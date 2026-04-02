@@ -173,3 +173,5 @@ func (UnimplementedProviderPlugin) GetModel(_ context.Context, _ string) (*Model
 func (UnimplementedProviderPlugin) DeleteModel(_ context.Context, _ string) (bool, error) {
 	return false, errors.ErrPluginCapabilityNotSupported
 }
+
+var _ ProviderPlugin = (*UnimplementedProviderPlugin)(nil)

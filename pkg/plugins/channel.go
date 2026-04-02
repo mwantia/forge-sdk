@@ -35,3 +35,5 @@ func (UnimplementedChannelPlugin) Send(_ context.Context, _, _ string, _ map[str
 func (UnimplementedChannelPlugin) Receive(_ context.Context) (<-chan ChannelMessage, error) {
 	return nil, errors.ErrPluginCapabilityNotSupported
 }
+
+var _ ChannelPlugin = (*UnimplementedChannelPlugin)(nil)

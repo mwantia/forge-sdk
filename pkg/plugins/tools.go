@@ -118,3 +118,5 @@ func (UnimplementedToolsPlugin) Cancel(_ context.Context, _ string) error {
 func (UnimplementedToolsPlugin) Validate(_ context.Context, _ ExecuteRequest) (*ValidateResponse, error) {
 	return nil, errors.ErrPluginCapabilityNotSupported
 }
+
+var _ ToolsPlugin = (*UnimplementedToolsPlugin)(nil)

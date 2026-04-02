@@ -80,3 +80,5 @@ func (UnimplementedMemoryPlugin) CommitSession(_ context.Context, _ string) (boo
 func (UnimplementedMemoryPlugin) AddMessage(_ context.Context, _, _, _ string) (bool, error) {
 	return false, errors.ErrPluginCapabilityNotSupported
 }
+
+var _ MemoryPlugin = (*UnimplementedMemoryPlugin)(nil)

@@ -1,6 +1,10 @@
 package plugins
 
-import "context"
+import (
+	"context"
+
+	"github.com/mwantia/forge-sdk/pkg/errors"
+)
 
 // DriverCapabilities describes what a driver supports.
 type DriverCapabilities struct {
@@ -72,3 +76,62 @@ type Driver interface {
 	GetToolsPlugin(ctx context.Context) (ToolsPlugin, error)
 	GetSandboxPlugin(ctx context.Context) (SandboxPlugin, error)
 }
+
+type UnimplementedDriver struct{}
+
+// CloseDriver implements [Driver].
+func (u *UnimplementedDriver) CloseDriver(ctx context.Context) error {
+	return errors.ErrPluginCapabilityNotSupported
+}
+
+// ConfigDriver implements [Driver].
+func (u *UnimplementedDriver) ConfigDriver(ctx context.Context, config PluginConfig) error {
+	return errors.ErrPluginCapabilityNotSupported
+}
+
+// GetCapabilities implements [Driver].
+func (u *UnimplementedDriver) GetCapabilities(ctx context.Context) (*DriverCapabilities, error) {
+	return nil, errors.ErrPluginCapabilityNotSupported
+}
+
+// GetChannelPlugin implements [Driver].
+func (u *UnimplementedDriver) GetChannelPlugin(ctx context.Context) (ChannelPlugin, error) {
+	return nil, errors.ErrPluginCapabilityNotSupported
+}
+
+// GetMemoryPlugin implements [Driver].
+func (u *UnimplementedDriver) GetMemoryPlugin(ctx context.Context) (MemoryPlugin, error) {
+	return nil, errors.ErrPluginCapabilityNotSupported
+}
+
+// GetPluginInfo implements [Driver].
+func (u *UnimplementedDriver) GetPluginInfo() PluginInfo {
+	return PluginInfo{}
+}
+
+// GetProviderPlugin implements [Driver].
+func (u *UnimplementedDriver) GetProviderPlugin(ctx context.Context) (ProviderPlugin, error) {
+	return nil, errors.ErrPluginCapabilityNotSupported
+}
+
+// GetSandboxPlugin implements [Driver].
+func (u *UnimplementedDriver) GetSandboxPlugin(ctx context.Context) (SandboxPlugin, error) {
+	return nil, errors.ErrPluginCapabilityNotSupported
+}
+
+// GetToolsPlugin implements [Driver].
+func (u *UnimplementedDriver) GetToolsPlugin(ctx context.Context) (ToolsPlugin, error) {
+	return nil, errors.ErrPluginCapabilityNotSupported
+}
+
+// OpenDriver implements [Driver].
+func (u *UnimplementedDriver) OpenDriver(ctx context.Context) error {
+	return errors.ErrPluginCapabilityNotSupported
+}
+
+// ProbePlugin implements [Driver].
+func (u *UnimplementedDriver) ProbePlugin(ctx context.Context) (bool, error) {
+	return false, errors.ErrPluginCapabilityNotSupported
+}
+
+var _ Driver = (*UnimplementedDriver)(nil)

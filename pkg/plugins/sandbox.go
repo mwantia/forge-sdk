@@ -169,3 +169,5 @@ func (UnimplementedSandboxPlugin) Stat(_ context.Context, _, _ string) (*Sandbox
 func (UnimplementedSandboxPlugin) ReadFile(_ context.Context, _, _ string) ([]byte, error) {
 	return nil, errors.ErrPluginCapabilityNotSupported
 }
+
+var _ SandboxPlugin = (*UnimplementedSandboxPlugin)(nil)
