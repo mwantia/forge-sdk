@@ -6,6 +6,7 @@ import (
 
 	"github.com/mwantia/forge-sdk/pkg/plugins"
 	proto "github.com/mwantia/forge-sdk/pkg/plugins/grpc/memory/proto"
+	"google.golang.org/protobuf/types/known/structpb"
 )
 
 // Server implements MemoryServiceServer, bridging gRPC to the MemoryPlugin interface.
@@ -27,12 +28,7 @@ func (s *Server) Store(ctx context.Context, req *proto.StoreRequest) (*proto.Sto
 		return nil, fmt.Errorf("memory plugin not available")
 	}
 
-	metadata := make(map[string]any)
-	for k, v := range req.Metadata {
-		metadata[k] = v
-	}
-
-	resource, err := plugin.StoreResource(ctx, req.Namespace, req.Content, metadata)
+	resource, err := plugin.StoreResource(ctx, req.Namespace, req.Content, req.Metadata.AsMap())
 	if err != nil {
 		return nil, err
 	}
@@ -48,27 +44,22 @@ func (s *Server) Retrieve(ctx context.Context, req *proto.RetrieveRequest) (*pro
 		return nil, fmt.Errorf("memory plugin not available")
 	}
 
-	filter := make(map[string]any)
-	for k, v := range req.Filter {
-		filter[k] = v
-	}
-
-	resources, err := plugin.RetrieveResource(ctx, req.Namespace, req.Query, int(req.Limit), filter)
+	resources, err := plugin.RetrieveResource(ctx, req.Namespace, req.Query, int(req.Limit), req.Filter.AsMap())
 	if err != nil {
 		return nil, err
 	}
 
 	protoResp := &proto.RetrieveResponse{}
 	for _, r := range resources {
-		metadata := make(map[string]string)
-		for k, v := range r.Metadata {
-			metadata[k] = fmt.Sprintf("%v", v)
+		meta, err := structpb.NewStruct(r.Metadata)
+		if err != nil {
+			return nil, err
 		}
 		protoResp.Results = append(protoResp.Results, &proto.MemoryResultProto{
 			Id:       r.ID,
 			Content:  r.Content,
 			Score:    r.Score,
-			Metadata: metadata,
+			Metadata: meta,
 		})
 	}
 	return protoResp, nil

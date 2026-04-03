@@ -9,6 +9,7 @@ package proto
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	structpb "google.golang.org/protobuf/types/known/structpb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -24,7 +25,7 @@ const (
 type StoreRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Content       string                 `protobuf:"bytes,1,opt,name=content,proto3" json:"content,omitempty"`
-	Metadata      map[string]string      `protobuf:"bytes,2,rep,name=metadata,proto3" json:"metadata,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	Metadata      *structpb.Struct       `protobuf:"bytes,2,opt,name=metadata,proto3" json:"metadata,omitempty"`
 	Namespace     string                 `protobuf:"bytes,3,opt,name=namespace,proto3" json:"namespace,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -67,7 +68,7 @@ func (x *StoreRequest) GetContent() string {
 	return ""
 }
 
-func (x *StoreRequest) GetMetadata() map[string]string {
+func (x *StoreRequest) GetMetadata() *structpb.Struct {
 	if x != nil {
 		return x.Metadata
 	}
@@ -130,7 +131,7 @@ type RetrieveRequest struct {
 	Query         string                 `protobuf:"bytes,1,opt,name=query,proto3" json:"query,omitempty"`
 	Limit         int32                  `protobuf:"varint,2,opt,name=limit,proto3" json:"limit,omitempty"`
 	Namespace     string                 `protobuf:"bytes,3,opt,name=namespace,proto3" json:"namespace,omitempty"`
-	Filter        map[string]string      `protobuf:"bytes,4,rep,name=filter,proto3" json:"filter,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	Filter        *structpb.Struct       `protobuf:"bytes,4,opt,name=filter,proto3" json:"filter,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -186,7 +187,7 @@ func (x *RetrieveRequest) GetNamespace() string {
 	return ""
 }
 
-func (x *RetrieveRequest) GetFilter() map[string]string {
+func (x *RetrieveRequest) GetFilter() *structpb.Struct {
 	if x != nil {
 		return x.Filter
 	}
@@ -242,7 +243,7 @@ type MemoryResultProto struct {
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	Content       string                 `protobuf:"bytes,2,opt,name=content,proto3" json:"content,omitempty"`
 	Score         float64                `protobuf:"fixed64,3,opt,name=score,proto3" json:"score,omitempty"`
-	Metadata      map[string]string      `protobuf:"bytes,4,rep,name=metadata,proto3" json:"metadata,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	Metadata      *structpb.Struct       `protobuf:"bytes,4,opt,name=metadata,proto3" json:"metadata,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -298,7 +299,7 @@ func (x *MemoryResultProto) GetScore() float64 {
 	return 0
 }
 
-func (x *MemoryResultProto) GetMetadata() map[string]string {
+func (x *MemoryResultProto) GetMetadata() *structpb.Struct {
 	if x != nil {
 		return x.Metadata
 	}
@@ -309,34 +310,25 @@ var File_pkg_plugins_grpc_memory_proto_memory_proto protoreflect.FileDescriptor
 
 const file_pkg_plugins_grpc_memory_proto_memory_proto_rawDesc = "" +
 	"\n" +
-	"*pkg/plugins/grpc/memory/proto/memory.proto\x12\x06memory\"\xc3\x01\n" +
+	"*pkg/plugins/grpc/memory/proto/memory.proto\x12\x06memory\x1a\x1cgoogle/protobuf/struct.proto\"{\n" +
 	"\fStoreRequest\x12\x18\n" +
-	"\acontent\x18\x01 \x01(\tR\acontent\x12>\n" +
-	"\bmetadata\x18\x02 \x03(\v2\".memory.StoreRequest.MetadataEntryR\bmetadata\x12\x1c\n" +
-	"\tnamespace\x18\x03 \x01(\tR\tnamespace\x1a;\n" +
-	"\rMetadataEntry\x12\x10\n" +
-	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\x1f\n" +
+	"\acontent\x18\x01 \x01(\tR\acontent\x123\n" +
+	"\bmetadata\x18\x02 \x01(\v2\x17.google.protobuf.StructR\bmetadata\x12\x1c\n" +
+	"\tnamespace\x18\x03 \x01(\tR\tnamespace\"\x1f\n" +
 	"\rStoreResponse\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\"\xd3\x01\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"\x8c\x01\n" +
 	"\x0fRetrieveRequest\x12\x14\n" +
 	"\x05query\x18\x01 \x01(\tR\x05query\x12\x14\n" +
 	"\x05limit\x18\x02 \x01(\x05R\x05limit\x12\x1c\n" +
-	"\tnamespace\x18\x03 \x01(\tR\tnamespace\x12;\n" +
-	"\x06filter\x18\x04 \x03(\v2#.memory.RetrieveRequest.FilterEntryR\x06filter\x1a9\n" +
-	"\vFilterEntry\x12\x10\n" +
-	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"G\n" +
+	"\tnamespace\x18\x03 \x01(\tR\tnamespace\x12/\n" +
+	"\x06filter\x18\x04 \x01(\v2\x17.google.protobuf.StructR\x06filter\"G\n" +
 	"\x10RetrieveResponse\x123\n" +
-	"\aresults\x18\x01 \x03(\v2\x19.memory.MemoryResultProtoR\aresults\"\xd5\x01\n" +
+	"\aresults\x18\x01 \x03(\v2\x19.memory.MemoryResultProtoR\aresults\"\x88\x01\n" +
 	"\x11MemoryResultProto\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x18\n" +
 	"\acontent\x18\x02 \x01(\tR\acontent\x12\x14\n" +
-	"\x05score\x18\x03 \x01(\x01R\x05score\x12C\n" +
-	"\bmetadata\x18\x04 \x03(\v2'.memory.MemoryResultProto.MetadataEntryR\bmetadata\x1a;\n" +
-	"\rMetadataEntry\x12\x10\n" +
-	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x012\x84\x01\n" +
+	"\x05score\x18\x03 \x01(\x01R\x05score\x123\n" +
+	"\bmetadata\x18\x04 \x01(\v2\x17.google.protobuf.StructR\bmetadata2\x84\x01\n" +
 	"\rMemoryService\x124\n" +
 	"\x05Store\x12\x14.memory.StoreRequest\x1a\x15.memory.StoreResponse\x12=\n" +
 	"\bRetrieve\x12\x17.memory.RetrieveRequest\x1a\x18.memory.RetrieveResponseB<Z:github.com/mwantia/forge-sdk/pkg/plugins/grpc/memory/protob\x06proto3"
@@ -353,22 +345,20 @@ func file_pkg_plugins_grpc_memory_proto_memory_proto_rawDescGZIP() []byte {
 	return file_pkg_plugins_grpc_memory_proto_memory_proto_rawDescData
 }
 
-var file_pkg_plugins_grpc_memory_proto_memory_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_pkg_plugins_grpc_memory_proto_memory_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_pkg_plugins_grpc_memory_proto_memory_proto_goTypes = []any{
 	(*StoreRequest)(nil),      // 0: memory.StoreRequest
 	(*StoreResponse)(nil),     // 1: memory.StoreResponse
 	(*RetrieveRequest)(nil),   // 2: memory.RetrieveRequest
 	(*RetrieveResponse)(nil),  // 3: memory.RetrieveResponse
 	(*MemoryResultProto)(nil), // 4: memory.MemoryResultProto
-	nil,                       // 5: memory.StoreRequest.MetadataEntry
-	nil,                       // 6: memory.RetrieveRequest.FilterEntry
-	nil,                       // 7: memory.MemoryResultProto.MetadataEntry
+	(*structpb.Struct)(nil),   // 5: google.protobuf.Struct
 }
 var file_pkg_plugins_grpc_memory_proto_memory_proto_depIdxs = []int32{
-	5, // 0: memory.StoreRequest.metadata:type_name -> memory.StoreRequest.MetadataEntry
-	6, // 1: memory.RetrieveRequest.filter:type_name -> memory.RetrieveRequest.FilterEntry
+	5, // 0: memory.StoreRequest.metadata:type_name -> google.protobuf.Struct
+	5, // 1: memory.RetrieveRequest.filter:type_name -> google.protobuf.Struct
 	4, // 2: memory.RetrieveResponse.results:type_name -> memory.MemoryResultProto
-	7, // 3: memory.MemoryResultProto.metadata:type_name -> memory.MemoryResultProto.MetadataEntry
+	5, // 3: memory.MemoryResultProto.metadata:type_name -> google.protobuf.Struct
 	0, // 4: memory.MemoryService.Store:input_type -> memory.StoreRequest
 	2, // 5: memory.MemoryService.Retrieve:input_type -> memory.RetrieveRequest
 	1, // 6: memory.MemoryService.Store:output_type -> memory.StoreResponse
@@ -391,7 +381,7 @@ func file_pkg_plugins_grpc_memory_proto_memory_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_pkg_plugins_grpc_memory_proto_memory_proto_rawDesc), len(file_pkg_plugins_grpc_memory_proto_memory_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   8,
+			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

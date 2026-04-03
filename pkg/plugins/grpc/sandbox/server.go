@@ -40,6 +40,7 @@ func (s *Server) CreateSandbox(ctx context.Context, req *proto.CreateSandboxRequ
 		spec.Name = req.Spec.Name
 		spec.WorkDir = req.Spec.WorkDir
 		spec.Env = req.Spec.Env
+		spec.Metadata = req.Spec.Metadata.AsMap()
 		for _, r := range req.Spec.AllowedHostPaths {
 			spec.AllowedHostPaths = append(spec.AllowedHostPaths, plugins.SandboxPathRule{
 				Path:     r.Path,

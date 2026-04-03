@@ -7,6 +7,7 @@ import (
 	"github.com/mwantia/forge-sdk/pkg/plugins"
 	proto "github.com/mwantia/forge-sdk/pkg/plugins/grpc/sandbox/proto"
 	"google.golang.org/grpc"
+	"google.golang.org/protobuf/types/known/structpb"
 )
 
 // Client implements plugins.SandboxPlugin over gRPC.
@@ -28,6 +29,10 @@ func (c *Client) CreateSandbox(ctx context.Context, spec plugins.SandboxSpec) (*
 			Writable: r.Writable,
 		})
 	}
+	meta, err := structpb.NewStruct(spec.Metadata)
+	if err != nil {
+		return nil, err
+	}
 
 	resp, err := c.client.CreateSandbox(ctx, &proto.CreateSandboxRequest{
 		Spec: &proto.SandboxSpec{
@@ -35,6 +40,7 @@ func (c *Client) CreateSandbox(ctx context.Context, spec plugins.SandboxSpec) (*
 			AllowedHostPaths: rules,
 			WorkDir:          spec.WorkDir,
 			Env:              spec.Env,
+			Metadata:         meta,
 		},
 	})
 	if err != nil {

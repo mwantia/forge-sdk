@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package channel;
 
+import "google/protobuf/struct.proto";
+
 option go_package = "github.com/mwantia/forge-sdk/pkg/plugins/grpc/channel/proto";
 
 service ChannelService {
@@ -10,9 +12,9 @@ service ChannelService {
 }
 
 message SendRequest {
-    string              channel_id = 1;
-    string              content    = 2;
-    map<string, string> metadata   = 3;
+    string                 channel_id = 1;
+    string                 content    = 2;
+    google.protobuf.Struct metadata   = 3;
 }
 
 message SendResponse {
@@ -24,9 +26,9 @@ message ReceiveRequest {
 }
 
 message MessageEvent {
-    string              id         = 1;
-    string              channel_id = 2;
-    string              author_id  = 3;
-    string              content    = 4;
-    map<string, string> metadata   = 5;
+    string                 id         = 1;
+    string                 channel_id = 2;
+    string                 author_id  = 3;
+    string                 content    = 4;
+    google.protobuf.Struct metadata   = 5;
 }

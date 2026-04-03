@@ -130,14 +130,10 @@ func (c *Client) ListModels(ctx context.Context) ([]*plugins.Model, error) {
 	}
 	models := make([]*plugins.Model, len(resp.Models))
 	for i, m := range resp.Models {
-		meta := make(map[string]any)
-		for k, v := range m.Metadata {
-			meta[k] = v
-		}
 		models[i] = &plugins.Model{
 			ModelName: m.Name,
 			Dimension: int(m.Dimension),
-			Metadata:  meta,
+			Metadata:  m.Metadata.AsMap(),
 		}
 	}
 	return models, nil
@@ -146,13 +142,14 @@ func (c *Client) ListModels(ctx context.Context) ([]*plugins.Model, error) {
 func (c *Client) CreateModel(ctx context.Context, modelName string, template *plugins.ModelTemplate) (*plugins.Model, error) {
 	req := &proto.CreateModelRequest{Name: modelName}
 	if template != nil {
+		params, err := structpb.NewStruct(template.Parameters)
+		if err != nil {
+			return nil, err
+		}
 		req.BaseModel = template.BaseModel
 		req.PromptTemplate = template.PromptTemplate
 		req.System = template.System
-		req.Parameters = make(map[string]string)
-		for k, v := range template.Parameters {
-			req.Parameters[k] = fmt.Sprintf("%v", v)
-		}
+		req.Parameters = params
 	}
 	resp, err := c.client.CreateModel(ctx, req)
 	if err != nil {

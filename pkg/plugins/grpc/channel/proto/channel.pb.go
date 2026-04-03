@@ -9,6 +9,7 @@ package proto
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	structpb "google.golang.org/protobuf/types/known/structpb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -25,7 +26,7 @@ type SendRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ChannelId     string                 `protobuf:"bytes,1,opt,name=channel_id,json=channelId,proto3" json:"channel_id,omitempty"`
 	Content       string                 `protobuf:"bytes,2,opt,name=content,proto3" json:"content,omitempty"`
-	Metadata      map[string]string      `protobuf:"bytes,3,rep,name=metadata,proto3" json:"metadata,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	Metadata      *structpb.Struct       `protobuf:"bytes,3,opt,name=metadata,proto3" json:"metadata,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -74,7 +75,7 @@ func (x *SendRequest) GetContent() string {
 	return ""
 }
 
-func (x *SendRequest) GetMetadata() map[string]string {
+func (x *SendRequest) GetMetadata() *structpb.Struct {
 	if x != nil {
 		return x.Metadata
 	}
@@ -175,7 +176,7 @@ type MessageEvent struct {
 	ChannelId     string                 `protobuf:"bytes,2,opt,name=channel_id,json=channelId,proto3" json:"channel_id,omitempty"`
 	AuthorId      string                 `protobuf:"bytes,3,opt,name=author_id,json=authorId,proto3" json:"author_id,omitempty"`
 	Content       string                 `protobuf:"bytes,4,opt,name=content,proto3" json:"content,omitempty"`
-	Metadata      map[string]string      `protobuf:"bytes,5,rep,name=metadata,proto3" json:"metadata,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	Metadata      *structpb.Struct       `protobuf:"bytes,5,opt,name=metadata,proto3" json:"metadata,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -238,7 +239,7 @@ func (x *MessageEvent) GetContent() string {
 	return ""
 }
 
-func (x *MessageEvent) GetMetadata() map[string]string {
+func (x *MessageEvent) GetMetadata() *structpb.Struct {
 	if x != nil {
 		return x.Metadata
 	}
@@ -249,31 +250,25 @@ var File_pkg_plugins_grpc_channel_proto_channel_proto protoreflect.FileDescripto
 
 const file_pkg_plugins_grpc_channel_proto_channel_proto_rawDesc = "" +
 	"\n" +
-	",pkg/plugins/grpc/channel/proto/channel.proto\x12\achannel\"\xc3\x01\n" +
+	",pkg/plugins/grpc/channel/proto/channel.proto\x12\achannel\x1a\x1cgoogle/protobuf/struct.proto\"{\n" +
 	"\vSendRequest\x12\x1d\n" +
 	"\n" +
 	"channel_id\x18\x01 \x01(\tR\tchannelId\x12\x18\n" +
-	"\acontent\x18\x02 \x01(\tR\acontent\x12>\n" +
-	"\bmetadata\x18\x03 \x03(\v2\".channel.SendRequest.MetadataEntryR\bmetadata\x1a;\n" +
-	"\rMetadataEntry\x12\x10\n" +
-	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"-\n" +
+	"\acontent\x18\x02 \x01(\tR\acontent\x123\n" +
+	"\bmetadata\x18\x03 \x01(\v2\x17.google.protobuf.StructR\bmetadata\"-\n" +
 	"\fSendResponse\x12\x1d\n" +
 	"\n" +
 	"message_id\x18\x01 \x01(\tR\tmessageId\"/\n" +
 	"\x0eReceiveRequest\x12\x1d\n" +
 	"\n" +
-	"channel_id\x18\x01 \x01(\tR\tchannelId\"\xf2\x01\n" +
+	"channel_id\x18\x01 \x01(\tR\tchannelId\"\xa9\x01\n" +
 	"\fMessageEvent\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1d\n" +
 	"\n" +
 	"channel_id\x18\x02 \x01(\tR\tchannelId\x12\x1b\n" +
 	"\tauthor_id\x18\x03 \x01(\tR\bauthorId\x12\x18\n" +
-	"\acontent\x18\x04 \x01(\tR\acontent\x12?\n" +
-	"\bmetadata\x18\x05 \x03(\v2#.channel.MessageEvent.MetadataEntryR\bmetadata\x1a;\n" +
-	"\rMetadataEntry\x12\x10\n" +
-	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x012\x82\x01\n" +
+	"\acontent\x18\x04 \x01(\tR\acontent\x123\n" +
+	"\bmetadata\x18\x05 \x01(\v2\x17.google.protobuf.StructR\bmetadata2\x82\x01\n" +
 	"\x0eChannelService\x123\n" +
 	"\x04Send\x12\x14.channel.SendRequest\x1a\x15.channel.SendResponse\x12;\n" +
 	"\aReceive\x12\x17.channel.ReceiveRequest\x1a\x15.channel.MessageEvent0\x01B=Z;github.com/mwantia/forge-sdk/pkg/plugins/grpc/channel/protob\x06proto3"
@@ -290,18 +285,17 @@ func file_pkg_plugins_grpc_channel_proto_channel_proto_rawDescGZIP() []byte {
 	return file_pkg_plugins_grpc_channel_proto_channel_proto_rawDescData
 }
 
-var file_pkg_plugins_grpc_channel_proto_channel_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_pkg_plugins_grpc_channel_proto_channel_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_pkg_plugins_grpc_channel_proto_channel_proto_goTypes = []any{
-	(*SendRequest)(nil),    // 0: channel.SendRequest
-	(*SendResponse)(nil),   // 1: channel.SendResponse
-	(*ReceiveRequest)(nil), // 2: channel.ReceiveRequest
-	(*MessageEvent)(nil),   // 3: channel.MessageEvent
-	nil,                    // 4: channel.SendRequest.MetadataEntry
-	nil,                    // 5: channel.MessageEvent.MetadataEntry
+	(*SendRequest)(nil),     // 0: channel.SendRequest
+	(*SendResponse)(nil),    // 1: channel.SendResponse
+	(*ReceiveRequest)(nil),  // 2: channel.ReceiveRequest
+	(*MessageEvent)(nil),    // 3: channel.MessageEvent
+	(*structpb.Struct)(nil), // 4: google.protobuf.Struct
 }
 var file_pkg_plugins_grpc_channel_proto_channel_proto_depIdxs = []int32{
-	4, // 0: channel.SendRequest.metadata:type_name -> channel.SendRequest.MetadataEntry
-	5, // 1: channel.MessageEvent.metadata:type_name -> channel.MessageEvent.MetadataEntry
+	4, // 0: channel.SendRequest.metadata:type_name -> google.protobuf.Struct
+	4, // 1: channel.MessageEvent.metadata:type_name -> google.protobuf.Struct
 	0, // 2: channel.ChannelService.Send:input_type -> channel.SendRequest
 	2, // 3: channel.ChannelService.Receive:input_type -> channel.ReceiveRequest
 	1, // 4: channel.ChannelService.Send:output_type -> channel.SendResponse
@@ -324,7 +318,7 @@ func file_pkg_plugins_grpc_channel_proto_channel_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_pkg_plugins_grpc_channel_proto_channel_proto_rawDesc), len(file_pkg_plugins_grpc_channel_proto_channel_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   6,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

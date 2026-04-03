@@ -2,11 +2,11 @@ package channel
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/mwantia/forge-sdk/pkg/plugins"
 	proto "github.com/mwantia/forge-sdk/pkg/plugins/grpc/channel/proto"
 	"google.golang.org/grpc"
+	"google.golang.org/protobuf/types/known/structpb"
 )
 
 // Client implements plugins.ChannelPlugin over gRPC.
@@ -21,15 +21,15 @@ func NewClient(conn *grpc.ClientConn) *Client {
 func (c *Client) GetLifecycle() plugins.Lifecycle { return nil }
 
 func (c *Client) Send(ctx context.Context, channel, content string, metadata map[string]any) (string, error) {
-	req := &proto.SendRequest{
+	meta, err := structpb.NewStruct(metadata)
+	if err != nil {
+		return "", err
+	}
+	resp, err := c.client.Send(ctx, &proto.SendRequest{
 		ChannelId: channel,
 		Content:   content,
-		Metadata:  make(map[string]string),
-	}
-	for k, v := range req.Metadata {
-		req.Metadata[k] = fmt.Sprintf("%v", v)
-	}
-	resp, err := c.client.Send(ctx, req)
+		Metadata:  meta,
+	})
 	if err != nil {
 		return "", err
 	}
@@ -50,16 +50,12 @@ func (c *Client) Receive(ctx context.Context) (<-chan plugins.ChannelMessage, er
 			if err != nil {
 				return
 			}
-			metadata := make(map[string]any)
-			for k, v := range evt.Metadata {
-				metadata[k] = v
-			}
 			ch <- plugins.ChannelMessage{
 				ID:       evt.Id,
 				Channel:  evt.ChannelId,
 				Author:   evt.AuthorId,
 				Content:  evt.Content,
-				Metadata: metadata,
+				Metadata: evt.Metadata.AsMap(),
 			}
 		}
 	}()

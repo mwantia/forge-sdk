@@ -145,15 +145,15 @@ func (s *Server) ListModels(ctx context.Context, _ *proto.ListModelsRequest) (*p
 
 	resp := &proto.ListModelsResponse{}
 	for _, m := range models {
-		pm := &proto.ModelProto{
+		meta, err := structpb.NewStruct(m.Metadata)
+		if err != nil {
+			return nil, err
+		}
+		resp.Models = append(resp.Models, &proto.ModelProto{
 			Name:      m.ModelName,
 			Dimension: int32(m.Dimension),
-			Metadata:  make(map[string]string),
-		}
-		for k, v := range m.Metadata {
-			pm.Metadata[k] = fmt.Sprintf("%v", v)
-		}
-		resp.Models = append(resp.Models, pm)
+			Metadata:  meta,
+		})
 	}
 	return resp, nil
 }
@@ -164,15 +164,11 @@ func (s *Server) CreateModel(ctx context.Context, req *proto.CreateModelRequest)
 		return nil, err
 	}
 
-	params := make(map[string]any)
-	for k, v := range req.Parameters {
-		params[k] = v
-	}
 	template := &plugins.ModelTemplate{
 		BaseModel:      req.BaseModel,
 		PromptTemplate: req.PromptTemplate,
 		System:         req.System,
-		Parameters:     params,
+		Parameters:     req.Parameters.AsMap(),
 	}
 
 	model, err := plugin.CreateModel(ctx, req.Name, template)

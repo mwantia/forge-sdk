@@ -6,6 +6,7 @@ import (
 
 	"github.com/mwantia/forge-sdk/pkg/plugins"
 	proto "github.com/mwantia/forge-sdk/pkg/plugins/grpc/channel/proto"
+	"google.golang.org/protobuf/types/known/structpb"
 )
 
 // Server implements ChannelServiceServer, bridging gRPC to the ChannelPlugin interface.
@@ -27,12 +28,7 @@ func (s *Server) Send(ctx context.Context, req *proto.SendRequest) (*proto.SendR
 		return nil, fmt.Errorf("channel plugin not available")
 	}
 
-	metadata := make(map[string]any)
-	for k, v := range req.Metadata {
-		metadata[k] = v
-	}
-
-	id, err := plugin.Send(ctx, req.ChannelId, req.Content, metadata)
+	id, err := plugin.Send(ctx, req.ChannelId, req.Content, req.Metadata.AsMap())
 	if err != nil {
 		return nil, err
 	}
@@ -56,16 +52,16 @@ func (s *Server) Receive(req *proto.ReceiveRequest, srv proto.ChannelService_Rec
 	}
 
 	for evt := range ch {
-		metadata := make(map[string]string)
-		for k, v := range evt.Metadata {
-			metadata[k] = fmt.Sprintf("%v", v)
+		meta, err := structpb.NewStruct(evt.Metadata)
+		if err != nil {
+			return err
 		}
 		if err := srv.Send(&proto.MessageEvent{
 			Id:        evt.ID,
 			ChannelId: evt.Channel,
 			AuthorId:  evt.Author,
 			Content:   evt.Content,
-			Metadata:  metadata,
+			Metadata:  meta,
 		}); err != nil {
 			return err
 		}

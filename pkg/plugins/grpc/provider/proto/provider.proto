@@ -18,12 +18,12 @@ service ProviderService {
 // --- Chat ---
 
 message ChatRequest {
-    string                model       = 1;
-    repeated MessageProto messages    = 2;
-    double                temperature = 3;
-    int32                 max_tokens  = 4;
-    repeated ToolDefProto tools       = 5;
-    map<string, string>   metadata    = 6;
+    string                 model       = 1;
+    repeated MessageProto  messages    = 2;
+    double                 temperature = 3;
+    int32                  max_tokens  = 4;
+    repeated ToolDefProto  tools       = 5;
+    google.protobuf.Struct metadata    = 6;
 }
 
 message TokenUsageProto {
@@ -87,11 +87,11 @@ message ListModelsResponse {
 }
 
 message CreateModelRequest {
-    string              name            = 1;
-    string              base_model      = 2;
-    string              prompt_template = 3;
-    string              system          = 4;
-    map<string, string> parameters      = 5;
+    string                 name            = 1;
+    string                 base_model      = 2;
+    string                 prompt_template = 3;
+    string                 system          = 4;
+    google.protobuf.Struct parameters      = 5;
 }
 
 message CreateModelResponse {
@@ -115,7 +115,7 @@ message DeleteModelResponse {
 }
 
 message ModelProto {
-    string              name      = 1;
-    int32               dimension = 2;
-    map<string, string> metadata  = 3;
+    string                 name      = 1;
+    int32                  dimension = 2;
+    google.protobuf.Struct metadata  = 3;
 }

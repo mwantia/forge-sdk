@@ -9,6 +9,7 @@ package proto
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	structpb "google.golang.org/protobuf/types/known/structpb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -79,7 +80,7 @@ type SandboxSpec struct {
 	AllowedHostPaths []*SandboxPathRule     `protobuf:"bytes,2,rep,name=allowed_host_paths,json=allowedHostPaths,proto3" json:"allowed_host_paths,omitempty"`
 	WorkDir          string                 `protobuf:"bytes,3,opt,name=work_dir,json=workDir,proto3" json:"work_dir,omitempty"`
 	Env              map[string]string      `protobuf:"bytes,4,rep,name=env,proto3" json:"env,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
-	Metadata         map[string]string      `protobuf:"bytes,5,rep,name=metadata,proto3" json:"metadata,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	Metadata         *structpb.Struct       `protobuf:"bytes,5,opt,name=metadata,proto3" json:"metadata,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -142,7 +143,7 @@ func (x *SandboxSpec) GetEnv() map[string]string {
 	return nil
 }
 
-func (x *SandboxSpec) GetMetadata() map[string]string {
+func (x *SandboxSpec) GetMetadata() *structpb.Struct {
 	if x != nil {
 		return x.Metadata
 	}
@@ -905,20 +906,17 @@ var File_pkg_plugins_grpc_sandbox_proto_sandbox_proto protoreflect.FileDescripto
 
 const file_pkg_plugins_grpc_sandbox_proto_sandbox_proto_rawDesc = "" +
 	"\n" +
-	",pkg/plugins/grpc/sandbox/proto/sandbox.proto\x12\asandbox\"A\n" +
+	",pkg/plugins/grpc/sandbox/proto/sandbox.proto\x12\asandbox\x1a\x1cgoogle/protobuf/struct.proto\"A\n" +
 	"\x0fSandboxPathRule\x12\x12\n" +
 	"\x04path\x18\x01 \x01(\tR\x04path\x12\x1a\n" +
-	"\bwritable\x18\x02 \x01(\bR\bwritable\"\xea\x02\n" +
+	"\bwritable\x18\x02 \x01(\bR\bwritable\"\xa2\x02\n" +
 	"\vSandboxSpec\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12F\n" +
 	"\x12allowed_host_paths\x18\x02 \x03(\v2\x18.sandbox.SandboxPathRuleR\x10allowedHostPaths\x12\x19\n" +
 	"\bwork_dir\x18\x03 \x01(\tR\aworkDir\x12/\n" +
-	"\x03env\x18\x04 \x03(\v2\x1d.sandbox.SandboxSpec.EnvEntryR\x03env\x12>\n" +
-	"\bmetadata\x18\x05 \x03(\v2\".sandbox.SandboxSpec.MetadataEntryR\bmetadata\x1a6\n" +
+	"\x03env\x18\x04 \x03(\v2\x1d.sandbox.SandboxSpec.EnvEntryR\x03env\x123\n" +
+	"\bmetadata\x18\x05 \x01(\v2\x17.google.protobuf.StructR\bmetadata\x1a6\n" +
 	"\bEnvEntry\x12\x10\n" +
-	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1a;\n" +
-	"\rMetadataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"@\n" +
 	"\x14CreateSandboxRequest\x12(\n" +
@@ -993,7 +991,7 @@ func file_pkg_plugins_grpc_sandbox_proto_sandbox_proto_rawDescGZIP() []byte {
 	return file_pkg_plugins_grpc_sandbox_proto_sandbox_proto_rawDescData
 }
 
-var file_pkg_plugins_grpc_sandbox_proto_sandbox_proto_msgTypes = make([]protoimpl.MessageInfo, 19)
+var file_pkg_plugins_grpc_sandbox_proto_sandbox_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
 var file_pkg_plugins_grpc_sandbox_proto_sandbox_proto_goTypes = []any{
 	(*SandboxPathRule)(nil),        // 0: sandbox.SandboxPathRule
 	(*SandboxSpec)(nil),            // 1: sandbox.SandboxSpec
@@ -1012,15 +1010,15 @@ var file_pkg_plugins_grpc_sandbox_proto_sandbox_proto_goTypes = []any{
 	(*ReadFileRequest)(nil),        // 14: sandbox.ReadFileRequest
 	(*ReadFileResponse)(nil),       // 15: sandbox.ReadFileResponse
 	nil,                            // 16: sandbox.SandboxSpec.EnvEntry
-	nil,                            // 17: sandbox.SandboxSpec.MetadataEntry
-	nil,                            // 18: sandbox.ExecuteRequest.EnvEntry
+	nil,                            // 17: sandbox.ExecuteRequest.EnvEntry
+	(*structpb.Struct)(nil),        // 18: google.protobuf.Struct
 }
 var file_pkg_plugins_grpc_sandbox_proto_sandbox_proto_depIdxs = []int32{
 	0,  // 0: sandbox.SandboxSpec.allowed_host_paths:type_name -> sandbox.SandboxPathRule
 	16, // 1: sandbox.SandboxSpec.env:type_name -> sandbox.SandboxSpec.EnvEntry
-	17, // 2: sandbox.SandboxSpec.metadata:type_name -> sandbox.SandboxSpec.MetadataEntry
+	18, // 2: sandbox.SandboxSpec.metadata:type_name -> google.protobuf.Struct
 	1,  // 3: sandbox.CreateSandboxRequest.spec:type_name -> sandbox.SandboxSpec
-	18, // 4: sandbox.ExecuteRequest.env:type_name -> sandbox.ExecuteRequest.EnvEntry
+	17, // 4: sandbox.ExecuteRequest.env:type_name -> sandbox.ExecuteRequest.EnvEntry
 	2,  // 5: sandbox.SandboxService.CreateSandbox:input_type -> sandbox.CreateSandboxRequest
 	4,  // 6: sandbox.SandboxService.DestroySandbox:input_type -> sandbox.DestroySandboxRequest
 	6,  // 7: sandbox.SandboxService.CopyIn:input_type -> sandbox.CopyInRequest
@@ -1053,7 +1051,7 @@ func file_pkg_plugins_grpc_sandbox_proto_sandbox_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_pkg_plugins_grpc_sandbox_proto_sandbox_proto_rawDesc), len(file_pkg_plugins_grpc_sandbox_proto_sandbox_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   19,
+			NumMessages:   18,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

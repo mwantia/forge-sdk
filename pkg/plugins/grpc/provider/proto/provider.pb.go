@@ -29,7 +29,7 @@ type ChatRequest struct {
 	Temperature   float64                `protobuf:"fixed64,3,opt,name=temperature,proto3" json:"temperature,omitempty"`
 	MaxTokens     int32                  `protobuf:"varint,4,opt,name=max_tokens,json=maxTokens,proto3" json:"max_tokens,omitempty"`
 	Tools         []*ToolDefProto        `protobuf:"bytes,5,rep,name=tools,proto3" json:"tools,omitempty"`
-	Metadata      map[string]string      `protobuf:"bytes,6,rep,name=metadata,proto3" json:"metadata,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	Metadata      *structpb.Struct       `protobuf:"bytes,6,opt,name=metadata,proto3" json:"metadata,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -99,7 +99,7 @@ func (x *ChatRequest) GetTools() []*ToolDefProto {
 	return nil
 }
 
-func (x *ChatRequest) GetMetadata() map[string]string {
+func (x *ChatRequest) GetMetadata() *structpb.Struct {
 	if x != nil {
 		return x.Metadata
 	}
@@ -688,7 +688,7 @@ type CreateModelRequest struct {
 	BaseModel      string                 `protobuf:"bytes,2,opt,name=base_model,json=baseModel,proto3" json:"base_model,omitempty"`
 	PromptTemplate string                 `protobuf:"bytes,3,opt,name=prompt_template,json=promptTemplate,proto3" json:"prompt_template,omitempty"`
 	System         string                 `protobuf:"bytes,4,opt,name=system,proto3" json:"system,omitempty"`
-	Parameters     map[string]string      `protobuf:"bytes,5,rep,name=parameters,proto3" json:"parameters,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	Parameters     *structpb.Struct       `protobuf:"bytes,5,opt,name=parameters,proto3" json:"parameters,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -751,7 +751,7 @@ func (x *CreateModelRequest) GetSystem() string {
 	return ""
 }
 
-func (x *CreateModelRequest) GetParameters() map[string]string {
+func (x *CreateModelRequest) GetParameters() *structpb.Struct {
 	if x != nil {
 		return x.Parameters
 	}
@@ -982,7 +982,7 @@ type ModelProto struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	Dimension     int32                  `protobuf:"varint,2,opt,name=dimension,proto3" json:"dimension,omitempty"`
-	Metadata      map[string]string      `protobuf:"bytes,3,rep,name=metadata,proto3" json:"metadata,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	Metadata      *structpb.Struct       `protobuf:"bytes,3,opt,name=metadata,proto3" json:"metadata,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1031,7 +1031,7 @@ func (x *ModelProto) GetDimension() int32 {
 	return 0
 }
 
-func (x *ModelProto) GetMetadata() map[string]string {
+func (x *ModelProto) GetMetadata() *structpb.Struct {
 	if x != nil {
 		return x.Metadata
 	}
@@ -1042,18 +1042,15 @@ var File_pkg_plugins_grpc_provider_proto_provider_proto protoreflect.FileDescrip
 
 const file_pkg_plugins_grpc_provider_proto_provider_proto_rawDesc = "" +
 	"\n" +
-	".pkg/plugins/grpc/provider/proto/provider.proto\x12\bprovider\x1a\x1cgoogle/protobuf/struct.proto\"\xc4\x02\n" +
+	".pkg/plugins/grpc/provider/proto/provider.proto\x12\bprovider\x1a\x1cgoogle/protobuf/struct.proto\"\xfb\x01\n" +
 	"\vChatRequest\x12\x14\n" +
 	"\x05model\x18\x01 \x01(\tR\x05model\x122\n" +
 	"\bmessages\x18\x02 \x03(\v2\x16.provider.MessageProtoR\bmessages\x12 \n" +
 	"\vtemperature\x18\x03 \x01(\x01R\vtemperature\x12\x1d\n" +
 	"\n" +
 	"max_tokens\x18\x04 \x01(\x05R\tmaxTokens\x12,\n" +
-	"\x05tools\x18\x05 \x03(\v2\x16.provider.ToolDefProtoR\x05tools\x12?\n" +
-	"\bmetadata\x18\x06 \x03(\v2#.provider.ChatRequest.MetadataEntryR\bmetadata\x1a;\n" +
-	"\rMetadataEntry\x12\x10\n" +
-	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xdb\x01\n" +
+	"\x05tools\x18\x05 \x03(\v2\x16.provider.ToolDefProtoR\x05tools\x123\n" +
+	"\bmetadata\x18\x06 \x01(\v2\x17.google.protobuf.StructR\bmetadata\"\xdb\x01\n" +
 	"\x0fTokenUsageProto\x12!\n" +
 	"\finput_tokens\x18\x01 \x01(\x05R\vinputTokens\x12#\n" +
 	"\routput_tokens\x18\x02 \x01(\x05R\foutputTokens\x12!\n" +
@@ -1099,19 +1096,16 @@ const file_pkg_plugins_grpc_provider_proto_provider_proto_rawDesc = "" +
 	"\x06values\x18\x01 \x03(\x02R\x06values\"\x13\n" +
 	"\x11ListModelsRequest\"B\n" +
 	"\x12ListModelsResponse\x12,\n" +
-	"\x06models\x18\x01 \x03(\v2\x14.provider.ModelProtoR\x06models\"\x95\x02\n" +
+	"\x06models\x18\x01 \x03(\v2\x14.provider.ModelProtoR\x06models\"\xc1\x01\n" +
 	"\x12CreateModelRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x1d\n" +
 	"\n" +
 	"base_model\x18\x02 \x01(\tR\tbaseModel\x12'\n" +
 	"\x0fprompt_template\x18\x03 \x01(\tR\x0epromptTemplate\x12\x16\n" +
-	"\x06system\x18\x04 \x01(\tR\x06system\x12L\n" +
+	"\x06system\x18\x04 \x01(\tR\x06system\x127\n" +
 	"\n" +
-	"parameters\x18\x05 \x03(\v2,.provider.CreateModelRequest.ParametersEntryR\n" +
-	"parameters\x1a=\n" +
-	"\x0fParametersEntry\x12\x10\n" +
-	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"A\n" +
+	"parameters\x18\x05 \x01(\v2\x17.google.protobuf.StructR\n" +
+	"parameters\"A\n" +
 	"\x13CreateModelResponse\x12*\n" +
 	"\x05model\x18\x01 \x01(\v2\x14.provider.ModelProtoR\x05model\"%\n" +
 	"\x0fGetModelRequest\x12\x12\n" +
@@ -1121,15 +1115,12 @@ const file_pkg_plugins_grpc_provider_proto_provider_proto_rawDesc = "" +
 	"\x12DeleteModelRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\"/\n" +
 	"\x13DeleteModelResponse\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess\"\xbb\x01\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\"s\n" +
 	"\n" +
 	"ModelProto\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x1c\n" +
-	"\tdimension\x18\x02 \x01(\x05R\tdimension\x12>\n" +
-	"\bmetadata\x18\x03 \x03(\v2\".provider.ModelProto.MetadataEntryR\bmetadata\x1a;\n" +
-	"\rMetadataEntry\x12\x10\n" +
-	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x012\xa5\x03\n" +
+	"\tdimension\x18\x02 \x01(\x05R\tdimension\x123\n" +
+	"\bmetadata\x18\x03 \x01(\v2\x17.google.protobuf.StructR\bmetadata2\xa5\x03\n" +
 	"\x0fProviderService\x124\n" +
 	"\x04Chat\x12\x15.provider.ChatRequest\x1a\x13.provider.ChatChunk0\x01\x128\n" +
 	"\x05Embed\x12\x16.provider.EmbedRequest\x1a\x17.provider.EmbedResponse\x12G\n" +
@@ -1151,7 +1142,7 @@ func file_pkg_plugins_grpc_provider_proto_provider_proto_rawDescGZIP() []byte {
 	return file_pkg_plugins_grpc_provider_proto_provider_proto_rawDescData
 }
 
-var file_pkg_plugins_grpc_provider_proto_provider_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
+var file_pkg_plugins_grpc_provider_proto_provider_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
 var file_pkg_plugins_grpc_provider_proto_provider_proto_goTypes = []any{
 	(*ChatRequest)(nil),         // 0: provider.ChatRequest
 	(*TokenUsageProto)(nil),     // 1: provider.TokenUsageProto
@@ -1171,26 +1162,23 @@ var file_pkg_plugins_grpc_provider_proto_provider_proto_goTypes = []any{
 	(*DeleteModelRequest)(nil),  // 15: provider.DeleteModelRequest
 	(*DeleteModelResponse)(nil), // 16: provider.DeleteModelResponse
 	(*ModelProto)(nil),          // 17: provider.ModelProto
-	nil,                         // 18: provider.ChatRequest.MetadataEntry
-	nil,                         // 19: provider.CreateModelRequest.ParametersEntry
-	nil,                         // 20: provider.ModelProto.MetadataEntry
-	(*structpb.Struct)(nil),     // 21: google.protobuf.Struct
+	(*structpb.Struct)(nil),     // 18: google.protobuf.Struct
 }
 var file_pkg_plugins_grpc_provider_proto_provider_proto_depIdxs = []int32{
 	3,  // 0: provider.ChatRequest.messages:type_name -> provider.MessageProto
 	4,  // 1: provider.ChatRequest.tools:type_name -> provider.ToolDefProto
-	18, // 2: provider.ChatRequest.metadata:type_name -> provider.ChatRequest.MetadataEntry
+	18, // 2: provider.ChatRequest.metadata:type_name -> google.protobuf.Struct
 	5,  // 3: provider.ChatChunk.tool_calls:type_name -> provider.ToolCallProto
 	1,  // 4: provider.ChatChunk.usage:type_name -> provider.TokenUsageProto
 	5,  // 5: provider.MessageProto.tool_calls:type_name -> provider.ToolCallProto
-	21, // 6: provider.ToolDefProto.parameters:type_name -> google.protobuf.Struct
-	21, // 7: provider.ToolCallProto.arguments:type_name -> google.protobuf.Struct
+	18, // 6: provider.ToolDefProto.parameters:type_name -> google.protobuf.Struct
+	18, // 7: provider.ToolCallProto.arguments:type_name -> google.protobuf.Struct
 	8,  // 8: provider.EmbedResponse.embeddings:type_name -> provider.EmbeddingProto
 	17, // 9: provider.ListModelsResponse.models:type_name -> provider.ModelProto
-	19, // 10: provider.CreateModelRequest.parameters:type_name -> provider.CreateModelRequest.ParametersEntry
+	18, // 10: provider.CreateModelRequest.parameters:type_name -> google.protobuf.Struct
 	17, // 11: provider.CreateModelResponse.model:type_name -> provider.ModelProto
 	17, // 12: provider.GetModelResponse.model:type_name -> provider.ModelProto
-	20, // 13: provider.ModelProto.metadata:type_name -> provider.ModelProto.MetadataEntry
+	18, // 13: provider.ModelProto.metadata:type_name -> google.protobuf.Struct
 	0,  // 14: provider.ProviderService.Chat:input_type -> provider.ChatRequest
 	6,  // 15: provider.ProviderService.Embed:input_type -> provider.EmbedRequest
 	9,  // 16: provider.ProviderService.ListModels:input_type -> provider.ListModelsRequest
@@ -1221,7 +1209,7 @@ func file_pkg_plugins_grpc_provider_proto_provider_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_pkg_plugins_grpc_provider_proto_provider_proto_rawDesc), len(file_pkg_plugins_grpc_provider_proto_provider_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   21,
+			NumMessages:   18,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

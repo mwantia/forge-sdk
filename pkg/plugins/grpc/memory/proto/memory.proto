@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package memory;
 
+import "google/protobuf/struct.proto";
+
 option go_package = "github.com/mwantia/forge-sdk/pkg/plugins/grpc/memory/proto";
 
 service MemoryService {
@@ -10,9 +12,9 @@ service MemoryService {
 }
 
 message StoreRequest {
-    string              content   = 1;
-    map<string, string> metadata  = 2;
-    string              namespace = 3;
+    string                 content   = 1;
+    google.protobuf.Struct metadata  = 2;
+    string                 namespace = 3;
 }
 
 message StoreResponse {
@@ -20,10 +22,10 @@ message StoreResponse {
 }
 
 message RetrieveRequest {
-    string              query     = 1;
-    int32               limit     = 2;
-    string              namespace = 3;
-    map<string, string> filter    = 4;
+    string                 query     = 1;
+    int32                  limit     = 2;
+    string                 namespace = 3;
+    google.protobuf.Struct filter    = 4;
 }
 
 message RetrieveResponse {
@@ -31,8 +33,8 @@ message RetrieveResponse {
 }
 
 message MemoryResultProto {
-    string              id       = 1;
-    string              content  = 2;
-    double              score    = 3;
-    map<string, string> metadata = 4;
+    string                 id       = 1;
+    string                 content  = 2;
+    double                 score    = 3;
+    google.protobuf.Struct metadata = 4;
 }
