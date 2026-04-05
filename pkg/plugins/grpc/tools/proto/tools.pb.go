@@ -214,6 +214,126 @@ func (x *GetToolResponse) GetTool() *ToolDefinitionProto {
 	return nil
 }
 
+type ToolPropertyProto struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Type          string                 `protobuf:"bytes,1,opt,name=type,proto3" json:"type,omitempty"`
+	Description   string                 `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
+	Enum          []string               `protobuf:"bytes,3,rep,name=enum,proto3" json:"enum,omitempty"`
+	Format        string                 `protobuf:"bytes,4,opt,name=format,proto3" json:"format,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ToolPropertyProto) Reset() {
+	*x = ToolPropertyProto{}
+	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ToolPropertyProto) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ToolPropertyProto) ProtoMessage() {}
+
+func (x *ToolPropertyProto) ProtoReflect() protoreflect.Message {
+	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ToolPropertyProto.ProtoReflect.Descriptor instead.
+func (*ToolPropertyProto) Descriptor() ([]byte, []int) {
+	return file_pkg_plugins_grpc_tools_proto_tools_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *ToolPropertyProto) GetType() string {
+	if x != nil {
+		return x.Type
+	}
+	return ""
+}
+
+func (x *ToolPropertyProto) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *ToolPropertyProto) GetEnum() []string {
+	if x != nil {
+		return x.Enum
+	}
+	return nil
+}
+
+func (x *ToolPropertyProto) GetFormat() string {
+	if x != nil {
+		return x.Format
+	}
+	return ""
+}
+
+type ToolParametersProto struct {
+	state         protoimpl.MessageState        `protogen:"open.v1"`
+	Properties    map[string]*ToolPropertyProto `protobuf:"bytes,1,rep,name=properties,proto3" json:"properties,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	Required      []string                      `protobuf:"bytes,2,rep,name=required,proto3" json:"required,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ToolParametersProto) Reset() {
+	*x = ToolParametersProto{}
+	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ToolParametersProto) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ToolParametersProto) ProtoMessage() {}
+
+func (x *ToolParametersProto) ProtoReflect() protoreflect.Message {
+	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ToolParametersProto.ProtoReflect.Descriptor instead.
+func (*ToolParametersProto) Descriptor() ([]byte, []int) {
+	return file_pkg_plugins_grpc_tools_proto_tools_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *ToolParametersProto) GetProperties() map[string]*ToolPropertyProto {
+	if x != nil {
+		return x.Properties
+	}
+	return nil
+}
+
+func (x *ToolParametersProto) GetRequired() []string {
+	if x != nil {
+		return x.Required
+	}
+	return nil
+}
+
 type ToolAnnotations struct {
 	state                protoimpl.MessageState `protogen:"open.v1"`
 	ReadOnly             bool                   `protobuf:"varint,1,opt,name=read_only,json=readOnly,proto3" json:"read_only,omitempty"`                                     // produces no side-effects
@@ -227,7 +347,7 @@ type ToolAnnotations struct {
 
 func (x *ToolAnnotations) Reset() {
 	*x = ToolAnnotations{}
-	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[4]
+	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -239,7 +359,7 @@ func (x *ToolAnnotations) String() string {
 func (*ToolAnnotations) ProtoMessage() {}
 
 func (x *ToolAnnotations) ProtoReflect() protoreflect.Message {
-	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[4]
+	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -252,7 +372,7 @@ func (x *ToolAnnotations) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ToolAnnotations.ProtoReflect.Descriptor instead.
 func (*ToolAnnotations) Descriptor() ([]byte, []int) {
-	return file_pkg_plugins_grpc_tools_proto_tools_proto_rawDescGZIP(), []int{4}
+	return file_pkg_plugins_grpc_tools_proto_tools_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *ToolAnnotations) GetReadOnly() bool {
@@ -294,7 +414,7 @@ type ToolDefinitionProto struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
 	Name               string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	Description        string                 `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
-	Parameters         *structpb.Struct       `protobuf:"bytes,3,opt,name=parameters,proto3" json:"parameters,omitempty"`
+	Parameters         *ToolParametersProto   `protobuf:"bytes,3,opt,name=parameters,proto3" json:"parameters,omitempty"`
 	Tags               []string               `protobuf:"bytes,4,rep,name=tags,proto3" json:"tags,omitempty"`
 	Annotations        *ToolAnnotations       `protobuf:"bytes,5,opt,name=annotations,proto3" json:"annotations,omitempty"`
 	Version            string                 `protobuf:"bytes,6,opt,name=version,proto3" json:"version,omitempty"`
@@ -306,7 +426,7 @@ type ToolDefinitionProto struct {
 
 func (x *ToolDefinitionProto) Reset() {
 	*x = ToolDefinitionProto{}
-	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[5]
+	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -318,7 +438,7 @@ func (x *ToolDefinitionProto) String() string {
 func (*ToolDefinitionProto) ProtoMessage() {}
 
 func (x *ToolDefinitionProto) ProtoReflect() protoreflect.Message {
-	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[5]
+	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -331,7 +451,7 @@ func (x *ToolDefinitionProto) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ToolDefinitionProto.ProtoReflect.Descriptor instead.
 func (*ToolDefinitionProto) Descriptor() ([]byte, []int) {
-	return file_pkg_plugins_grpc_tools_proto_tools_proto_rawDescGZIP(), []int{5}
+	return file_pkg_plugins_grpc_tools_proto_tools_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *ToolDefinitionProto) GetName() string {
@@ -348,7 +468,7 @@ func (x *ToolDefinitionProto) GetDescription() string {
 	return ""
 }
 
-func (x *ToolDefinitionProto) GetParameters() *structpb.Struct {
+func (x *ToolDefinitionProto) GetParameters() *ToolParametersProto {
 	if x != nil {
 		return x.Parameters
 	}
@@ -401,7 +521,7 @@ type ExecuteRequest struct {
 
 func (x *ExecuteRequest) Reset() {
 	*x = ExecuteRequest{}
-	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[6]
+	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -413,7 +533,7 @@ func (x *ExecuteRequest) String() string {
 func (*ExecuteRequest) ProtoMessage() {}
 
 func (x *ExecuteRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[6]
+	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -426,7 +546,7 @@ func (x *ExecuteRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExecuteRequest.ProtoReflect.Descriptor instead.
 func (*ExecuteRequest) Descriptor() ([]byte, []int) {
-	return file_pkg_plugins_grpc_tools_proto_tools_proto_rawDescGZIP(), []int{6}
+	return file_pkg_plugins_grpc_tools_proto_tools_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *ExecuteRequest) GetTool() string {
@@ -461,7 +581,7 @@ type ExecuteResponse struct {
 
 func (x *ExecuteResponse) Reset() {
 	*x = ExecuteResponse{}
-	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[7]
+	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -473,7 +593,7 @@ func (x *ExecuteResponse) String() string {
 func (*ExecuteResponse) ProtoMessage() {}
 
 func (x *ExecuteResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[7]
+	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -486,7 +606,7 @@ func (x *ExecuteResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExecuteResponse.ProtoReflect.Descriptor instead.
 func (*ExecuteResponse) Descriptor() ([]byte, []int) {
-	return file_pkg_plugins_grpc_tools_proto_tools_proto_rawDescGZIP(), []int{7}
+	return file_pkg_plugins_grpc_tools_proto_tools_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *ExecuteResponse) GetResult() *structpb.Value {
@@ -522,7 +642,7 @@ type ExecuteChunk struct {
 
 func (x *ExecuteChunk) Reset() {
 	*x = ExecuteChunk{}
-	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[8]
+	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -534,7 +654,7 @@ func (x *ExecuteChunk) String() string {
 func (*ExecuteChunk) ProtoMessage() {}
 
 func (x *ExecuteChunk) ProtoReflect() protoreflect.Message {
-	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[8]
+	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -547,7 +667,7 @@ func (x *ExecuteChunk) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExecuteChunk.ProtoReflect.Descriptor instead.
 func (*ExecuteChunk) Descriptor() ([]byte, []int) {
-	return file_pkg_plugins_grpc_tools_proto_tools_proto_rawDescGZIP(), []int{8}
+	return file_pkg_plugins_grpc_tools_proto_tools_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *ExecuteChunk) GetCallId() string {
@@ -587,7 +707,7 @@ type CancelRequest struct {
 
 func (x *CancelRequest) Reset() {
 	*x = CancelRequest{}
-	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[9]
+	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -599,7 +719,7 @@ func (x *CancelRequest) String() string {
 func (*CancelRequest) ProtoMessage() {}
 
 func (x *CancelRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[9]
+	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -612,7 +732,7 @@ func (x *CancelRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CancelRequest.ProtoReflect.Descriptor instead.
 func (*CancelRequest) Descriptor() ([]byte, []int) {
-	return file_pkg_plugins_grpc_tools_proto_tools_proto_rawDescGZIP(), []int{9}
+	return file_pkg_plugins_grpc_tools_proto_tools_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *CancelRequest) GetCallId() string {
@@ -631,7 +751,7 @@ type CancelResponse struct {
 
 func (x *CancelResponse) Reset() {
 	*x = CancelResponse{}
-	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[10]
+	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -643,7 +763,7 @@ func (x *CancelResponse) String() string {
 func (*CancelResponse) ProtoMessage() {}
 
 func (x *CancelResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[10]
+	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -656,7 +776,7 @@ func (x *CancelResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CancelResponse.ProtoReflect.Descriptor instead.
 func (*CancelResponse) Descriptor() ([]byte, []int) {
-	return file_pkg_plugins_grpc_tools_proto_tools_proto_rawDescGZIP(), []int{10}
+	return file_pkg_plugins_grpc_tools_proto_tools_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *CancelResponse) GetOk() bool {
@@ -676,7 +796,7 @@ type ValidateRequest struct {
 
 func (x *ValidateRequest) Reset() {
 	*x = ValidateRequest{}
-	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[11]
+	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -688,7 +808,7 @@ func (x *ValidateRequest) String() string {
 func (*ValidateRequest) ProtoMessage() {}
 
 func (x *ValidateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[11]
+	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -701,7 +821,7 @@ func (x *ValidateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ValidateRequest.ProtoReflect.Descriptor instead.
 func (*ValidateRequest) Descriptor() ([]byte, []int) {
-	return file_pkg_plugins_grpc_tools_proto_tools_proto_rawDescGZIP(), []int{11}
+	return file_pkg_plugins_grpc_tools_proto_tools_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *ValidateRequest) GetTool() string {
@@ -728,7 +848,7 @@ type ValidateResponse struct {
 
 func (x *ValidateResponse) Reset() {
 	*x = ValidateResponse{}
-	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[12]
+	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -740,7 +860,7 @@ func (x *ValidateResponse) String() string {
 func (*ValidateResponse) ProtoMessage() {}
 
 func (x *ValidateResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[12]
+	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -753,7 +873,7 @@ func (x *ValidateResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ValidateResponse.ProtoReflect.Descriptor instead.
 func (*ValidateResponse) Descriptor() ([]byte, []int) {
-	return file_pkg_plugins_grpc_tools_proto_tools_proto_rawDescGZIP(), []int{12}
+	return file_pkg_plugins_grpc_tools_proto_tools_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *ValidateResponse) GetValid() bool {
@@ -786,7 +906,20 @@ const file_pkg_plugins_grpc_tools_proto_tools_proto_rawDesc = "" +
 	"\x0eGetToolRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\"A\n" +
 	"\x0fGetToolResponse\x12.\n" +
-	"\x04tool\x18\x01 \x01(\v2\x1a.tools.ToolDefinitionProtoR\x04tool\"\xc2\x01\n" +
+	"\x04tool\x18\x01 \x01(\v2\x1a.tools.ToolDefinitionProtoR\x04tool\"u\n" +
+	"\x11ToolPropertyProto\x12\x12\n" +
+	"\x04type\x18\x01 \x01(\tR\x04type\x12 \n" +
+	"\vdescription\x18\x02 \x01(\tR\vdescription\x12\x12\n" +
+	"\x04enum\x18\x03 \x03(\tR\x04enum\x12\x16\n" +
+	"\x06format\x18\x04 \x01(\tR\x06format\"\xd6\x01\n" +
+	"\x13ToolParametersProto\x12J\n" +
+	"\n" +
+	"properties\x18\x01 \x03(\v2*.tools.ToolParametersProto.PropertiesEntryR\n" +
+	"properties\x12\x1a\n" +
+	"\brequired\x18\x02 \x03(\tR\brequired\x1aW\n" +
+	"\x0fPropertiesEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12.\n" +
+	"\x05value\x18\x02 \x01(\v2\x18.tools.ToolPropertyProtoR\x05value:\x028\x01\"\xc2\x01\n" +
 	"\x0fToolAnnotations\x12\x1b\n" +
 	"\tread_only\x18\x01 \x01(\bR\breadOnly\x12 \n" +
 	"\vdestructive\x18\x02 \x01(\bR\vdestructive\x12\x1e\n" +
@@ -794,12 +927,12 @@ const file_pkg_plugins_grpc_tools_proto_tools_proto_rawDesc = "" +
 	"idempotent\x18\x03 \x01(\bR\n" +
 	"idempotent\x123\n" +
 	"\x15requires_confirmation\x18\x04 \x01(\bR\x14requiresConfirmation\x12\x1b\n" +
-	"\tcost_hint\x18\x05 \x01(\tR\bcostHint\"\xbd\x02\n" +
+	"\tcost_hint\x18\x05 \x01(\tR\bcostHint\"\xc0\x02\n" +
 	"\x13ToolDefinitionProto\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12 \n" +
-	"\vdescription\x18\x02 \x01(\tR\vdescription\x127\n" +
+	"\vdescription\x18\x02 \x01(\tR\vdescription\x12:\n" +
 	"\n" +
-	"parameters\x18\x03 \x01(\v2\x17.google.protobuf.StructR\n" +
+	"parameters\x18\x03 \x01(\v2\x1a.tools.ToolParametersProtoR\n" +
 	"parameters\x12\x12\n" +
 	"\x04tags\x18\x04 \x03(\tR\x04tags\x128\n" +
 	"\vannotations\x18\x05 \x01(\v2\x16.tools.ToolAnnotationsR\vannotations\x12\x18\n" +
@@ -851,51 +984,56 @@ func file_pkg_plugins_grpc_tools_proto_tools_proto_rawDescGZIP() []byte {
 	return file_pkg_plugins_grpc_tools_proto_tools_proto_rawDescData
 }
 
-var file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
+var file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
 var file_pkg_plugins_grpc_tools_proto_tools_proto_goTypes = []any{
 	(*ListToolsRequest)(nil),    // 0: tools.ListToolsRequest
 	(*ListToolsResponse)(nil),   // 1: tools.ListToolsResponse
 	(*GetToolRequest)(nil),      // 2: tools.GetToolRequest
 	(*GetToolResponse)(nil),     // 3: tools.GetToolResponse
-	(*ToolAnnotations)(nil),     // 4: tools.ToolAnnotations
-	(*ToolDefinitionProto)(nil), // 5: tools.ToolDefinitionProto
-	(*ExecuteRequest)(nil),      // 6: tools.ExecuteRequest
-	(*ExecuteResponse)(nil),     // 7: tools.ExecuteResponse
-	(*ExecuteChunk)(nil),        // 8: tools.ExecuteChunk
-	(*CancelRequest)(nil),       // 9: tools.CancelRequest
-	(*CancelResponse)(nil),      // 10: tools.CancelResponse
-	(*ValidateRequest)(nil),     // 11: tools.ValidateRequest
-	(*ValidateResponse)(nil),    // 12: tools.ValidateResponse
-	(*structpb.Struct)(nil),     // 13: google.protobuf.Struct
-	(*structpb.Value)(nil),      // 14: google.protobuf.Value
+	(*ToolPropertyProto)(nil),   // 4: tools.ToolPropertyProto
+	(*ToolParametersProto)(nil), // 5: tools.ToolParametersProto
+	(*ToolAnnotations)(nil),     // 6: tools.ToolAnnotations
+	(*ToolDefinitionProto)(nil), // 7: tools.ToolDefinitionProto
+	(*ExecuteRequest)(nil),      // 8: tools.ExecuteRequest
+	(*ExecuteResponse)(nil),     // 9: tools.ExecuteResponse
+	(*ExecuteChunk)(nil),        // 10: tools.ExecuteChunk
+	(*CancelRequest)(nil),       // 11: tools.CancelRequest
+	(*CancelResponse)(nil),      // 12: tools.CancelResponse
+	(*ValidateRequest)(nil),     // 13: tools.ValidateRequest
+	(*ValidateResponse)(nil),    // 14: tools.ValidateResponse
+	nil,                         // 15: tools.ToolParametersProto.PropertiesEntry
+	(*structpb.Struct)(nil),     // 16: google.protobuf.Struct
+	(*structpb.Value)(nil),      // 17: google.protobuf.Value
 }
 var file_pkg_plugins_grpc_tools_proto_tools_proto_depIdxs = []int32{
-	5,  // 0: tools.ListToolsResponse.tools:type_name -> tools.ToolDefinitionProto
-	5,  // 1: tools.GetToolResponse.tool:type_name -> tools.ToolDefinitionProto
-	13, // 2: tools.ToolDefinitionProto.parameters:type_name -> google.protobuf.Struct
-	4,  // 3: tools.ToolDefinitionProto.annotations:type_name -> tools.ToolAnnotations
-	13, // 4: tools.ExecuteRequest.arguments:type_name -> google.protobuf.Struct
-	14, // 5: tools.ExecuteResponse.result:type_name -> google.protobuf.Value
-	13, // 6: tools.ExecuteResponse.metadata:type_name -> google.protobuf.Struct
-	14, // 7: tools.ExecuteChunk.delta:type_name -> google.protobuf.Value
-	13, // 8: tools.ValidateRequest.arguments:type_name -> google.protobuf.Struct
-	0,  // 9: tools.ToolsService.ListTools:input_type -> tools.ListToolsRequest
-	2,  // 10: tools.ToolsService.GetTool:input_type -> tools.GetToolRequest
-	6,  // 11: tools.ToolsService.Execute:input_type -> tools.ExecuteRequest
-	6,  // 12: tools.ToolsService.ExecuteStream:input_type -> tools.ExecuteRequest
-	9,  // 13: tools.ToolsService.Cancel:input_type -> tools.CancelRequest
-	11, // 14: tools.ToolsService.Validate:input_type -> tools.ValidateRequest
-	1,  // 15: tools.ToolsService.ListTools:output_type -> tools.ListToolsResponse
-	3,  // 16: tools.ToolsService.GetTool:output_type -> tools.GetToolResponse
-	7,  // 17: tools.ToolsService.Execute:output_type -> tools.ExecuteResponse
-	8,  // 18: tools.ToolsService.ExecuteStream:output_type -> tools.ExecuteChunk
-	10, // 19: tools.ToolsService.Cancel:output_type -> tools.CancelResponse
-	12, // 20: tools.ToolsService.Validate:output_type -> tools.ValidateResponse
-	15, // [15:21] is the sub-list for method output_type
-	9,  // [9:15] is the sub-list for method input_type
-	9,  // [9:9] is the sub-list for extension type_name
-	9,  // [9:9] is the sub-list for extension extendee
-	0,  // [0:9] is the sub-list for field type_name
+	7,  // 0: tools.ListToolsResponse.tools:type_name -> tools.ToolDefinitionProto
+	7,  // 1: tools.GetToolResponse.tool:type_name -> tools.ToolDefinitionProto
+	15, // 2: tools.ToolParametersProto.properties:type_name -> tools.ToolParametersProto.PropertiesEntry
+	5,  // 3: tools.ToolDefinitionProto.parameters:type_name -> tools.ToolParametersProto
+	6,  // 4: tools.ToolDefinitionProto.annotations:type_name -> tools.ToolAnnotations
+	16, // 5: tools.ExecuteRequest.arguments:type_name -> google.protobuf.Struct
+	17, // 6: tools.ExecuteResponse.result:type_name -> google.protobuf.Value
+	16, // 7: tools.ExecuteResponse.metadata:type_name -> google.protobuf.Struct
+	17, // 8: tools.ExecuteChunk.delta:type_name -> google.protobuf.Value
+	16, // 9: tools.ValidateRequest.arguments:type_name -> google.protobuf.Struct
+	4,  // 10: tools.ToolParametersProto.PropertiesEntry.value:type_name -> tools.ToolPropertyProto
+	0,  // 11: tools.ToolsService.ListTools:input_type -> tools.ListToolsRequest
+	2,  // 12: tools.ToolsService.GetTool:input_type -> tools.GetToolRequest
+	8,  // 13: tools.ToolsService.Execute:input_type -> tools.ExecuteRequest
+	8,  // 14: tools.ToolsService.ExecuteStream:input_type -> tools.ExecuteRequest
+	11, // 15: tools.ToolsService.Cancel:input_type -> tools.CancelRequest
+	13, // 16: tools.ToolsService.Validate:input_type -> tools.ValidateRequest
+	1,  // 17: tools.ToolsService.ListTools:output_type -> tools.ListToolsResponse
+	3,  // 18: tools.ToolsService.GetTool:output_type -> tools.GetToolResponse
+	9,  // 19: tools.ToolsService.Execute:output_type -> tools.ExecuteResponse
+	10, // 20: tools.ToolsService.ExecuteStream:output_type -> tools.ExecuteChunk
+	12, // 21: tools.ToolsService.Cancel:output_type -> tools.CancelResponse
+	14, // 22: tools.ToolsService.Validate:output_type -> tools.ValidateResponse
+	17, // [17:23] is the sub-list for method output_type
+	11, // [11:17] is the sub-list for method input_type
+	11, // [11:11] is the sub-list for extension type_name
+	11, // [11:11] is the sub-list for extension extendee
+	0,  // [0:11] is the sub-list for field type_name
 }
 
 func init() { file_pkg_plugins_grpc_tools_proto_tools_proto_init() }
@@ -909,7 +1047,7 @@ func file_pkg_plugins_grpc_tools_proto_tools_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_pkg_plugins_grpc_tools_proto_tools_proto_rawDesc), len(file_pkg_plugins_grpc_tools_proto_tools_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   13,
+			NumMessages:   16,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

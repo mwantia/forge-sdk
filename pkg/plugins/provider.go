@@ -141,7 +141,7 @@ type ChatMessageToolCalls struct {
 type ToolCall struct {
 	Name        string         `json:"name"`
 	Description string         `json:"description"`
-	Parameters  map[string]any `json:"parameters"`
+	Parameters  ToolParameters `json:"parameters"`
 }
 
 // UnimplementedProviderPlugin can be embedded to satisfy ProviderPlugin with default

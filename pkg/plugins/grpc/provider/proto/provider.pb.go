@@ -7,6 +7,7 @@
 package proto
 
 import (
+	proto "github.com/mwantia/forge-sdk/pkg/plugins/grpc/tools/proto"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	structpb "google.golang.org/protobuf/types/known/structpb"
@@ -343,10 +344,10 @@ func (x *MessageProto) GetToolCalls() []*ToolCallProto {
 }
 
 type ToolDefProto struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Description   string                 `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
-	Parameters    *structpb.Struct       `protobuf:"bytes,3,opt,name=parameters,proto3" json:"parameters,omitempty"`
+	state         protoimpl.MessageState     `protogen:"open.v1"`
+	Name          string                     `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Description   string                     `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
+	Parameters    *proto.ToolParametersProto `protobuf:"bytes,3,opt,name=parameters,proto3" json:"parameters,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -395,7 +396,7 @@ func (x *ToolDefProto) GetDescription() string {
 	return ""
 }
 
-func (x *ToolDefProto) GetParameters() *structpb.Struct {
+func (x *ToolDefProto) GetParameters() *proto.ToolParametersProto {
 	if x != nil {
 		return x.Parameters
 	}
@@ -1042,7 +1043,7 @@ var File_pkg_plugins_grpc_provider_proto_provider_proto protoreflect.FileDescrip
 
 const file_pkg_plugins_grpc_provider_proto_provider_proto_rawDesc = "" +
 	"\n" +
-	".pkg/plugins/grpc/provider/proto/provider.proto\x12\bprovider\x1a\x1cgoogle/protobuf/struct.proto\"\xfb\x01\n" +
+	".pkg/plugins/grpc/provider/proto/provider.proto\x12\bprovider\x1a\x1cgoogle/protobuf/struct.proto\x1a(pkg/plugins/grpc/tools/proto/tools.proto\"\xfb\x01\n" +
 	"\vChatRequest\x12\x14\n" +
 	"\x05model\x18\x01 \x01(\tR\x05model\x122\n" +
 	"\bmessages\x18\x02 \x03(\v2\x16.provider.MessageProtoR\bmessages\x12 \n" +
@@ -1074,12 +1075,12 @@ const file_pkg_plugins_grpc_provider_proto_provider_proto_rawDesc = "" +
 	"\x04role\x18\x01 \x01(\tR\x04role\x12\x18\n" +
 	"\acontent\x18\x02 \x01(\tR\acontent\x126\n" +
 	"\n" +
-	"tool_calls\x18\x03 \x03(\v2\x17.provider.ToolCallProtoR\ttoolCalls\"}\n" +
+	"tool_calls\x18\x03 \x03(\v2\x17.provider.ToolCallProtoR\ttoolCalls\"\x80\x01\n" +
 	"\fToolDefProto\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12 \n" +
-	"\vdescription\x18\x02 \x01(\tR\vdescription\x127\n" +
+	"\vdescription\x18\x02 \x01(\tR\vdescription\x12:\n" +
 	"\n" +
-	"parameters\x18\x03 \x01(\v2\x17.google.protobuf.StructR\n" +
+	"parameters\x18\x03 \x01(\v2\x1a.tools.ToolParametersProtoR\n" +
 	"parameters\"j\n" +
 	"\rToolCallProto\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
@@ -1144,25 +1145,26 @@ func file_pkg_plugins_grpc_provider_proto_provider_proto_rawDescGZIP() []byte {
 
 var file_pkg_plugins_grpc_provider_proto_provider_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
 var file_pkg_plugins_grpc_provider_proto_provider_proto_goTypes = []any{
-	(*ChatRequest)(nil),         // 0: provider.ChatRequest
-	(*TokenUsageProto)(nil),     // 1: provider.TokenUsageProto
-	(*ChatChunk)(nil),           // 2: provider.ChatChunk
-	(*MessageProto)(nil),        // 3: provider.MessageProto
-	(*ToolDefProto)(nil),        // 4: provider.ToolDefProto
-	(*ToolCallProto)(nil),       // 5: provider.ToolCallProto
-	(*EmbedRequest)(nil),        // 6: provider.EmbedRequest
-	(*EmbedResponse)(nil),       // 7: provider.EmbedResponse
-	(*EmbeddingProto)(nil),      // 8: provider.EmbeddingProto
-	(*ListModelsRequest)(nil),   // 9: provider.ListModelsRequest
-	(*ListModelsResponse)(nil),  // 10: provider.ListModelsResponse
-	(*CreateModelRequest)(nil),  // 11: provider.CreateModelRequest
-	(*CreateModelResponse)(nil), // 12: provider.CreateModelResponse
-	(*GetModelRequest)(nil),     // 13: provider.GetModelRequest
-	(*GetModelResponse)(nil),    // 14: provider.GetModelResponse
-	(*DeleteModelRequest)(nil),  // 15: provider.DeleteModelRequest
-	(*DeleteModelResponse)(nil), // 16: provider.DeleteModelResponse
-	(*ModelProto)(nil),          // 17: provider.ModelProto
-	(*structpb.Struct)(nil),     // 18: google.protobuf.Struct
+	(*ChatRequest)(nil),               // 0: provider.ChatRequest
+	(*TokenUsageProto)(nil),           // 1: provider.TokenUsageProto
+	(*ChatChunk)(nil),                 // 2: provider.ChatChunk
+	(*MessageProto)(nil),              // 3: provider.MessageProto
+	(*ToolDefProto)(nil),              // 4: provider.ToolDefProto
+	(*ToolCallProto)(nil),             // 5: provider.ToolCallProto
+	(*EmbedRequest)(nil),              // 6: provider.EmbedRequest
+	(*EmbedResponse)(nil),             // 7: provider.EmbedResponse
+	(*EmbeddingProto)(nil),            // 8: provider.EmbeddingProto
+	(*ListModelsRequest)(nil),         // 9: provider.ListModelsRequest
+	(*ListModelsResponse)(nil),        // 10: provider.ListModelsResponse
+	(*CreateModelRequest)(nil),        // 11: provider.CreateModelRequest
+	(*CreateModelResponse)(nil),       // 12: provider.CreateModelResponse
+	(*GetModelRequest)(nil),           // 13: provider.GetModelRequest
+	(*GetModelResponse)(nil),          // 14: provider.GetModelResponse
+	(*DeleteModelRequest)(nil),        // 15: provider.DeleteModelRequest
+	(*DeleteModelResponse)(nil),       // 16: provider.DeleteModelResponse
+	(*ModelProto)(nil),                // 17: provider.ModelProto
+	(*structpb.Struct)(nil),           // 18: google.protobuf.Struct
+	(*proto.ToolParametersProto)(nil), // 19: tools.ToolParametersProto
 }
 var file_pkg_plugins_grpc_provider_proto_provider_proto_depIdxs = []int32{
 	3,  // 0: provider.ChatRequest.messages:type_name -> provider.MessageProto
@@ -1171,7 +1173,7 @@ var file_pkg_plugins_grpc_provider_proto_provider_proto_depIdxs = []int32{
 	5,  // 3: provider.ChatChunk.tool_calls:type_name -> provider.ToolCallProto
 	1,  // 4: provider.ChatChunk.usage:type_name -> provider.TokenUsageProto
 	5,  // 5: provider.MessageProto.tool_calls:type_name -> provider.ToolCallProto
-	18, // 6: provider.ToolDefProto.parameters:type_name -> google.protobuf.Struct
+	19, // 6: provider.ToolDefProto.parameters:type_name -> tools.ToolParametersProto
 	18, // 7: provider.ToolCallProto.arguments:type_name -> google.protobuf.Struct
 	8,  // 8: provider.EmbedResponse.embeddings:type_name -> provider.EmbeddingProto
 	17, // 9: provider.ListModelsResponse.models:type_name -> provider.ModelProto

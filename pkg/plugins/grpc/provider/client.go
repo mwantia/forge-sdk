@@ -7,6 +7,7 @@ import (
 
 	"github.com/mwantia/forge-sdk/pkg/plugins"
 	proto "github.com/mwantia/forge-sdk/pkg/plugins/grpc/provider/proto"
+	toolsgrpc "github.com/mwantia/forge-sdk/pkg/plugins/grpc/tools"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/structpb"
 )
@@ -89,14 +90,10 @@ func (c *Client) Chat(ctx context.Context, messages []plugins.ChatMessage, tools
 		req.Messages = append(req.Messages, pm)
 	}
 	for _, t := range tools {
-		params, err := structpb.NewStruct(t.Parameters)
-		if err != nil {
-			return nil, err
-		}
 		req.Tools = append(req.Tools, &proto.ToolDefProto{
 			Name:        t.Name,
 			Description: t.Description,
-			Parameters:  params,
+			Parameters:  toolsgrpc.ToolParametersToProto(t.Parameters),
 		})
 	}
 

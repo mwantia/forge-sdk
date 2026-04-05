@@ -159,14 +159,10 @@ func protoToToolDefinition(t *proto.ToolDefinitionProto) plugins.ToolDefinition 
 	if t == nil {
 		return plugins.ToolDefinition{}
 	}
-	var params map[string]any
-	if t.Parameters != nil {
-		params = t.Parameters.AsMap()
-	}
 	def := plugins.ToolDefinition{
 		Name:               t.Name,
 		Description:        t.Description,
-		Parameters:         params,
+		Parameters:         ProtoToToolParameters(t.Parameters),
 		Tags:               t.Tags,
 		Version:            t.Version,
 		Deprecated:         t.Deprecated,

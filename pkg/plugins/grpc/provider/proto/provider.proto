@@ -3,6 +3,7 @@ syntax = "proto3";
 package provider;
 
 import "google/protobuf/struct.proto";
+import "pkg/plugins/grpc/tools/proto/tools.proto";
 
 option go_package = "github.com/mwantia/forge-sdk/pkg/plugins/grpc/provider/proto";
 
@@ -52,9 +53,9 @@ message MessageProto {
 }
 
 message ToolDefProto {
-    string                 name        = 1;
-    string                 description = 2;
-    google.protobuf.Struct parameters  = 3;
+    string                     name        = 1;
+    string                     description = 2;
+    tools.ToolParametersProto  parameters  = 3;
 }
 
 message ToolCallProto {

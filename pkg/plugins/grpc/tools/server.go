@@ -2,13 +2,11 @@ package tools
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"io"
 
 	"github.com/mwantia/forge-sdk/pkg/plugins"
 	proto "github.com/mwantia/forge-sdk/pkg/plugins/grpc/tools/proto"
-	"google.golang.org/protobuf/types/known/structpb"
 )
 
 // Server implements ToolsServiceServer, bridging gRPC to the ToolsPlugin interface.
@@ -190,16 +188,12 @@ func (s *Server) Validate(ctx context.Context, req *proto.ValidateRequest) (*pro
 	}, nil
 }
 
-// toolDefinitionToProto converts a plugins.ToolDefinition to *proto.ToolDefProto.
+// toolDefinitionToProto converts a plugins.ToolDefinition to *proto.ToolDefinitionProto.
 func toolDefinitionToProto(t plugins.ToolDefinition) (*proto.ToolDefinitionProto, error) {
-	paramsStruct, err := toStruct(t.Parameters)
-	if err != nil {
-		return nil, fmt.Errorf("failed to encode parameters: %w", err)
-	}
-	p := &proto.ToolDefinitionProto{
+	return &proto.ToolDefinitionProto{
 		Name:               t.Name,
 		Description:        t.Description,
-		Parameters:         paramsStruct,
+		Parameters:         ToolParametersToProto(t.Parameters),
 		Tags:               t.Tags,
 		Version:            t.Version,
 		Deprecated:         t.Deprecated,
@@ -211,42 +205,9 @@ func toolDefinitionToProto(t plugins.ToolDefinition) (*proto.ToolDefinitionProto
 			RequiresConfirmation: t.Annotations.RequiresConfirmation,
 			CostHint:             string(t.Annotations.CostHint),
 		},
-	}
-	return p, nil
+	}, nil
 }
 
-// toStruct converts a map[string]any to *structpb.Struct via a JSON round-trip so
-// that native Go types like []string are normalised to JSON-compatible equivalents.
-func toStruct(m map[string]any) (*structpb.Struct, error) {
-	if len(m) == 0 {
-		return nil, nil
-	}
-	b, err := json.Marshal(m)
-	if err != nil {
-		return nil, err
-	}
-	var normalized map[string]any
-	if err := json.Unmarshal(b, &normalized); err != nil {
-		return nil, err
-	}
-	return structpb.NewStruct(normalized)
-}
-
-// toValue converts any value to *structpb.Value via a JSON round-trip.
-func toValue(v any) (*structpb.Value, error) {
-	if v == nil {
-		return structpb.NewNullValue(), nil
-	}
-	b, err := json.Marshal(v)
-	if err != nil {
-		return nil, err
-	}
-	var normalized any
-	if err := json.Unmarshal(b, &normalized); err != nil {
-		return nil, err
-	}
-	return structpb.NewValue(normalized)
-}
 
 // isEOF returns true if err signals end-of-stream.
 func isEOF(err error) bool {

@@ -2,6 +2,7 @@ package plugins
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/mwantia/forge-sdk/pkg/errors"
 )
@@ -13,6 +14,14 @@ var (
 	ToolCostCheap     ToolCostHint = "cheap"
 	ToolCostModerate  ToolCostHint = "moderate"
 	ToolCostExpensive ToolCostHint = "expensive"
+)
+
+type ToolIdempotentProbability string
+
+var (
+	ToolIdempotentGuaranteed ToolIdempotentProbability = "guaranteed"
+	ToolIdempotentUnlikely   ToolIdempotentProbability = "unlikely"
+	ToolIdempotentFrequent   ToolIdempotentProbability = "frequent"
 )
 
 // ToolsPlugin acts as bridge (or summary of embedded tools) for tool calling.
@@ -40,23 +49,37 @@ type ListToolsResponse struct {
 
 // --- Tool definition ---
 
-type ToolAnnotations struct {
-	ReadOnly             bool         `json:"read_only,omitempty"`
-	Destructive          bool         `json:"destructive,omitempty"`
-	Idempotent           bool         `json:"idempotent,omitempty"`
-	RequiresConfirmation bool         `json:"requires_confirmation,omitempty"`
-	CostHint             ToolCostHint `json:"cost_hint,omitempty"`
-}
-
 type ToolDefinition struct {
 	Name               string          `json:"name"`
 	Description        string          `json:"description"`
-	Parameters         map[string]any  `json:"parameters"`
 	Tags               []string        `json:"tags,omitempty"`
 	Annotations        ToolAnnotations `json:"annotations"`
+	Parameters         ToolParameters  `json:"parameters"`
 	Version            string          `json:"version,omitempty"`
 	Deprecated         bool            `json:"deprecated,omitempty"`
 	DeprecationMessage string          `json:"deprecation_message,omitempty"`
+}
+
+type ToolAnnotations struct {
+	ReadOnly              bool                      `json:"read_only,omitempty"`
+	Destructive           bool                      `json:"destructive,omitempty"`
+	Idempotent            bool                      `json:"idempotent,omitempty"`
+	IdempotentProbability ToolIdempotentProbability `json:"idempotent_probability,omitempty"`
+	RequiresConfirmation  bool                      `json:"requires_confirmation,omitempty"`
+	CostHint              ToolCostHint              `json:"cost_hint,omitempty"`
+}
+
+type ToolParameters struct {
+	Type       string                    `json:"type"`
+	Properties map[string]ToolProperties `json:"properties"`
+	Required   []string                  `json:"required,omitempty"`
+}
+
+type ToolProperties struct {
+	Type        string   `json:"type"`
+	Description string   `json:"description"`
+	Enum        []string `json:"enum,omitempty"`
+	Format      string   `json:"format,omitempty"`
 }
 
 // --- Execute ---
@@ -120,3 +143,21 @@ func (UnimplementedToolsPlugin) Validate(_ context.Context, _ ExecuteRequest) (*
 }
 
 var _ ToolsPlugin = (*UnimplementedToolsPlugin)(nil)
+
+// ValidateAgainstDefinition checks that all required fields declared in def.Parameters.Required
+// are present and non-empty in req.Arguments.
+func ValidateAgainstDefinition(def ToolDefinition, req ExecuteRequest) *ValidateResponse {
+	var errs []string
+	for _, key := range def.Parameters.Required {
+		v, exists := req.Arguments[key]
+		if !exists {
+			errs = append(errs, fmt.Sprintf("%q is required", key))
+			continue
+		}
+		s, ok := v.(string)
+		if !ok || s == "" {
+			errs = append(errs, fmt.Sprintf("%q is required", key))
+		}
+	}
+	return &ValidateResponse{Valid: len(errs) == 0, Errors: errs}
+}

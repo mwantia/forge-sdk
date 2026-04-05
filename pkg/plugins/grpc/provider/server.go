@@ -7,6 +7,7 @@ import (
 
 	"github.com/mwantia/forge-sdk/pkg/plugins"
 	proto "github.com/mwantia/forge-sdk/pkg/plugins/grpc/provider/proto"
+	toolsgrpc "github.com/mwantia/forge-sdk/pkg/plugins/grpc/tools"
 	"google.golang.org/protobuf/types/known/structpb"
 )
 
@@ -55,7 +56,7 @@ func (s *Server) Chat(req *proto.ChatRequest, stream proto.ProviderService_ChatS
 		tools = append(tools, plugins.ToolCall{
 			Name:        t.Name,
 			Description: t.Description,
-			Parameters:  t.Parameters.AsMap(),
+			Parameters:  toolsgrpc.ProtoToToolParameters(t.Parameters),
 		})
 	}
 

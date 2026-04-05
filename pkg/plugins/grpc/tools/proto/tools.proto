@@ -34,6 +34,18 @@ message GetToolResponse { ToolDefinitionProto tool = 1; }
 
 // --- Tool definition ---
 
+message ToolPropertyProto {
+    string          type        = 1;
+    string          description = 2;
+    repeated string enum        = 3;
+    string          format      = 4;
+}
+
+message ToolParametersProto {
+    map<string, ToolPropertyProto> properties = 1;
+    repeated string                required   = 2;
+}
+
 message ToolAnnotations {
     bool   read_only             = 1; // produces no side-effects
     bool   destructive           = 2; // cannot be undone
@@ -43,14 +55,14 @@ message ToolAnnotations {
 }
 
 message ToolDefinitionProto {
-    string                 name                = 1;
-    string                 description         = 2;
-    google.protobuf.Struct parameters          = 3;
-    repeated string        tags                = 4;
-    ToolAnnotations        annotations         = 5;
-    string                 version             = 6;
-    bool                   deprecated          = 7;
-    string                 deprecation_message = 8;
+    string              name                = 1;
+    string              description         = 2;
+    ToolParametersProto parameters          = 3;
+    repeated string     tags                = 4;
+    ToolAnnotations     annotations         = 5;
+    string              version             = 6;
+    bool                deprecated          = 7;
+    string              deprecation_message = 8;
 }
 
 // --- Execute ---
