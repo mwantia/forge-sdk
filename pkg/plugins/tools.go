@@ -70,12 +70,12 @@ type ToolAnnotations struct {
 }
 
 type ToolParameters struct {
-	Type       string                    `json:"type"`
-	Properties map[string]ToolProperties `json:"properties"`
-	Required   []string                  `json:"required,omitempty"`
+	Type       string                  `json:"type"`
+	Properties map[string]ToolProperty `json:"properties"`
+	Required   []string                `json:"required,omitempty"`
 }
 
-type ToolProperties struct {
+type ToolProperty struct {
 	Type        string   `json:"type"`
 	Description string   `json:"description"`
 	Enum        []string `json:"enum,omitempty"`
