@@ -2,7 +2,6 @@ package plugins
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/mwantia/forge-sdk/pkg/errors"
 )
@@ -143,21 +142,3 @@ func (UnimplementedToolsPlugin) Validate(_ context.Context, _ ExecuteRequest) (*
 }
 
 var _ ToolsPlugin = (*UnimplementedToolsPlugin)(nil)
-
-// ValidateAgainstDefinition checks that all required fields declared in def.Parameters.Required
-// are present and non-empty in req.Arguments.
-func ValidateAgainstDefinition(def ToolDefinition, req ExecuteRequest) *ValidateResponse {
-	var errs []string
-	for _, key := range def.Parameters.Required {
-		v, exists := req.Arguments[key]
-		if !exists {
-			errs = append(errs, fmt.Sprintf("%q is required", key))
-			continue
-		}
-		s, ok := v.(string)
-		if !ok || s == "" {
-			errs = append(errs, fmt.Sprintf("%q is required", key))
-		}
-	}
-	return &ValidateResponse{Valid: len(errs) == 0, Errors: errs}
-}

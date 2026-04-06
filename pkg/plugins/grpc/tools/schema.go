@@ -41,9 +41,9 @@ func ProtoToToolParameters(p *proto.ToolParametersProto) plugins.ToolParameters 
 	}
 	for name, prop := range p.Properties {
 		if out.Properties == nil {
-			out.Properties = make(map[string]plugins.ToolProperties)
+			out.Properties = make(map[string]plugins.ToolProperty)
 		}
-		out.Properties[name] = plugins.ToolProperties{
+		out.Properties[name] = plugins.ToolProperty{
 			Type:        prop.Type,
 			Description: prop.Description,
 			Enum:        prop.Enum,
