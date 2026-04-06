@@ -81,10 +81,11 @@ func (s *Server) Chat(req *proto.ChatRequest, stream proto.ProviderService_ChatS
 		}
 
 		protoChunk := &proto.ChatChunk{
-			Id:    chunk.ID,
-			Role:  chunk.Role,
-			Delta: chunk.Delta,
-			Done:  chunk.Done,
+			Id:       chunk.ID,
+			Role:     chunk.Role,
+			Delta:    chunk.Delta,
+			Thinking: chunk.Thinking,
+			Done:     chunk.Done,
 		}
 		for _, tc := range chunk.ToolCalls {
 			arguments, err := structpb.NewStruct(tc.Arguments)

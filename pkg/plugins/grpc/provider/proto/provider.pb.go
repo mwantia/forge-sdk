@@ -200,6 +200,7 @@ type ChatChunk struct {
 	ToolCalls     []*ToolCallProto       `protobuf:"bytes,5,rep,name=tool_calls,json=toolCalls,proto3" json:"tool_calls,omitempty"`
 	Model         string                 `protobuf:"bytes,6,opt,name=model,proto3" json:"model,omitempty"`
 	Usage         *TokenUsageProto       `protobuf:"bytes,7,opt,name=usage,proto3" json:"usage,omitempty"`
+	Thinking      string                 `protobuf:"bytes,8,opt,name=thinking,proto3" json:"thinking,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -281,6 +282,13 @@ func (x *ChatChunk) GetUsage() *TokenUsageProto {
 		return x.Usage
 	}
 	return nil
+}
+
+func (x *ChatChunk) GetThinking() string {
+	if x != nil {
+		return x.Thinking
+	}
+	return ""
 }
 
 type MessageProto struct {
@@ -1061,7 +1069,7 @@ const file_pkg_plugins_grpc_provider_proto_provider_proto_rawDesc = "" +
 	"\voutput_cost\x18\x05 \x01(\x01R\n" +
 	"outputCost\x12\x1d\n" +
 	"\n" +
-	"total_cost\x18\x06 \x01(\x01R\ttotalCost\"\xd8\x01\n" +
+	"total_cost\x18\x06 \x01(\x01R\ttotalCost\"\xf4\x01\n" +
 	"\tChatChunk\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04role\x18\x02 \x01(\tR\x04role\x12\x14\n" +
@@ -1070,7 +1078,8 @@ const file_pkg_plugins_grpc_provider_proto_provider_proto_rawDesc = "" +
 	"\n" +
 	"tool_calls\x18\x05 \x03(\v2\x17.provider.ToolCallProtoR\ttoolCalls\x12\x14\n" +
 	"\x05model\x18\x06 \x01(\tR\x05model\x12/\n" +
-	"\x05usage\x18\a \x01(\v2\x19.provider.TokenUsageProtoR\x05usage\"t\n" +
+	"\x05usage\x18\a \x01(\v2\x19.provider.TokenUsageProtoR\x05usage\x12\x1a\n" +
+	"\bthinking\x18\b \x01(\tR\bthinking\"t\n" +
 	"\fMessageProto\x12\x12\n" +
 	"\x04role\x18\x01 \x01(\tR\x04role\x12\x18\n" +
 	"\acontent\x18\x02 \x01(\tR\acontent\x126\n" +

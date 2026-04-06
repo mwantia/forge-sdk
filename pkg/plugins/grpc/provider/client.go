@@ -34,10 +34,11 @@ func (s *grpcChatStream) Recv() (*plugins.ChatChunk, error) {
 		return nil, err
 	}
 	result := &plugins.ChatChunk{
-		ID:    chunk.Id,
-		Role:  chunk.Role,
-		Delta: chunk.Delta,
-		Done:  chunk.Done,
+		ID:       chunk.Id,
+		Role:     chunk.Role,
+		Delta:    chunk.Delta,
+		Thinking: chunk.Thinking,
+		Done:     chunk.Done,
 	}
 	for _, tc := range chunk.ToolCalls {
 		result.ToolCalls = append(result.ToolCalls, plugins.ChatToolCall{

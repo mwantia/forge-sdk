@@ -71,11 +71,14 @@ type ModelTemplate struct {
 }
 
 // ChatChunk is a single streamed piece of a response.
-// Delta carries incremental text. ToolCalls, Done, and Usage are only set on the final chunk.
+// Delta carries incremental content text. Thinking carries reasoning/scratchpad text when
+// the model supports extended thinking — it is never mixed into Delta.
+// ToolCalls, Done, and Usage are only set on the final chunk.
 type ChatChunk struct {
 	ID        string         `json:"id,omitempty"`
 	Role      string         `json:"role,omitempty"`
 	Delta     string         `json:"delta"`
+	Thinking  string         `json:"thinking,omitempty"`
 	Done      bool           `json:"done"`
 	ToolCalls []ChatToolCall `json:"tool_calls,omitempty"`
 	Metadata  map[string]any `json:"metadata,omitempty"`
@@ -87,6 +90,7 @@ type ChatResult struct {
 	ID        string         `json:"id"`
 	Role      string         `json:"role"`
 	Content   string         `json:"content"`
+	Thinking  string         `json:"thinking,omitempty"`
 	ToolCalls []ChatToolCall `json:"tool_calls,omitempty"`
 	Metadata  map[string]any `json:"metadata,omitempty"`
 	Usage     *TokenUsage    `json:"usage,omitempty"`
@@ -111,6 +115,7 @@ func CollectStream(stream ChatStream) (*ChatResult, error) {
 			result.Role = chunk.Role
 		}
 		result.Content += chunk.Delta
+		result.Thinking += chunk.Thinking
 		result.ToolCalls = append(result.ToolCalls, chunk.ToolCalls...)
 		if chunk.Done {
 			result.Metadata = chunk.Metadata

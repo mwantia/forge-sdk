@@ -44,6 +44,7 @@ message ChatChunk {
     repeated ToolCallProto   tool_calls = 5;
     string                   model      = 6;
     TokenUsageProto          usage      = 7;
+    string                   thinking   = 8;
 }
 
 message MessageProto {
