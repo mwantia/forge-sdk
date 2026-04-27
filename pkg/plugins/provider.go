@@ -34,6 +34,7 @@ type Model struct {
 	ModelName          string         `json:"model_name,omitempty"`
 	Dimension          int            `json:"dimension,omitempty"`
 	Temperature        float64        `json:"temperature,omitempty"`
+	System             string         `json:"system,omitempty"`
 	Template           *ModelTemplate `json:"template,omitempty"`
 	Metadata           map[string]any `json:"metadata,omitempty"`
 	CostPerInputToken  float64        `json:"cost_per_input_token,omitempty"`

@@ -10,7 +10,6 @@ import (
 )
 
 // Client implements plugins.MemoryPlugin over gRPC.
-// Unimplemented capabilities (sessions, AddMessage) fall back to UnimplementedMemoryPlugin.
 type Client struct {
 	plugins.UnimplementedMemoryPlugin
 	client proto.MemoryServiceClient

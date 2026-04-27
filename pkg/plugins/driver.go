@@ -23,7 +23,6 @@ type ProviderCapabilities struct {
 
 type MemoryCapabilities struct {
 	SupportsVectorSearch bool
-	SupportSessions      bool
 	MaxContextSize       int
 }
 
@@ -72,6 +71,7 @@ type Driver interface {
 	// Plugin type accessors - return implementations only if supported
 	GetProviderPlugin(ctx context.Context) (ProviderPlugin, error)
 	GetMemoryPlugin(ctx context.Context) (MemoryPlugin, error)
+	GetSessionsPlugin(ctx context.Context) (SessionsPlugin, error)
 	GetChannelPlugin(ctx context.Context) (ChannelPlugin, error)
 	GetToolsPlugin(ctx context.Context) (ToolsPlugin, error)
 	GetSandboxPlugin(ctx context.Context) (SandboxPlugin, error)
@@ -101,6 +101,11 @@ func (u *UnimplementedDriver) GetChannelPlugin(ctx context.Context) (ChannelPlug
 
 // GetMemoryPlugin implements [Driver].
 func (u *UnimplementedDriver) GetMemoryPlugin(ctx context.Context) (MemoryPlugin, error) {
+	return nil, errors.ErrPluginCapabilityNotSupported
+}
+
+// GetSessionsPlugin implements [Driver].
+func (u *UnimplementedDriver) GetSessionsPlugin(ctx context.Context) (SessionsPlugin, error) {
 	return nil, errors.ErrPluginCapabilityNotSupported
 }
 

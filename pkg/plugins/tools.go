@@ -26,12 +26,18 @@ var (
 // ToolsPlugin acts as bridge (or summary of embedded tools) for tool calling.
 type ToolsPlugin interface {
 	BasePlugin
+
 	ListTools(ctx context.Context, filter ListToolsFilter) (*ListToolsResponse, error)
 	GetTool(ctx context.Context, name string) (*ToolDefinition, error)
 	Execute(ctx context.Context, req ExecuteRequest) (*ExecuteResponse, error)
 	ExecuteStream(ctx context.Context, req ExecuteRequest) (<-chan ExecuteChunk, error)
 	Cancel(ctx context.Context, callID string) error
 	Validate(ctx context.Context, req ExecuteRequest) (*ValidateResponse, error)
+
+	// System returns a plugin-level system-prompt fragment describing the
+	// plugin's capability domain and when to reach for it. Empty string =
+	// no contribution. Called once per pipeline turn; keep cheap.
+	System(ctx context.Context) (string, error)
 }
 
 // --- List ---
@@ -66,6 +72,12 @@ type ToolAnnotations struct {
 	IdempotentProbability ToolIdempotentProbability `json:"idempotent_probability,omitempty"`
 	RequiresConfirmation  bool                      `json:"requires_confirmation,omitempty"`
 	CostHint              ToolCostHint              `json:"cost_hint,omitempty"`
+
+	// System is free-form prose injected into the assembled system prompt
+	// under this tool's section. Use for behavioral guidance, when-to-use /
+	// when-not-to-use, anti-patterns, examples, cross-tool composition.
+	// Keep ToolDefinition.Description short and factual; put depth here.
+	System string `json:"system,omitempty"`
 }
 
 type ToolParameters struct {
@@ -139,6 +151,10 @@ func (UnimplementedToolsPlugin) Cancel(_ context.Context, _ string) error {
 
 func (UnimplementedToolsPlugin) Validate(_ context.Context, _ ExecuteRequest) (*ValidateResponse, error) {
 	return nil, errors.ErrPluginCapabilityNotSupported
+}
+
+func (UnimplementedToolsPlugin) System(_ context.Context) (string, error) {
+	return "", nil
 }
 
 var _ ToolsPlugin = (*UnimplementedToolsPlugin)(nil)

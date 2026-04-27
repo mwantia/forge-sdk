@@ -188,6 +188,18 @@ func (s *Server) Validate(ctx context.Context, req *proto.ValidateRequest) (*pro
 	}, nil
 }
 
+func (s *Server) System(ctx context.Context, _ *proto.SystemRequest) (*proto.SystemResponse, error) {
+	plugin, err := s.getPlugin(ctx)
+	if err != nil {
+		return nil, err
+	}
+	prompt, err := plugin.System(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &proto.SystemResponse{Prompt: prompt}, nil
+}
+
 // toolDefinitionToProto converts a plugins.ToolDefinition to *proto.ToolDefinitionProto.
 func toolDefinitionToProto(t plugins.ToolDefinition) (*proto.ToolDefinitionProto, error) {
 	return &proto.ToolDefinitionProto{
@@ -204,6 +216,7 @@ func toolDefinitionToProto(t plugins.ToolDefinition) (*proto.ToolDefinitionProto
 			Idempotent:           t.Annotations.Idempotent,
 			RequiresConfirmation: t.Annotations.RequiresConfirmation,
 			CostHint:             string(t.Annotations.CostHint),
+			System:               t.Annotations.System,
 		},
 	}, nil
 }

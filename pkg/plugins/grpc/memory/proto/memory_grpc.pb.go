@@ -26,6 +26,8 @@ const (
 // MemoryServiceClient is the client API for MemoryService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+//
+// MemoryService carries resource-level memory operations (store/retrieve).
 type MemoryServiceClient interface {
 	Store(ctx context.Context, in *StoreRequest, opts ...grpc.CallOption) (*StoreResponse, error)
 	Retrieve(ctx context.Context, in *RetrieveRequest, opts ...grpc.CallOption) (*RetrieveResponse, error)
@@ -62,6 +64,8 @@ func (c *memoryServiceClient) Retrieve(ctx context.Context, in *RetrieveRequest,
 // MemoryServiceServer is the server API for MemoryService service.
 // All implementations must embed UnimplementedMemoryServiceServer
 // for forward compatibility.
+//
+// MemoryService carries resource-level memory operations (store/retrieve).
 type MemoryServiceServer interface {
 	Store(context.Context, *StoreRequest) (*StoreResponse, error)
 	Retrieve(context.Context, *RetrieveRequest) (*RetrieveResponse, error)

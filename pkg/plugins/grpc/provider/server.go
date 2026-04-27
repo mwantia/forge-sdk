@@ -195,7 +195,7 @@ func (s *Server) GetModel(ctx context.Context, req *proto.GetModelRequest) (*pro
 	}
 
 	return &proto.GetModelResponse{
-		Model: &proto.ModelProto{Name: model.ModelName, Dimension: int32(model.Dimension)},
+		Model: &proto.ModelProto{Name: model.ModelName, Dimension: int32(model.Dimension), System: model.System},
 	}, nil
 }
 

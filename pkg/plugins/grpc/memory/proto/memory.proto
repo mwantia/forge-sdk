@@ -6,6 +6,7 @@ import "google/protobuf/struct.proto";
 
 option go_package = "github.com/mwantia/forge-sdk/pkg/plugins/grpc/memory/proto";
 
+// MemoryService carries resource-level memory operations (store/retrieve).
 service MemoryService {
     rpc Store(StoreRequest)       returns (StoreResponse);
     rpc Retrieve(RetrieveRequest) returns (RetrieveResponse);

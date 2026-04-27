@@ -17,6 +17,7 @@ service DriverService {
     rpc ConfigDriver(ConfigRequest)               returns (ConfigResponse);
     rpc GetProviderPlugin(GetPluginRequest)        returns (GetPluginResponse);
     rpc GetMemoryPlugin(GetPluginRequest)          returns (GetPluginResponse);
+    rpc GetSessionsPlugin(GetPluginRequest)        returns (GetPluginResponse);
     rpc GetChannelPlugin(GetPluginRequest)         returns (GetPluginResponse);
     rpc GetToolsPlugin(GetPluginRequest)           returns (GetPluginResponse);
     rpc GetSandboxPlugin(GetPluginRequest)         returns (GetPluginResponse);

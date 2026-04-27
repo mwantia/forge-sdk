@@ -5,6 +5,9 @@ const (
 	PluginTypeProvider string = "provider"
 	// A memory plugin acts as memory management for endpoints like OpenViking.
 	PluginTypeMemory string = "memory"
+	// A sessions plugin owns session + message lifecycle for plugins that
+	// manage their own storage (e.g. OpenViking).
+	PluginTypeSessions string = "sessions"
 	// A channel plugin acts as communication gateway for endpoints like Discord.
 	PluginTypeChannel string = "channel"
 	// A tools plugin acts as bridge (or summary of embedded tools) for tool calling.

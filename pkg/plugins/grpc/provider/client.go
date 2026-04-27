@@ -167,7 +167,7 @@ func (c *Client) GetModel(ctx context.Context, name string) (*plugins.Model, err
 	if resp.Model == nil {
 		return nil, fmt.Errorf("model not found: %s", name)
 	}
-	return &plugins.Model{ModelName: resp.Model.Name, Dimension: int(resp.Model.Dimension)}, nil
+	return &plugins.Model{ModelName: resp.Model.Name, Dimension: int(resp.Model.Dimension), System: resp.Model.System}, nil
 }
 
 func (c *Client) DeleteModel(ctx context.Context, name string) (bool, error) {

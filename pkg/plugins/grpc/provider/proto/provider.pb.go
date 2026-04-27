@@ -992,6 +992,7 @@ type ModelProto struct {
 	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	Dimension     int32                  `protobuf:"varint,2,opt,name=dimension,proto3" json:"dimension,omitempty"`
 	Metadata      *structpb.Struct       `protobuf:"bytes,3,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	System        string                 `protobuf:"bytes,4,opt,name=system,proto3" json:"system,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1045,6 +1046,13 @@ func (x *ModelProto) GetMetadata() *structpb.Struct {
 		return x.Metadata
 	}
 	return nil
+}
+
+func (x *ModelProto) GetSystem() string {
+	if x != nil {
+		return x.System
+	}
+	return ""
 }
 
 var File_pkg_plugins_grpc_provider_proto_provider_proto protoreflect.FileDescriptor
@@ -1125,12 +1133,13 @@ const file_pkg_plugins_grpc_provider_proto_provider_proto_rawDesc = "" +
 	"\x12DeleteModelRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\"/\n" +
 	"\x13DeleteModelResponse\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess\"s\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\"\x8b\x01\n" +
 	"\n" +
 	"ModelProto\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x1c\n" +
 	"\tdimension\x18\x02 \x01(\x05R\tdimension\x123\n" +
-	"\bmetadata\x18\x03 \x01(\v2\x17.google.protobuf.StructR\bmetadata2\xa5\x03\n" +
+	"\bmetadata\x18\x03 \x01(\v2\x17.google.protobuf.StructR\bmetadata\x12\x16\n" +
+	"\x06system\x18\x04 \x01(\tR\x06system2\xa5\x03\n" +
 	"\x0fProviderService\x124\n" +
 	"\x04Chat\x12\x15.provider.ChatRequest\x1a\x13.provider.ChatChunk0\x01\x128\n" +
 	"\x05Embed\x12\x16.provider.EmbedRequest\x1a\x17.provider.EmbedResponse\x12G\n" +

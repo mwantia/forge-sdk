@@ -154,6 +154,14 @@ func (c *Client) Validate(ctx context.Context, req plugins.ExecuteRequest) (*plu
 	}, nil
 }
 
+func (c *Client) System(ctx context.Context) (string, error) {
+	resp, err := c.client.System(ctx, &proto.SystemRequest{})
+	if err != nil {
+		return "", err
+	}
+	return resp.Prompt, nil
+}
+
 // protoToToolDefinition converts a ToolDefProto to plugins.ToolDefinition.
 func protoToToolDefinition(t *proto.ToolDefinitionProto) plugins.ToolDefinition {
 	if t == nil {
@@ -175,6 +183,7 @@ func protoToToolDefinition(t *proto.ToolDefinitionProto) plugins.ToolDefinition 
 			Idempotent:           t.Annotations.Idempotent,
 			RequiresConfirmation: t.Annotations.RequiresConfirmation,
 			CostHint:             plugins.ToolCostHint(t.Annotations.CostHint),
+			System:               t.Annotations.System,
 		}
 	}
 	return def

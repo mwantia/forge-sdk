@@ -341,6 +341,7 @@ type ToolAnnotations struct {
 	Idempotent           bool                   `protobuf:"varint,3,opt,name=idempotent,proto3" json:"idempotent,omitempty"`                                                 // safe to retry
 	RequiresConfirmation bool                   `protobuf:"varint,4,opt,name=requires_confirmation,json=requiresConfirmation,proto3" json:"requires_confirmation,omitempty"` // agent should ask before calling
 	CostHint             string                 `protobuf:"bytes,5,opt,name=cost_hint,json=costHint,proto3" json:"cost_hint,omitempty"`                                      // "free" | "cheap" | "expensive"
+	System               string                 `protobuf:"bytes,6,opt,name=system,proto3" json:"system,omitempty"`                                                          // free-form prose injected into the system prompt under this tool
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache
 }
@@ -406,6 +407,13 @@ func (x *ToolAnnotations) GetRequiresConfirmation() bool {
 func (x *ToolAnnotations) GetCostHint() string {
 	if x != nil {
 		return x.CostHint
+	}
+	return ""
+}
+
+func (x *ToolAnnotations) GetSystem() string {
+	if x != nil {
+		return x.System
 	}
 	return ""
 }
@@ -890,6 +898,86 @@ func (x *ValidateResponse) GetErrors() []string {
 	return nil
 }
 
+type SystemRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SystemRequest) Reset() {
+	*x = SystemRequest{}
+	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SystemRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SystemRequest) ProtoMessage() {}
+
+func (x *SystemRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SystemRequest.ProtoReflect.Descriptor instead.
+func (*SystemRequest) Descriptor() ([]byte, []int) {
+	return file_pkg_plugins_grpc_tools_proto_tools_proto_rawDescGZIP(), []int{15}
+}
+
+type SystemResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Prompt        string                 `protobuf:"bytes,1,opt,name=prompt,proto3" json:"prompt,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SystemResponse) Reset() {
+	*x = SystemResponse{}
+	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SystemResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SystemResponse) ProtoMessage() {}
+
+func (x *SystemResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SystemResponse.ProtoReflect.Descriptor instead.
+func (*SystemResponse) Descriptor() ([]byte, []int) {
+	return file_pkg_plugins_grpc_tools_proto_tools_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *SystemResponse) GetPrompt() string {
+	if x != nil {
+		return x.Prompt
+	}
+	return ""
+}
+
 var File_pkg_plugins_grpc_tools_proto_tools_proto protoreflect.FileDescriptor
 
 const file_pkg_plugins_grpc_tools_proto_tools_proto_rawDesc = "" +
@@ -919,7 +1007,7 @@ const file_pkg_plugins_grpc_tools_proto_tools_proto_rawDesc = "" +
 	"\brequired\x18\x02 \x03(\tR\brequired\x1aW\n" +
 	"\x0fPropertiesEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12.\n" +
-	"\x05value\x18\x02 \x01(\v2\x18.tools.ToolPropertyProtoR\x05value:\x028\x01\"\xc2\x01\n" +
+	"\x05value\x18\x02 \x01(\v2\x18.tools.ToolPropertyProtoR\x05value:\x028\x01\"\xda\x01\n" +
 	"\x0fToolAnnotations\x12\x1b\n" +
 	"\tread_only\x18\x01 \x01(\bR\breadOnly\x12 \n" +
 	"\vdestructive\x18\x02 \x01(\bR\vdestructive\x12\x1e\n" +
@@ -927,7 +1015,8 @@ const file_pkg_plugins_grpc_tools_proto_tools_proto_rawDesc = "" +
 	"idempotent\x18\x03 \x01(\bR\n" +
 	"idempotent\x123\n" +
 	"\x15requires_confirmation\x18\x04 \x01(\bR\x14requiresConfirmation\x12\x1b\n" +
-	"\tcost_hint\x18\x05 \x01(\tR\bcostHint\"\xc0\x02\n" +
+	"\tcost_hint\x18\x05 \x01(\tR\bcostHint\x12\x16\n" +
+	"\x06system\x18\x06 \x01(\tR\x06system\"\xc0\x02\n" +
 	"\x13ToolDefinitionProto\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12 \n" +
 	"\vdescription\x18\x02 \x01(\tR\vdescription\x12:\n" +
@@ -963,14 +1052,18 @@ const file_pkg_plugins_grpc_tools_proto_tools_proto_rawDesc = "" +
 	"\targuments\x18\x02 \x01(\v2\x17.google.protobuf.StructR\targuments\"@\n" +
 	"\x10ValidateResponse\x12\x14\n" +
 	"\x05valid\x18\x01 \x01(\bR\x05valid\x12\x16\n" +
-	"\x06errors\x18\x02 \x03(\tR\x06errors2\xf5\x02\n" +
+	"\x06errors\x18\x02 \x03(\tR\x06errors\"\x0f\n" +
+	"\rSystemRequest\"(\n" +
+	"\x0eSystemResponse\x12\x16\n" +
+	"\x06prompt\x18\x01 \x01(\tR\x06prompt2\xac\x03\n" +
 	"\fToolsService\x12>\n" +
 	"\tListTools\x12\x17.tools.ListToolsRequest\x1a\x18.tools.ListToolsResponse\x128\n" +
 	"\aGetTool\x12\x15.tools.GetToolRequest\x1a\x16.tools.GetToolResponse\x128\n" +
 	"\aExecute\x12\x15.tools.ExecuteRequest\x1a\x16.tools.ExecuteResponse\x12=\n" +
 	"\rExecuteStream\x12\x15.tools.ExecuteRequest\x1a\x13.tools.ExecuteChunk0\x01\x125\n" +
 	"\x06Cancel\x12\x14.tools.CancelRequest\x1a\x15.tools.CancelResponse\x12;\n" +
-	"\bValidate\x12\x16.tools.ValidateRequest\x1a\x17.tools.ValidateResponseB;Z9github.com/mwantia/forge-sdk/pkg/plugins/grpc/tools/protob\x06proto3"
+	"\bValidate\x12\x16.tools.ValidateRequest\x1a\x17.tools.ValidateResponse\x125\n" +
+	"\x06System\x12\x14.tools.SystemRequest\x1a\x15.tools.SystemResponseB;Z9github.com/mwantia/forge-sdk/pkg/plugins/grpc/tools/protob\x06proto3"
 
 var (
 	file_pkg_plugins_grpc_tools_proto_tools_proto_rawDescOnce sync.Once
@@ -984,7 +1077,7 @@ func file_pkg_plugins_grpc_tools_proto_tools_proto_rawDescGZIP() []byte {
 	return file_pkg_plugins_grpc_tools_proto_tools_proto_rawDescData
 }
 
-var file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
+var file_pkg_plugins_grpc_tools_proto_tools_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
 var file_pkg_plugins_grpc_tools_proto_tools_proto_goTypes = []any{
 	(*ListToolsRequest)(nil),    // 0: tools.ListToolsRequest
 	(*ListToolsResponse)(nil),   // 1: tools.ListToolsResponse
@@ -1001,21 +1094,23 @@ var file_pkg_plugins_grpc_tools_proto_tools_proto_goTypes = []any{
 	(*CancelResponse)(nil),      // 12: tools.CancelResponse
 	(*ValidateRequest)(nil),     // 13: tools.ValidateRequest
 	(*ValidateResponse)(nil),    // 14: tools.ValidateResponse
-	nil,                         // 15: tools.ToolParametersProto.PropertiesEntry
-	(*structpb.Struct)(nil),     // 16: google.protobuf.Struct
-	(*structpb.Value)(nil),      // 17: google.protobuf.Value
+	(*SystemRequest)(nil),       // 15: tools.SystemRequest
+	(*SystemResponse)(nil),      // 16: tools.SystemResponse
+	nil,                         // 17: tools.ToolParametersProto.PropertiesEntry
+	(*structpb.Struct)(nil),     // 18: google.protobuf.Struct
+	(*structpb.Value)(nil),      // 19: google.protobuf.Value
 }
 var file_pkg_plugins_grpc_tools_proto_tools_proto_depIdxs = []int32{
 	7,  // 0: tools.ListToolsResponse.tools:type_name -> tools.ToolDefinitionProto
 	7,  // 1: tools.GetToolResponse.tool:type_name -> tools.ToolDefinitionProto
-	15, // 2: tools.ToolParametersProto.properties:type_name -> tools.ToolParametersProto.PropertiesEntry
+	17, // 2: tools.ToolParametersProto.properties:type_name -> tools.ToolParametersProto.PropertiesEntry
 	5,  // 3: tools.ToolDefinitionProto.parameters:type_name -> tools.ToolParametersProto
 	6,  // 4: tools.ToolDefinitionProto.annotations:type_name -> tools.ToolAnnotations
-	16, // 5: tools.ExecuteRequest.arguments:type_name -> google.protobuf.Struct
-	17, // 6: tools.ExecuteResponse.result:type_name -> google.protobuf.Value
-	16, // 7: tools.ExecuteResponse.metadata:type_name -> google.protobuf.Struct
-	17, // 8: tools.ExecuteChunk.delta:type_name -> google.protobuf.Value
-	16, // 9: tools.ValidateRequest.arguments:type_name -> google.protobuf.Struct
+	18, // 5: tools.ExecuteRequest.arguments:type_name -> google.protobuf.Struct
+	19, // 6: tools.ExecuteResponse.result:type_name -> google.protobuf.Value
+	18, // 7: tools.ExecuteResponse.metadata:type_name -> google.protobuf.Struct
+	19, // 8: tools.ExecuteChunk.delta:type_name -> google.protobuf.Value
+	18, // 9: tools.ValidateRequest.arguments:type_name -> google.protobuf.Struct
 	4,  // 10: tools.ToolParametersProto.PropertiesEntry.value:type_name -> tools.ToolPropertyProto
 	0,  // 11: tools.ToolsService.ListTools:input_type -> tools.ListToolsRequest
 	2,  // 12: tools.ToolsService.GetTool:input_type -> tools.GetToolRequest
@@ -1023,14 +1118,16 @@ var file_pkg_plugins_grpc_tools_proto_tools_proto_depIdxs = []int32{
 	8,  // 14: tools.ToolsService.ExecuteStream:input_type -> tools.ExecuteRequest
 	11, // 15: tools.ToolsService.Cancel:input_type -> tools.CancelRequest
 	13, // 16: tools.ToolsService.Validate:input_type -> tools.ValidateRequest
-	1,  // 17: tools.ToolsService.ListTools:output_type -> tools.ListToolsResponse
-	3,  // 18: tools.ToolsService.GetTool:output_type -> tools.GetToolResponse
-	9,  // 19: tools.ToolsService.Execute:output_type -> tools.ExecuteResponse
-	10, // 20: tools.ToolsService.ExecuteStream:output_type -> tools.ExecuteChunk
-	12, // 21: tools.ToolsService.Cancel:output_type -> tools.CancelResponse
-	14, // 22: tools.ToolsService.Validate:output_type -> tools.ValidateResponse
-	17, // [17:23] is the sub-list for method output_type
-	11, // [11:17] is the sub-list for method input_type
+	15, // 17: tools.ToolsService.System:input_type -> tools.SystemRequest
+	1,  // 18: tools.ToolsService.ListTools:output_type -> tools.ListToolsResponse
+	3,  // 19: tools.ToolsService.GetTool:output_type -> tools.GetToolResponse
+	9,  // 20: tools.ToolsService.Execute:output_type -> tools.ExecuteResponse
+	10, // 21: tools.ToolsService.ExecuteStream:output_type -> tools.ExecuteChunk
+	12, // 22: tools.ToolsService.Cancel:output_type -> tools.CancelResponse
+	14, // 23: tools.ToolsService.Validate:output_type -> tools.ValidateResponse
+	16, // 24: tools.ToolsService.System:output_type -> tools.SystemResponse
+	18, // [18:25] is the sub-list for method output_type
+	11, // [11:18] is the sub-list for method input_type
 	11, // [11:11] is the sub-list for extension type_name
 	11, // [11:11] is the sub-list for extension extendee
 	0,  // [0:11] is the sub-list for field type_name
@@ -1047,7 +1144,7 @@ func file_pkg_plugins_grpc_tools_proto_tools_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_pkg_plugins_grpc_tools_proto_tools_proto_rawDesc), len(file_pkg_plugins_grpc_tools_proto_tools_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   16,
+			NumMessages:   18,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -10,6 +10,7 @@ import (
 	memorygrpc "github.com/mwantia/forge-sdk/pkg/plugins/grpc/memory"
 	providergrpc "github.com/mwantia/forge-sdk/pkg/plugins/grpc/provider"
 	sandboxgrpc "github.com/mwantia/forge-sdk/pkg/plugins/grpc/sandbox"
+	sessionsgrpc "github.com/mwantia/forge-sdk/pkg/plugins/grpc/sessions"
 	toolsgrpc "github.com/mwantia/forge-sdk/pkg/plugins/grpc/tools"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/structpb"
@@ -101,6 +102,17 @@ func (c *Client) GetMemoryPlugin(ctx context.Context) (plugins.MemoryPlugin, err
 		return nil, nil
 	}
 	return memorygrpc.NewClient(c.conn), nil
+}
+
+func (c *Client) GetSessionsPlugin(ctx context.Context) (plugins.SessionsPlugin, error) {
+	resp, err := c.client.GetSessionsPlugin(ctx, &proto.GetPluginRequest{})
+	if err != nil {
+		return nil, err
+	}
+	if !resp.Available {
+		return nil, nil
+	}
+	return sessionsgrpc.NewClient(c.conn), nil
 }
 
 func (c *Client) GetChannelPlugin(ctx context.Context) (plugins.ChannelPlugin, error) {

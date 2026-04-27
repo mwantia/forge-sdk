@@ -82,6 +82,14 @@ func (s *Server) GetMemoryPlugin(ctx context.Context, req *proto.GetPluginReques
 	return &proto.GetPluginResponse{Available: p != nil}, nil
 }
 
+func (s *Server) GetSessionsPlugin(ctx context.Context, req *proto.GetPluginRequest) (*proto.GetPluginResponse, error) {
+	p, err := s.impl.GetSessionsPlugin(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &proto.GetPluginResponse{Available: p != nil}, nil
+}
+
 func (s *Server) GetChannelPlugin(ctx context.Context, req *proto.GetPluginRequest) (*proto.GetPluginResponse, error) {
 	p, err := s.impl.GetChannelPlugin(ctx)
 	if err != nil {

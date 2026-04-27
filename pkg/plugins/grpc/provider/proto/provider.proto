@@ -120,4 +120,5 @@ message ModelProto {
     string                 name      = 1;
     int32                  dimension = 2;
     google.protobuf.Struct metadata  = 3;
+    string                 system    = 4;
 }

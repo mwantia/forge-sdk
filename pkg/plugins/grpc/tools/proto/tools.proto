@@ -13,6 +13,7 @@ service ToolsService {
     rpc ExecuteStream(ExecuteRequest) returns (stream ExecuteChunk);
     rpc Cancel(CancelRequest)         returns (CancelResponse);
     rpc Validate(ValidateRequest)     returns (ValidateResponse);
+    rpc System(SystemRequest)         returns (SystemResponse);
 }
 
 // --- List ---
@@ -52,6 +53,7 @@ message ToolAnnotations {
     bool   idempotent            = 3; // safe to retry
     bool   requires_confirmation = 4; // agent should ask before calling
     string cost_hint             = 5; // "free" | "cheap" | "expensive"
+    string system                = 6; // free-form prose injected into the system prompt under this tool
 }
 
 message ToolDefinitionProto {
@@ -104,3 +106,8 @@ message ValidateResponse {
     bool             valid  = 1;
     repeated string  errors = 2;
 }
+
+// --- System ---
+
+message SystemRequest  {}
+message SystemResponse { string prompt = 1; }

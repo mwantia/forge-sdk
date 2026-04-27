@@ -27,6 +27,7 @@ const (
 	DriverService_ConfigDriver_FullMethodName      = "/driver.DriverService/ConfigDriver"
 	DriverService_GetProviderPlugin_FullMethodName = "/driver.DriverService/GetProviderPlugin"
 	DriverService_GetMemoryPlugin_FullMethodName   = "/driver.DriverService/GetMemoryPlugin"
+	DriverService_GetSessionsPlugin_FullMethodName = "/driver.DriverService/GetSessionsPlugin"
 	DriverService_GetChannelPlugin_FullMethodName  = "/driver.DriverService/GetChannelPlugin"
 	DriverService_GetToolsPlugin_FullMethodName    = "/driver.DriverService/GetToolsPlugin"
 	DriverService_GetSandboxPlugin_FullMethodName  = "/driver.DriverService/GetSandboxPlugin"
@@ -46,6 +47,7 @@ type DriverServiceClient interface {
 	ConfigDriver(ctx context.Context, in *ConfigRequest, opts ...grpc.CallOption) (*ConfigResponse, error)
 	GetProviderPlugin(ctx context.Context, in *GetPluginRequest, opts ...grpc.CallOption) (*GetPluginResponse, error)
 	GetMemoryPlugin(ctx context.Context, in *GetPluginRequest, opts ...grpc.CallOption) (*GetPluginResponse, error)
+	GetSessionsPlugin(ctx context.Context, in *GetPluginRequest, opts ...grpc.CallOption) (*GetPluginResponse, error)
 	GetChannelPlugin(ctx context.Context, in *GetPluginRequest, opts ...grpc.CallOption) (*GetPluginResponse, error)
 	GetToolsPlugin(ctx context.Context, in *GetPluginRequest, opts ...grpc.CallOption) (*GetPluginResponse, error)
 	GetSandboxPlugin(ctx context.Context, in *GetPluginRequest, opts ...grpc.CallOption) (*GetPluginResponse, error)
@@ -139,6 +141,16 @@ func (c *driverServiceClient) GetMemoryPlugin(ctx context.Context, in *GetPlugin
 	return out, nil
 }
 
+func (c *driverServiceClient) GetSessionsPlugin(ctx context.Context, in *GetPluginRequest, opts ...grpc.CallOption) (*GetPluginResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetPluginResponse)
+	err := c.cc.Invoke(ctx, DriverService_GetSessionsPlugin_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *driverServiceClient) GetChannelPlugin(ctx context.Context, in *GetPluginRequest, opts ...grpc.CallOption) (*GetPluginResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetPluginResponse)
@@ -183,6 +195,7 @@ type DriverServiceServer interface {
 	ConfigDriver(context.Context, *ConfigRequest) (*ConfigResponse, error)
 	GetProviderPlugin(context.Context, *GetPluginRequest) (*GetPluginResponse, error)
 	GetMemoryPlugin(context.Context, *GetPluginRequest) (*GetPluginResponse, error)
+	GetSessionsPlugin(context.Context, *GetPluginRequest) (*GetPluginResponse, error)
 	GetChannelPlugin(context.Context, *GetPluginRequest) (*GetPluginResponse, error)
 	GetToolsPlugin(context.Context, *GetPluginRequest) (*GetPluginResponse, error)
 	GetSandboxPlugin(context.Context, *GetPluginRequest) (*GetPluginResponse, error)
@@ -219,6 +232,9 @@ func (UnimplementedDriverServiceServer) GetProviderPlugin(context.Context, *GetP
 }
 func (UnimplementedDriverServiceServer) GetMemoryPlugin(context.Context, *GetPluginRequest) (*GetPluginResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetMemoryPlugin not implemented")
+}
+func (UnimplementedDriverServiceServer) GetSessionsPlugin(context.Context, *GetPluginRequest) (*GetPluginResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetSessionsPlugin not implemented")
 }
 func (UnimplementedDriverServiceServer) GetChannelPlugin(context.Context, *GetPluginRequest) (*GetPluginResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetChannelPlugin not implemented")
@@ -394,6 +410,24 @@ func _DriverService_GetMemoryPlugin_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DriverService_GetSessionsPlugin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPluginRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DriverServiceServer).GetSessionsPlugin(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DriverService_GetSessionsPlugin_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DriverServiceServer).GetSessionsPlugin(ctx, req.(*GetPluginRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _DriverService_GetChannelPlugin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetPluginRequest)
 	if err := dec(in); err != nil {
@@ -486,6 +520,10 @@ var DriverService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetMemoryPlugin",
 			Handler:    _DriverService_GetMemoryPlugin_Handler,
+		},
+		{
+			MethodName: "GetSessionsPlugin",
+			Handler:    _DriverService_GetSessionsPlugin_Handler,
 		},
 		{
 			MethodName: "GetChannelPlugin",

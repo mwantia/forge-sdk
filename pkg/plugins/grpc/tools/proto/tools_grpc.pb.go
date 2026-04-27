@@ -25,6 +25,7 @@ const (
 	ToolsService_ExecuteStream_FullMethodName = "/tools.ToolsService/ExecuteStream"
 	ToolsService_Cancel_FullMethodName        = "/tools.ToolsService/Cancel"
 	ToolsService_Validate_FullMethodName      = "/tools.ToolsService/Validate"
+	ToolsService_System_FullMethodName        = "/tools.ToolsService/System"
 )
 
 // ToolsServiceClient is the client API for ToolsService service.
@@ -37,6 +38,7 @@ type ToolsServiceClient interface {
 	ExecuteStream(ctx context.Context, in *ExecuteRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[ExecuteChunk], error)
 	Cancel(ctx context.Context, in *CancelRequest, opts ...grpc.CallOption) (*CancelResponse, error)
 	Validate(ctx context.Context, in *ValidateRequest, opts ...grpc.CallOption) (*ValidateResponse, error)
+	System(ctx context.Context, in *SystemRequest, opts ...grpc.CallOption) (*SystemResponse, error)
 }
 
 type toolsServiceClient struct {
@@ -116,6 +118,16 @@ func (c *toolsServiceClient) Validate(ctx context.Context, in *ValidateRequest, 
 	return out, nil
 }
 
+func (c *toolsServiceClient) System(ctx context.Context, in *SystemRequest, opts ...grpc.CallOption) (*SystemResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SystemResponse)
+	err := c.cc.Invoke(ctx, ToolsService_System_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ToolsServiceServer is the server API for ToolsService service.
 // All implementations must embed UnimplementedToolsServiceServer
 // for forward compatibility.
@@ -126,6 +138,7 @@ type ToolsServiceServer interface {
 	ExecuteStream(*ExecuteRequest, grpc.ServerStreamingServer[ExecuteChunk]) error
 	Cancel(context.Context, *CancelRequest) (*CancelResponse, error)
 	Validate(context.Context, *ValidateRequest) (*ValidateResponse, error)
+	System(context.Context, *SystemRequest) (*SystemResponse, error)
 	mustEmbedUnimplementedToolsServiceServer()
 }
 
@@ -153,6 +166,9 @@ func (UnimplementedToolsServiceServer) Cancel(context.Context, *CancelRequest) (
 }
 func (UnimplementedToolsServiceServer) Validate(context.Context, *ValidateRequest) (*ValidateResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Validate not implemented")
+}
+func (UnimplementedToolsServiceServer) System(context.Context, *SystemRequest) (*SystemResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method System not implemented")
 }
 func (UnimplementedToolsServiceServer) mustEmbedUnimplementedToolsServiceServer() {}
 func (UnimplementedToolsServiceServer) testEmbeddedByValue()                      {}
@@ -276,6 +292,24 @@ func _ToolsService_Validate_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ToolsService_System_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SystemRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ToolsServiceServer).System(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ToolsService_System_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ToolsServiceServer).System(ctx, req.(*SystemRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ToolsService_ServiceDesc is the grpc.ServiceDesc for ToolsService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -302,6 +336,10 @@ var ToolsService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Validate",
 			Handler:    _ToolsService_Validate_Handler,
+		},
+		{
+			MethodName: "System",
+			Handler:    _ToolsService_System_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

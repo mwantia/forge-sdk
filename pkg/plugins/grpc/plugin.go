@@ -15,6 +15,8 @@ import (
 	providerproto "github.com/mwantia/forge-sdk/pkg/plugins/grpc/provider/proto"
 	sandboxgrpc "github.com/mwantia/forge-sdk/pkg/plugins/grpc/sandbox"
 	sandboxproto "github.com/mwantia/forge-sdk/pkg/plugins/grpc/sandbox/proto"
+	sessionsgrpc "github.com/mwantia/forge-sdk/pkg/plugins/grpc/sessions"
+	sessionsproto "github.com/mwantia/forge-sdk/pkg/plugins/grpc/sessions/proto"
 	toolsgrpc "github.com/mwantia/forge-sdk/pkg/plugins/grpc/tools"
 	toolsproto "github.com/mwantia/forge-sdk/pkg/plugins/grpc/tools/proto"
 	"google.golang.org/grpc"
@@ -43,6 +45,7 @@ func (p *DriverPlugin) GRPCServer(broker *goplugin.GRPCBroker, s *grpc.Server) e
 	driverproto.RegisterDriverServiceServer(s, drivergrpc.NewServer(p.Impl, broker))
 	providerproto.RegisterProviderServiceServer(s, providergrpc.NewServer(p.Impl))
 	memoryproto.RegisterMemoryServiceServer(s, memorygrpc.NewServer(p.Impl))
+	sessionsproto.RegisterSessionsServiceServer(s, sessionsgrpc.NewServer(p.Impl))
 	channelproto.RegisterChannelServiceServer(s, channelgrpc.NewServer(p.Impl))
 	toolsproto.RegisterToolsServiceServer(s, toolsgrpc.NewServer(p.Impl))
 	sandboxproto.RegisterSandboxServiceServer(s, sandboxgrpc.NewServer(p.Impl))
