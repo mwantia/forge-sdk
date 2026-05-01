@@ -100,12 +100,16 @@ func (s *Server) Chat(req *proto.ChatRequest, stream proto.ProviderService_ChatS
 		}
 		if u := chunk.Usage; u != nil {
 			protoChunk.Usage = &proto.TokenUsageProto{
-				InputTokens:  int32(u.InputTokens),
-				OutputTokens: int32(u.OutputTokens),
-				TotalTokens:  int32(u.TotalTokens),
-				InputCost:    u.InputCost,
-				OutputCost:   u.OutputCost,
-				TotalCost:    u.TotalCost,
+				InputTokens:              int32(u.InputTokens),
+				OutputTokens:             int32(u.OutputTokens),
+				TotalTokens:              int32(u.TotalTokens),
+				CachedInputTokens:        int32(u.CachedInputTokens),
+				CacheCreationInputTokens: int32(u.CacheCreationInputTokens),
+				InputCost:                u.InputCost,
+				OutputCost:               u.OutputCost,
+				CachedInputCost:          u.CachedInputCost,
+				CacheCreationInputCost:   u.CacheCreationInputCost,
+				TotalCost:                u.TotalCost,
 			}
 		}
 

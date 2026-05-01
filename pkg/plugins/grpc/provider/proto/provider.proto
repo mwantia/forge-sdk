@@ -28,12 +28,16 @@ message ChatRequest {
 }
 
 message TokenUsageProto {
-    int32  input_tokens  = 1;
-    int32  output_tokens = 2;
-    int32  total_tokens  = 3;
-    double input_cost    = 4;
-    double output_cost   = 5;
-    double total_cost    = 6;
+    int32  input_tokens                 = 1;
+    int32  output_tokens                = 2;
+    int32  total_tokens                 = 3;
+    double input_cost                   = 4;
+    double output_cost                  = 5;
+    double total_cost                   = 6;
+    int32  cached_input_tokens          = 7;
+    int32  cache_creation_input_tokens  = 8;
+    double cached_input_cost            = 9;
+    double cache_creation_input_cost    = 10;
 }
 
 message ChatChunk {

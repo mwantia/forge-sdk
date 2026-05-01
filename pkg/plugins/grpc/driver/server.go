@@ -74,16 +74,8 @@ func (s *Server) GetProviderPlugin(ctx context.Context, req *proto.GetPluginRequ
 	return &proto.GetPluginResponse{Available: p != nil}, nil
 }
 
-func (s *Server) GetMemoryPlugin(ctx context.Context, req *proto.GetPluginRequest) (*proto.GetPluginResponse, error) {
-	p, err := s.impl.GetMemoryPlugin(ctx)
-	if err != nil {
-		return nil, err
-	}
-	return &proto.GetPluginResponse{Available: p != nil}, nil
-}
-
-func (s *Server) GetSessionsPlugin(ctx context.Context, req *proto.GetPluginRequest) (*proto.GetPluginResponse, error) {
-	p, err := s.impl.GetSessionsPlugin(ctx)
+func (s *Server) GetResourcePlugin(ctx context.Context, req *proto.GetPluginRequest) (*proto.GetPluginResponse, error) {
+	p, err := s.impl.GetResourcePlugin(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -126,10 +118,10 @@ func capsToProto(caps *plugins.DriverCapabilities) *proto.DriverCapabilities {
 			SupportsVision:    caps.Provider.SupportsVision,
 		}
 	}
-	if caps.Memory != nil {
-		p.Memory = &proto.MemoryCapabilities{
-			SupportsVectorSearch: caps.Memory.SupportsVectorSearch,
-			MaxContextSize:       int32(caps.Memory.MaxContextSize),
+	if caps.Resource != nil {
+		p.Resource = &proto.ResourceCapabilities{
+			SupportsVectorSearch: caps.Resource.SupportsVectorSearch,
+			MaxContextSize:       int32(caps.Resource.MaxContextSize),
 		}
 	}
 	if caps.Channel != nil {
@@ -165,10 +157,10 @@ func capsFromProto(p *proto.DriverCapabilities) *plugins.DriverCapabilities {
 			SupportsVision:    p.Provider.SupportsVision,
 		}
 	}
-	if p.Memory != nil {
-		caps.Memory = &plugins.MemoryCapabilities{
-			SupportsVectorSearch: p.Memory.SupportsVectorSearch,
-			MaxContextSize:       int(p.Memory.MaxContextSize),
+	if p.Resource != nil {
+		caps.Resource = &plugins.ResourceCapabilities{
+			SupportsVectorSearch: p.Resource.SupportsVectorSearch,
+			MaxContextSize:       int(p.Resource.MaxContextSize),
 		}
 	}
 	if p.Channel != nil {

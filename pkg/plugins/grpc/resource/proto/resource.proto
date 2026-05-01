@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package resource;
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/mwantia/forge-sdk/pkg/plugins/grpc/resource/proto";
+
+// ResourceService carries resource-level memory operations
+// (store / recall / forget) over namespaced corpora.
+service ResourceService {
+    rpc Store(StoreRequest)   returns (StoreResponse);
+    rpc Recall(RecallRequest) returns (RecallResponse);
+    rpc Forget(ForgetRequest) returns (ForgetResponse);
+}
+
+message StoreRequest {
+    string                 namespace = 1;
+    string                 content   = 2;
+    google.protobuf.Struct metadata  = 3;
+}
+
+message StoreResponse {
+    Resource resource = 1;
+}
+
+message RecallRequest {
+    string                 namespace = 1;
+    string                 query     = 2;
+    int32                  limit     = 3;
+    google.protobuf.Struct filter    = 4;
+}
+
+message RecallResponse {
+    repeated Resource results = 1;
+}
+
+message ForgetRequest {
+    string namespace = 1;
+    string id        = 2;
+}
+
+message ForgetResponse {}
+
+message Resource {
+    string                     id         = 1;
+    string                     namespace  = 2;
+    string                     content    = 3;
+    google.protobuf.Struct     metadata   = 4;
+    double                     score      = 5;
+    google.protobuf.Timestamp  created_at = 6;
+}

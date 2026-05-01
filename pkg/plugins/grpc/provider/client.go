@@ -49,12 +49,16 @@ func (s *grpcChatStream) Recv() (*plugins.ChatChunk, error) {
 	}
 	if u := chunk.Usage; u != nil {
 		result.Usage = &plugins.TokenUsage{
-			InputTokens:  int(u.InputTokens),
-			OutputTokens: int(u.OutputTokens),
-			TotalTokens:  int(u.TotalTokens),
-			InputCost:    u.InputCost,
-			OutputCost:   u.OutputCost,
-			TotalCost:    u.TotalCost,
+			InputTokens:              int(u.InputTokens),
+			OutputTokens:             int(u.OutputTokens),
+			TotalTokens:              int(u.TotalTokens),
+			CachedInputTokens:        int(u.CachedInputTokens),
+			CacheCreationInputTokens: int(u.CacheCreationInputTokens),
+			InputCost:                u.InputCost,
+			OutputCost:               u.OutputCost,
+			CachedInputCost:          u.CachedInputCost,
+			CacheCreationInputCost:   u.CacheCreationInputCost,
+			TotalCost:                u.TotalCost,
 		}
 	}
 	return result, nil

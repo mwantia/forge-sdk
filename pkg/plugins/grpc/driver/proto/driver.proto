@@ -9,18 +9,17 @@ option go_package = "github.com/mwantia/forge-sdk/pkg/plugins/grpc/driver/proto"
 
 // DriverService is the main gRPC service for plugin lifecycle management.
 service DriverService {
-    rpc GetPluginInfo(GetPluginInfoRequest)       returns (GetPluginInfoResponse);
-    rpc ProbePlugin(ProbeRequest)                 returns (ProbeResponse);
-    rpc GetCapabilities(CapabilitiesRequest)       returns (CapabilitiesResponse);
-    rpc OpenDriver(OpenRequest)                   returns (OpenResponse);
-    rpc CloseDriver(CloseRequest)                 returns (CloseResponse);
-    rpc ConfigDriver(ConfigRequest)               returns (ConfigResponse);
-    rpc GetProviderPlugin(GetPluginRequest)        returns (GetPluginResponse);
-    rpc GetMemoryPlugin(GetPluginRequest)          returns (GetPluginResponse);
-    rpc GetSessionsPlugin(GetPluginRequest)        returns (GetPluginResponse);
-    rpc GetChannelPlugin(GetPluginRequest)         returns (GetPluginResponse);
-    rpc GetToolsPlugin(GetPluginRequest)           returns (GetPluginResponse);
-    rpc GetSandboxPlugin(GetPluginRequest)         returns (GetPluginResponse);
+    rpc GetPluginInfo(GetPluginInfoRequest)        returns (GetPluginInfoResponse);
+    rpc ProbePlugin(ProbeRequest)                  returns (ProbeResponse);
+    rpc GetCapabilities(CapabilitiesRequest)        returns (CapabilitiesResponse);
+    rpc OpenDriver(OpenRequest)                    returns (OpenResponse);
+    rpc CloseDriver(CloseRequest)                  returns (CloseResponse);
+    rpc ConfigDriver(ConfigRequest)                returns (ConfigResponse);
+    rpc GetProviderPlugin(GetPluginRequest)         returns (GetPluginResponse);
+    rpc GetResourcePlugin(GetPluginRequest)         returns (GetPluginResponse);
+    rpc GetChannelPlugin(GetPluginRequest)          returns (GetPluginResponse);
+    rpc GetToolsPlugin(GetPluginRequest)            returns (GetPluginResponse);
+    rpc GetSandboxPlugin(GetPluginRequest)          returns (GetPluginResponse);
 }
 
 message GetPluginInfoRequest {}

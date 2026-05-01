@@ -87,7 +87,7 @@ type DriverCapabilities struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Types         []string               `protobuf:"bytes,1,rep,name=types,proto3" json:"types,omitempty"`
 	Provider      *ProviderCapabilities  `protobuf:"bytes,2,opt,name=provider,proto3" json:"provider,omitempty"`
-	Memory        *MemoryCapabilities    `protobuf:"bytes,3,opt,name=memory,proto3" json:"memory,omitempty"`
+	Resource      *ResourceCapabilities  `protobuf:"bytes,3,opt,name=resource,proto3" json:"resource,omitempty"`
 	Channel       *ChannelCapabilities   `protobuf:"bytes,4,opt,name=channel,proto3" json:"channel,omitempty"`
 	Tools         *ToolsCapabilities     `protobuf:"bytes,5,opt,name=tools,proto3" json:"tools,omitempty"`
 	Sandbox       *SandboxCapabilities   `protobuf:"bytes,6,opt,name=sandbox,proto3" json:"sandbox,omitempty"`
@@ -139,9 +139,9 @@ func (x *DriverCapabilities) GetProvider() *ProviderCapabilities {
 	return nil
 }
 
-func (x *DriverCapabilities) GetMemory() *MemoryCapabilities {
+func (x *DriverCapabilities) GetResource() *ResourceCapabilities {
 	if x != nil {
-		return x.Memory
+		return x.Resource
 	}
 	return nil
 }
@@ -219,7 +219,7 @@ func (x *ProviderCapabilities) GetSupportsVision() bool {
 	return false
 }
 
-type MemoryCapabilities struct {
+type ResourceCapabilities struct {
 	state                protoimpl.MessageState `protogen:"open.v1"`
 	SupportsVectorSearch bool                   `protobuf:"varint,1,opt,name=supports_vector_search,json=supportsVectorSearch,proto3" json:"supports_vector_search,omitempty"`
 	MaxContextSize       int32                  `protobuf:"varint,2,opt,name=max_context_size,json=maxContextSize,proto3" json:"max_context_size,omitempty"`
@@ -227,20 +227,20 @@ type MemoryCapabilities struct {
 	sizeCache            protoimpl.SizeCache
 }
 
-func (x *MemoryCapabilities) Reset() {
-	*x = MemoryCapabilities{}
+func (x *ResourceCapabilities) Reset() {
+	*x = ResourceCapabilities{}
 	mi := &file_pkg_plugins_grpc_driver_proto_common_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *MemoryCapabilities) String() string {
+func (x *ResourceCapabilities) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MemoryCapabilities) ProtoMessage() {}
+func (*ResourceCapabilities) ProtoMessage() {}
 
-func (x *MemoryCapabilities) ProtoReflect() protoreflect.Message {
+func (x *ResourceCapabilities) ProtoReflect() protoreflect.Message {
 	mi := &file_pkg_plugins_grpc_driver_proto_common_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -252,19 +252,19 @@ func (x *MemoryCapabilities) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use MemoryCapabilities.ProtoReflect.Descriptor instead.
-func (*MemoryCapabilities) Descriptor() ([]byte, []int) {
+// Deprecated: Use ResourceCapabilities.ProtoReflect.Descriptor instead.
+func (*ResourceCapabilities) Descriptor() ([]byte, []int) {
 	return file_pkg_plugins_grpc_driver_proto_common_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *MemoryCapabilities) GetSupportsVectorSearch() bool {
+func (x *ResourceCapabilities) GetSupportsVectorSearch() bool {
 	if x != nil {
 		return x.SupportsVectorSearch
 	}
 	return false
 }
 
-func (x *MemoryCapabilities) GetMaxContextSize() int32 {
+func (x *ResourceCapabilities) GetMaxContextSize() int32 {
 	if x != nil {
 		return x.MaxContextSize
 	}
@@ -436,18 +436,18 @@ const file_pkg_plugins_grpc_driver_proto_common_proto_rawDesc = "" +
 	"PluginInfo\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x16\n" +
 	"\x06author\x18\x02 \x01(\tR\x06author\x12\x18\n" +
-	"\aversion\x18\x03 \x01(\tR\aversion\"\xb7\x02\n" +
+	"\aversion\x18\x03 \x01(\tR\aversion\"\xbd\x02\n" +
 	"\x12DriverCapabilities\x12\x14\n" +
 	"\x05types\x18\x01 \x03(\tR\x05types\x128\n" +
-	"\bprovider\x18\x02 \x01(\v2\x1c.driver.ProviderCapabilitiesR\bprovider\x122\n" +
-	"\x06memory\x18\x03 \x01(\v2\x1a.driver.MemoryCapabilitiesR\x06memory\x125\n" +
+	"\bprovider\x18\x02 \x01(\v2\x1c.driver.ProviderCapabilitiesR\bprovider\x128\n" +
+	"\bresource\x18\x03 \x01(\v2\x1c.driver.ResourceCapabilitiesR\bresource\x125\n" +
 	"\achannel\x18\x04 \x01(\v2\x1b.driver.ChannelCapabilitiesR\achannel\x12/\n" +
 	"\x05tools\x18\x05 \x01(\v2\x19.driver.ToolsCapabilitiesR\x05tools\x125\n" +
 	"\asandbox\x18\x06 \x01(\v2\x1b.driver.SandboxCapabilitiesR\asandbox\"n\n" +
 	"\x14ProviderCapabilities\x12-\n" +
 	"\x12supports_streaming\x18\x01 \x01(\bR\x11supportsStreaming\x12'\n" +
-	"\x0fsupports_vision\x18\x02 \x01(\bR\x0esupportsVision\"t\n" +
-	"\x12MemoryCapabilities\x124\n" +
+	"\x0fsupports_vision\x18\x02 \x01(\bR\x0esupportsVision\"v\n" +
+	"\x14ResourceCapabilities\x124\n" +
 	"\x16supports_vector_search\x18\x01 \x01(\bR\x14supportsVectorSearch\x12(\n" +
 	"\x10max_context_size\x18\x02 \x01(\x05R\x0emaxContextSize\"z\n" +
 	"\x13ChannelCapabilities\x128\n" +
@@ -477,14 +477,14 @@ var file_pkg_plugins_grpc_driver_proto_common_proto_goTypes = []any{
 	(*PluginInfo)(nil),           // 0: driver.PluginInfo
 	(*DriverCapabilities)(nil),   // 1: driver.DriverCapabilities
 	(*ProviderCapabilities)(nil), // 2: driver.ProviderCapabilities
-	(*MemoryCapabilities)(nil),   // 3: driver.MemoryCapabilities
+	(*ResourceCapabilities)(nil), // 3: driver.ResourceCapabilities
 	(*ChannelCapabilities)(nil),  // 4: driver.ChannelCapabilities
 	(*ToolsCapabilities)(nil),    // 5: driver.ToolsCapabilities
 	(*SandboxCapabilities)(nil),  // 6: driver.SandboxCapabilities
 }
 var file_pkg_plugins_grpc_driver_proto_common_proto_depIdxs = []int32{
 	2, // 0: driver.DriverCapabilities.provider:type_name -> driver.ProviderCapabilities
-	3, // 1: driver.DriverCapabilities.memory:type_name -> driver.MemoryCapabilities
+	3, // 1: driver.DriverCapabilities.resource:type_name -> driver.ResourceCapabilities
 	4, // 2: driver.DriverCapabilities.channel:type_name -> driver.ChannelCapabilities
 	5, // 3: driver.DriverCapabilities.tools:type_name -> driver.ToolsCapabilities
 	6, // 4: driver.DriverCapabilities.sandbox:type_name -> driver.SandboxCapabilities

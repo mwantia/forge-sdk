@@ -108,15 +108,19 @@ func (x *ChatRequest) GetMetadata() *structpb.Struct {
 }
 
 type TokenUsageProto struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	InputTokens   int32                  `protobuf:"varint,1,opt,name=input_tokens,json=inputTokens,proto3" json:"input_tokens,omitempty"`
-	OutputTokens  int32                  `protobuf:"varint,2,opt,name=output_tokens,json=outputTokens,proto3" json:"output_tokens,omitempty"`
-	TotalTokens   int32                  `protobuf:"varint,3,opt,name=total_tokens,json=totalTokens,proto3" json:"total_tokens,omitempty"`
-	InputCost     float64                `protobuf:"fixed64,4,opt,name=input_cost,json=inputCost,proto3" json:"input_cost,omitempty"`
-	OutputCost    float64                `protobuf:"fixed64,5,opt,name=output_cost,json=outputCost,proto3" json:"output_cost,omitempty"`
-	TotalCost     float64                `protobuf:"fixed64,6,opt,name=total_cost,json=totalCost,proto3" json:"total_cost,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state                    protoimpl.MessageState `protogen:"open.v1"`
+	InputTokens              int32                  `protobuf:"varint,1,opt,name=input_tokens,json=inputTokens,proto3" json:"input_tokens,omitempty"`
+	OutputTokens             int32                  `protobuf:"varint,2,opt,name=output_tokens,json=outputTokens,proto3" json:"output_tokens,omitempty"`
+	TotalTokens              int32                  `protobuf:"varint,3,opt,name=total_tokens,json=totalTokens,proto3" json:"total_tokens,omitempty"`
+	InputCost                float64                `protobuf:"fixed64,4,opt,name=input_cost,json=inputCost,proto3" json:"input_cost,omitempty"`
+	OutputCost               float64                `protobuf:"fixed64,5,opt,name=output_cost,json=outputCost,proto3" json:"output_cost,omitempty"`
+	TotalCost                float64                `protobuf:"fixed64,6,opt,name=total_cost,json=totalCost,proto3" json:"total_cost,omitempty"`
+	CachedInputTokens        int32                  `protobuf:"varint,7,opt,name=cached_input_tokens,json=cachedInputTokens,proto3" json:"cached_input_tokens,omitempty"`
+	CacheCreationInputTokens int32                  `protobuf:"varint,8,opt,name=cache_creation_input_tokens,json=cacheCreationInputTokens,proto3" json:"cache_creation_input_tokens,omitempty"`
+	CachedInputCost          float64                `protobuf:"fixed64,9,opt,name=cached_input_cost,json=cachedInputCost,proto3" json:"cached_input_cost,omitempty"`
+	CacheCreationInputCost   float64                `protobuf:"fixed64,10,opt,name=cache_creation_input_cost,json=cacheCreationInputCost,proto3" json:"cache_creation_input_cost,omitempty"`
+	unknownFields            protoimpl.UnknownFields
+	sizeCache                protoimpl.SizeCache
 }
 
 func (x *TokenUsageProto) Reset() {
@@ -187,6 +191,34 @@ func (x *TokenUsageProto) GetOutputCost() float64 {
 func (x *TokenUsageProto) GetTotalCost() float64 {
 	if x != nil {
 		return x.TotalCost
+	}
+	return 0
+}
+
+func (x *TokenUsageProto) GetCachedInputTokens() int32 {
+	if x != nil {
+		return x.CachedInputTokens
+	}
+	return 0
+}
+
+func (x *TokenUsageProto) GetCacheCreationInputTokens() int32 {
+	if x != nil {
+		return x.CacheCreationInputTokens
+	}
+	return 0
+}
+
+func (x *TokenUsageProto) GetCachedInputCost() float64 {
+	if x != nil {
+		return x.CachedInputCost
+	}
+	return 0
+}
+
+func (x *TokenUsageProto) GetCacheCreationInputCost() float64 {
+	if x != nil {
+		return x.CacheCreationInputCost
 	}
 	return 0
 }
@@ -1067,7 +1099,7 @@ const file_pkg_plugins_grpc_provider_proto_provider_proto_rawDesc = "" +
 	"\n" +
 	"max_tokens\x18\x04 \x01(\x05R\tmaxTokens\x12,\n" +
 	"\x05tools\x18\x05 \x03(\v2\x16.provider.ToolDefProtoR\x05tools\x123\n" +
-	"\bmetadata\x18\x06 \x01(\v2\x17.google.protobuf.StructR\bmetadata\"\xdb\x01\n" +
+	"\bmetadata\x18\x06 \x01(\v2\x17.google.protobuf.StructR\bmetadata\"\xb1\x03\n" +
 	"\x0fTokenUsageProto\x12!\n" +
 	"\finput_tokens\x18\x01 \x01(\x05R\vinputTokens\x12#\n" +
 	"\routput_tokens\x18\x02 \x01(\x05R\foutputTokens\x12!\n" +
@@ -1077,7 +1109,12 @@ const file_pkg_plugins_grpc_provider_proto_provider_proto_rawDesc = "" +
 	"\voutput_cost\x18\x05 \x01(\x01R\n" +
 	"outputCost\x12\x1d\n" +
 	"\n" +
-	"total_cost\x18\x06 \x01(\x01R\ttotalCost\"\xf4\x01\n" +
+	"total_cost\x18\x06 \x01(\x01R\ttotalCost\x12.\n" +
+	"\x13cached_input_tokens\x18\a \x01(\x05R\x11cachedInputTokens\x12=\n" +
+	"\x1bcache_creation_input_tokens\x18\b \x01(\x05R\x18cacheCreationInputTokens\x12*\n" +
+	"\x11cached_input_cost\x18\t \x01(\x01R\x0fcachedInputCost\x129\n" +
+	"\x19cache_creation_input_cost\x18\n" +
+	" \x01(\x01R\x16cacheCreationInputCost\"\xf4\x01\n" +
 	"\tChatChunk\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04role\x18\x02 \x01(\tR\x04role\x12\x14\n" +

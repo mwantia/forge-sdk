@@ -10,7 +10,7 @@ import (
 type DriverCapabilities struct {
 	Types    []string
 	Provider *ProviderCapabilities
-	Memory   *MemoryCapabilities
+	Resource *ResourceCapabilities
 	Channel  *ChannelCapabilities
 	Tools    *ToolsCapabilities
 	Sandbox  *SandboxCapabilities
@@ -21,7 +21,7 @@ type ProviderCapabilities struct {
 	SupportsVision    bool
 }
 
-type MemoryCapabilities struct {
+type ResourceCapabilities struct {
 	SupportsVectorSearch bool
 	MaxContextSize       int
 }
@@ -70,8 +70,7 @@ type Driver interface {
 
 	// Plugin type accessors - return implementations only if supported
 	GetProviderPlugin(ctx context.Context) (ProviderPlugin, error)
-	GetMemoryPlugin(ctx context.Context) (MemoryPlugin, error)
-	GetSessionsPlugin(ctx context.Context) (SessionsPlugin, error)
+	GetResourcePlugin(ctx context.Context) (ResourcePlugin, error)
 	GetChannelPlugin(ctx context.Context) (ChannelPlugin, error)
 	GetToolsPlugin(ctx context.Context) (ToolsPlugin, error)
 	GetSandboxPlugin(ctx context.Context) (SandboxPlugin, error)
@@ -99,13 +98,8 @@ func (u *UnimplementedDriver) GetChannelPlugin(ctx context.Context) (ChannelPlug
 	return nil, errors.ErrPluginCapabilityNotSupported
 }
 
-// GetMemoryPlugin implements [Driver].
-func (u *UnimplementedDriver) GetMemoryPlugin(ctx context.Context) (MemoryPlugin, error) {
-	return nil, errors.ErrPluginCapabilityNotSupported
-}
-
-// GetSessionsPlugin implements [Driver].
-func (u *UnimplementedDriver) GetSessionsPlugin(ctx context.Context) (SessionsPlugin, error) {
+// GetResourcePlugin implements [Driver].
+func (u *UnimplementedDriver) GetResourcePlugin(ctx context.Context) (ResourcePlugin, error) {
 	return nil, errors.ErrPluginCapabilityNotSupported
 }
 

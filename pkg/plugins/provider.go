@@ -39,16 +39,39 @@ type Model struct {
 	Metadata           map[string]any `json:"metadata,omitempty"`
 	CostPerInputToken  float64        `json:"cost_per_input_token,omitempty"`
 	CostPerOutputToken float64        `json:"cost_per_output_token,omitempty"`
+	// CostPerCachedInputToken is the per-token rate for prompt tokens served
+	// from the provider's prompt cache (OpenAI cached_tokens, Anthropic
+	// cache_read_input_tokens). Typically ~10% of CostPerInputToken.
+	CostPerCachedInputToken float64 `json:"cost_per_cached_input_token,omitempty"`
+	// CostPerCacheCreationInputToken is the per-token rate Anthropic charges
+	// when writing new entries into the prompt cache (cache_creation_input_tokens),
+	// typically ~125% of CostPerInputToken. Set to 0 for providers that do
+	// not bill cache creation separately (e.g. OpenAI).
+	CostPerCacheCreationInputToken float64 `json:"cost_per_cache_creation_input_token,omitempty"`
 }
 
 // TokenUsage tracks token consumption and optional cost for a single inference call.
+//
+// Cache accounting follows the provider conventions:
+//   - InputTokens is the total prompt token count *as billed* by the provider.
+//     For OpenAI this includes CachedInputTokens; for Anthropic it does NOT
+//     (Anthropic reports cached reads as a separate bucket).
+//   - CachedInputTokens is the subset of the prompt served from cache at a
+//     reduced rate (OpenAI cached_tokens, Anthropic cache_read_input_tokens).
+//   - CacheCreationInputTokens is Anthropic-specific: tokens written into the
+//     cache on this call, billed at a premium. Always 0 for OpenAI.
 type TokenUsage struct {
-	InputTokens  int     `json:"input_tokens"`
-	OutputTokens int     `json:"output_tokens"`
-	TotalTokens  int     `json:"total_tokens"`
-	InputCost    float64 `json:"input_cost,omitempty"`
-	OutputCost   float64 `json:"output_cost,omitempty"`
-	TotalCost    float64 `json:"total_cost,omitempty"`
+	InputTokens              int `json:"input_tokens"`
+	OutputTokens             int `json:"output_tokens"`
+	TotalTokens              int `json:"total_tokens"`
+	CachedInputTokens        int `json:"cached_input_tokens,omitempty"`
+	CacheCreationInputTokens int `json:"cache_creation_input_tokens,omitempty"`
+
+	InputCost              float64 `json:"input_cost,omitempty"`
+	OutputCost             float64 `json:"output_cost,omitempty"`
+	CachedInputCost        float64 `json:"cached_input_cost,omitempty"`
+	CacheCreationInputCost float64 `json:"cache_creation_input_cost,omitempty"`
+	TotalCost              float64 `json:"total_cost,omitempty"`
 }
 
 // Add combines another TokenUsage into this one (used to accumulate session totals).
@@ -59,8 +82,12 @@ func (u *TokenUsage) Add(other *TokenUsage) {
 	u.InputTokens += other.InputTokens
 	u.OutputTokens += other.OutputTokens
 	u.TotalTokens += other.TotalTokens
+	u.CachedInputTokens += other.CachedInputTokens
+	u.CacheCreationInputTokens += other.CacheCreationInputTokens
 	u.InputCost += other.InputCost
 	u.OutputCost += other.OutputCost
+	u.CachedInputCost += other.CachedInputCost
+	u.CacheCreationInputCost += other.CacheCreationInputCost
 	u.TotalCost += other.TotalCost
 }
 

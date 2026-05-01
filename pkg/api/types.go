@@ -1,6 +1,10 @@
 package api
 
-import "time"
+import (
+	"time"
+
+	"github.com/mwantia/forge-sdk/pkg/plugins"
+)
 
 // SystemPromptEntry is a named system prompt segment.
 // Multiple entries are joined in order into a single system message.
@@ -20,15 +24,20 @@ type SessionMetadata struct {
 	SystemPrompts []SystemPromptEntry  `json:"system_prompts,omitempty"`
 	CreatedAt     time.Time            `json:"created_at"`
 	UpdatedAt     time.Time            `json:"updated_at"`
+	Usage         *plugins.TokenUsage  `json:"usage,omitempty"`
 }
 
-// Message is a single stored message in a session.
+// Message is a single stored message in a session, projected from the
+// content-addressed DAG entry plus its meta sidecar.
 type Message struct {
-	ID        string            `json:"id"`
-	Role      string            `json:"role"`
-	Content   string            `json:"content"`
-	ToolCalls []MessageToolCall `json:"tool_calls,omitempty"`
-	CreatedAt time.Time         `json:"created_at"`
+	Hash        string            `json:"hash"`
+	ParentHash  string            `json:"parent_hash,omitempty"`
+	Role        string            `json:"role"`
+	Content     string            `json:"content"`
+	ToolCalls   []MessageToolCall `json:"tool_calls,omitempty"`
+	CreatedAt   time.Time         `json:"created_at"`
+	ContextHash string            `json:"context_hash,omitempty"`
+	Usage       *plugins.TokenUsage `json:"usage,omitempty"`
 }
 
 // MessageToolCall records a tool invocation within a message.

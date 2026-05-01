@@ -9,14 +9,12 @@ import (
 	channelproto "github.com/mwantia/forge-sdk/pkg/plugins/grpc/channel/proto"
 	drivergrpc "github.com/mwantia/forge-sdk/pkg/plugins/grpc/driver"
 	driverproto "github.com/mwantia/forge-sdk/pkg/plugins/grpc/driver/proto"
-	memorygrpc "github.com/mwantia/forge-sdk/pkg/plugins/grpc/memory"
-	memoryproto "github.com/mwantia/forge-sdk/pkg/plugins/grpc/memory/proto"
 	providergrpc "github.com/mwantia/forge-sdk/pkg/plugins/grpc/provider"
 	providerproto "github.com/mwantia/forge-sdk/pkg/plugins/grpc/provider/proto"
+	resourcegrpc "github.com/mwantia/forge-sdk/pkg/plugins/grpc/resource"
+	resourceproto "github.com/mwantia/forge-sdk/pkg/plugins/grpc/resource/proto"
 	sandboxgrpc "github.com/mwantia/forge-sdk/pkg/plugins/grpc/sandbox"
 	sandboxproto "github.com/mwantia/forge-sdk/pkg/plugins/grpc/sandbox/proto"
-	sessionsgrpc "github.com/mwantia/forge-sdk/pkg/plugins/grpc/sessions"
-	sessionsproto "github.com/mwantia/forge-sdk/pkg/plugins/grpc/sessions/proto"
 	toolsgrpc "github.com/mwantia/forge-sdk/pkg/plugins/grpc/tools"
 	toolsproto "github.com/mwantia/forge-sdk/pkg/plugins/grpc/tools/proto"
 	"google.golang.org/grpc"
@@ -44,8 +42,7 @@ type DriverPlugin struct {
 func (p *DriverPlugin) GRPCServer(broker *goplugin.GRPCBroker, s *grpc.Server) error {
 	driverproto.RegisterDriverServiceServer(s, drivergrpc.NewServer(p.Impl, broker))
 	providerproto.RegisterProviderServiceServer(s, providergrpc.NewServer(p.Impl))
-	memoryproto.RegisterMemoryServiceServer(s, memorygrpc.NewServer(p.Impl))
-	sessionsproto.RegisterSessionsServiceServer(s, sessionsgrpc.NewServer(p.Impl))
+	resourceproto.RegisterResourceServiceServer(s, resourcegrpc.NewServer(p.Impl))
 	channelproto.RegisterChannelServiceServer(s, channelgrpc.NewServer(p.Impl))
 	toolsproto.RegisterToolsServiceServer(s, toolsgrpc.NewServer(p.Impl))
 	sandboxproto.RegisterSandboxServiceServer(s, sandboxgrpc.NewServer(p.Impl))

@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strings"
 )
 
 const (
@@ -79,15 +80,34 @@ func (c *Client) GetMessage(ctx context.Context, sessionID, msgID string) (*Mess
 // output chunking and pacing policy is bypassed: deltas are forwarded as
 // token-boundary chunks with no pacing. Use this for programmatic consumers
 // that want raw throughput.
-func (c *Client) SendMessage(ctx context.Context, sessionID, content string, noStore, raw bool) (<-chan WireEvent, error) {
+// DispatchOptions configures branch-aware dispatching. Zero values pick
+// the defaults: HEAD branch, no fork, server-managed chunking.
+type DispatchOptions struct {
+	NoStore  bool
+	Raw      bool
+	Ref      string // dispatch on a non-HEAD ref
+	ForkFrom string // hash or prefix; auto-creates a branch off that message's parent
+}
+
+func (c *Client) SendMessage(ctx context.Context, sessionID, content string, opts DispatchOptions) (<-chan WireEvent, error) {
 	body := map[string]any{
 		"session_id": sessionID,
 		"content":    content,
-		"no_store":   noStore,
+		"no_store":   opts.NoStore,
 	}
 	path := pipelinePath + "/dispatch"
-	if raw {
-		path += "?raw=true"
+	q := []string{}
+	if opts.Raw {
+		q = append(q, "raw=true")
+	}
+	if opts.Ref != "" {
+		q = append(q, "ref="+opts.Ref)
+	}
+	if opts.ForkFrom != "" {
+		q = append(q, "fork_from="+opts.ForkFrom)
+	}
+	if len(q) > 0 {
+		path += "?" + joinQuery(q)
 	}
 	resp, err := c.postRaw(path, body)
 	if err != nil {
@@ -169,6 +189,10 @@ func (c *Client) PreviewPipeline(ctx context.Context, sessionID, content string)
 		return nil, err
 	}
 	return &resp, nil
+}
+
+func joinQuery(parts []string) string {
+	return strings.Join(parts, "&")
 }
 
 // CompactMessages removes intermediate tool-call messages from the session.

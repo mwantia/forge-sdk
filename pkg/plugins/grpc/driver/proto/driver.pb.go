@@ -589,7 +589,7 @@ const file_pkg_plugins_grpc_driver_proto_driver_proto_rawDesc = "" +
 	"\x0eConfigResponse\"\x12\n" +
 	"\x10GetPluginRequest\"1\n" +
 	"\x11GetPluginResponse\x12\x1c\n" +
-	"\tavailable\x18\x01 \x01(\bR\tavailable2\xd0\x06\n" +
+	"\tavailable\x18\x01 \x01(\bR\tavailable2\x88\x06\n" +
 	"\rDriverService\x12L\n" +
 	"\rGetPluginInfo\x12\x1c.driver.GetPluginInfoRequest\x1a\x1d.driver.GetPluginInfoResponse\x12:\n" +
 	"\vProbePlugin\x12\x14.driver.ProbeRequest\x1a\x15.driver.ProbeResponse\x12L\n" +
@@ -598,9 +598,8 @@ const file_pkg_plugins_grpc_driver_proto_driver_proto_rawDesc = "" +
 	"OpenDriver\x12\x13.driver.OpenRequest\x1a\x14.driver.OpenResponse\x12:\n" +
 	"\vCloseDriver\x12\x14.driver.CloseRequest\x1a\x15.driver.CloseResponse\x12=\n" +
 	"\fConfigDriver\x12\x15.driver.ConfigRequest\x1a\x16.driver.ConfigResponse\x12H\n" +
-	"\x11GetProviderPlugin\x12\x18.driver.GetPluginRequest\x1a\x19.driver.GetPluginResponse\x12F\n" +
-	"\x0fGetMemoryPlugin\x12\x18.driver.GetPluginRequest\x1a\x19.driver.GetPluginResponse\x12H\n" +
-	"\x11GetSessionsPlugin\x12\x18.driver.GetPluginRequest\x1a\x19.driver.GetPluginResponse\x12G\n" +
+	"\x11GetProviderPlugin\x12\x18.driver.GetPluginRequest\x1a\x19.driver.GetPluginResponse\x12H\n" +
+	"\x11GetResourcePlugin\x12\x18.driver.GetPluginRequest\x1a\x19.driver.GetPluginResponse\x12G\n" +
 	"\x10GetChannelPlugin\x12\x18.driver.GetPluginRequest\x1a\x19.driver.GetPluginResponse\x12E\n" +
 	"\x0eGetToolsPlugin\x12\x18.driver.GetPluginRequest\x1a\x19.driver.GetPluginResponse\x12G\n" +
 	"\x10GetSandboxPlugin\x12\x18.driver.GetPluginRequest\x1a\x19.driver.GetPluginResponseB<Z:github.com/mwantia/forge-sdk/pkg/plugins/grpc/driver/protob\x06proto3"
@@ -648,25 +647,23 @@ var file_pkg_plugins_grpc_driver_proto_driver_proto_depIdxs = []int32{
 	8,  // 7: driver.DriverService.CloseDriver:input_type -> driver.CloseRequest
 	10, // 8: driver.DriverService.ConfigDriver:input_type -> driver.ConfigRequest
 	12, // 9: driver.DriverService.GetProviderPlugin:input_type -> driver.GetPluginRequest
-	12, // 10: driver.DriverService.GetMemoryPlugin:input_type -> driver.GetPluginRequest
-	12, // 11: driver.DriverService.GetSessionsPlugin:input_type -> driver.GetPluginRequest
-	12, // 12: driver.DriverService.GetChannelPlugin:input_type -> driver.GetPluginRequest
-	12, // 13: driver.DriverService.GetToolsPlugin:input_type -> driver.GetPluginRequest
-	12, // 14: driver.DriverService.GetSandboxPlugin:input_type -> driver.GetPluginRequest
-	1,  // 15: driver.DriverService.GetPluginInfo:output_type -> driver.GetPluginInfoResponse
-	3,  // 16: driver.DriverService.ProbePlugin:output_type -> driver.ProbeResponse
-	5,  // 17: driver.DriverService.GetCapabilities:output_type -> driver.CapabilitiesResponse
-	7,  // 18: driver.DriverService.OpenDriver:output_type -> driver.OpenResponse
-	9,  // 19: driver.DriverService.CloseDriver:output_type -> driver.CloseResponse
-	11, // 20: driver.DriverService.ConfigDriver:output_type -> driver.ConfigResponse
-	13, // 21: driver.DriverService.GetProviderPlugin:output_type -> driver.GetPluginResponse
-	13, // 22: driver.DriverService.GetMemoryPlugin:output_type -> driver.GetPluginResponse
-	13, // 23: driver.DriverService.GetSessionsPlugin:output_type -> driver.GetPluginResponse
-	13, // 24: driver.DriverService.GetChannelPlugin:output_type -> driver.GetPluginResponse
-	13, // 25: driver.DriverService.GetToolsPlugin:output_type -> driver.GetPluginResponse
-	13, // 26: driver.DriverService.GetSandboxPlugin:output_type -> driver.GetPluginResponse
-	15, // [15:27] is the sub-list for method output_type
-	3,  // [3:15] is the sub-list for method input_type
+	12, // 10: driver.DriverService.GetResourcePlugin:input_type -> driver.GetPluginRequest
+	12, // 11: driver.DriverService.GetChannelPlugin:input_type -> driver.GetPluginRequest
+	12, // 12: driver.DriverService.GetToolsPlugin:input_type -> driver.GetPluginRequest
+	12, // 13: driver.DriverService.GetSandboxPlugin:input_type -> driver.GetPluginRequest
+	1,  // 14: driver.DriverService.GetPluginInfo:output_type -> driver.GetPluginInfoResponse
+	3,  // 15: driver.DriverService.ProbePlugin:output_type -> driver.ProbeResponse
+	5,  // 16: driver.DriverService.GetCapabilities:output_type -> driver.CapabilitiesResponse
+	7,  // 17: driver.DriverService.OpenDriver:output_type -> driver.OpenResponse
+	9,  // 18: driver.DriverService.CloseDriver:output_type -> driver.CloseResponse
+	11, // 19: driver.DriverService.ConfigDriver:output_type -> driver.ConfigResponse
+	13, // 20: driver.DriverService.GetProviderPlugin:output_type -> driver.GetPluginResponse
+	13, // 21: driver.DriverService.GetResourcePlugin:output_type -> driver.GetPluginResponse
+	13, // 22: driver.DriverService.GetChannelPlugin:output_type -> driver.GetPluginResponse
+	13, // 23: driver.DriverService.GetToolsPlugin:output_type -> driver.GetPluginResponse
+	13, // 24: driver.DriverService.GetSandboxPlugin:output_type -> driver.GetPluginResponse
+	14, // [14:25] is the sub-list for method output_type
+	3,  // [3:14] is the sub-list for method input_type
 	3,  // [3:3] is the sub-list for extension type_name
 	3,  // [3:3] is the sub-list for extension extendee
 	0,  // [0:3] is the sub-list for field type_name
