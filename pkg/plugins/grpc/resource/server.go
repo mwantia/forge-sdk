@@ -37,7 +37,11 @@ func (s *Server) Store(ctx context.Context, req *proto.StoreRequest) (*proto.Sto
 	if err != nil {
 		return nil, err
 	}
-	resource, err := p.Store(ctx, req.Namespace, req.Content, req.Metadata.AsMap())
+	var meta map[string]any
+	if req.Metadata != nil {
+		meta = req.Metadata.AsMap()
+	}
+	resource, err := p.Store(ctx, req.Path, req.Content, req.Tags, meta)
 	if err != nil {
 		return nil, err
 	}
@@ -53,7 +57,37 @@ func (s *Server) Recall(ctx context.Context, req *proto.RecallRequest) (*proto.R
 	if err != nil {
 		return nil, err
 	}
-	resources, err := p.Recall(ctx, req.Namespace, req.Query, int(req.Limit), req.Filter.AsMap())
+
+	pq := req.Query
+	if pq == nil {
+		pq = &proto.RecallQuery{}
+	}
+
+	q := plugins.RecallQuery{
+		Path:  pq.Path,
+		Query: pq.Query,
+		Tags:  pq.Tags,
+		Limit: int(pq.Limit),
+	}
+	for _, f := range pq.Filter {
+		var val any
+		if f.Value != nil {
+			val = f.Value.AsInterface()
+		}
+		q.Filter = append(q.Filter, plugins.FilterPredicate{
+			Key:   f.Key,
+			Op:    plugins.FilterOp(f.Op),
+			Value: val,
+		})
+	}
+	if pq.CreatedAfter != nil {
+		q.CreatedAfter = pq.CreatedAfter.AsTime()
+	}
+	if pq.CreatedBefore != nil {
+		q.CreatedBefore = pq.CreatedBefore.AsTime()
+	}
+
+	resources, err := p.Recall(ctx, q)
 	if err != nil {
 		return nil, err
 	}
@@ -73,7 +107,7 @@ func (s *Server) Forget(ctx context.Context, req *proto.ForgetRequest) (*proto.F
 	if err != nil {
 		return nil, err
 	}
-	if err := p.Forget(ctx, req.Namespace, req.Id); err != nil {
+	if err := p.Forget(ctx, req.Path, req.Id); err != nil {
 		return nil, err
 	}
 	return &proto.ForgetResponse{}, nil
@@ -84,10 +118,11 @@ func resourceToProto(r *plugins.Resource) (*proto.Resource, error) {
 		return nil, nil
 	}
 	out := &proto.Resource{
-		Id:        r.ID,
-		Namespace: r.Namespace,
-		Content:   r.Content,
-		Score:     r.Score,
+		Id:      r.ID,
+		Path:    r.Path,
+		Content: r.Content,
+		Tags:    r.Tags,
+		Score:   r.Score,
 	}
 	if len(r.Metadata) > 0 {
 		meta, err := structpb.NewStruct(r.Metadata)

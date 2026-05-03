@@ -7,18 +7,34 @@ import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/mwantia/forge-sdk/pkg/plugins/grpc/resource/proto";
 
-// ResourceService carries resource-level memory operations
-// (store / recall / forget) over namespaced corpora.
+// ResourceService carries path-based resource storage and retrieval.
 service ResourceService {
     rpc Store(StoreRequest)   returns (StoreResponse);
     rpc Recall(RecallRequest) returns (RecallResponse);
     rpc Forget(ForgetRequest) returns (ForgetResponse);
 }
 
+message FilterPredicate {
+    string               key   = 1;
+    string               op    = 2; // eq | prefix | contains | gte | lte
+    google.protobuf.Value value = 3;
+}
+
+message RecallQuery {
+    string                    path           = 1;
+    string                    query          = 2;
+    repeated string           tags           = 3;
+    repeated FilterPredicate  filter         = 4;
+    google.protobuf.Timestamp created_after  = 5;
+    google.protobuf.Timestamp created_before = 6;
+    int32                     limit          = 7;
+}
+
 message StoreRequest {
-    string                 namespace = 1;
-    string                 content   = 2;
-    google.protobuf.Struct metadata  = 3;
+    string                 path     = 1;
+    string                 content  = 2;
+    repeated string        tags     = 3;
+    google.protobuf.Struct metadata = 4;
 }
 
 message StoreResponse {
@@ -26,10 +42,7 @@ message StoreResponse {
 }
 
 message RecallRequest {
-    string                 namespace = 1;
-    string                 query     = 2;
-    int32                  limit     = 3;
-    google.protobuf.Struct filter    = 4;
+    RecallQuery query = 1;
 }
 
 message RecallResponse {
@@ -37,17 +50,18 @@ message RecallResponse {
 }
 
 message ForgetRequest {
-    string namespace = 1;
-    string id        = 2;
+    string path = 1;
+    string id   = 2;
 }
 
 message ForgetResponse {}
 
 message Resource {
-    string                     id         = 1;
-    string                     namespace  = 2;
-    string                     content    = 3;
-    google.protobuf.Struct     metadata   = 4;
-    double                     score      = 5;
-    google.protobuf.Timestamp  created_at = 6;
+    string                    id         = 1;
+    string                    path       = 2;
+    string                    content    = 3;
+    repeated string           tags       = 4;
+    google.protobuf.Struct    metadata   = 5;
+    double                    score      = 6;
+    google.protobuf.Timestamp created_at = 7;
 }

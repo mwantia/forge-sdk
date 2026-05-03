@@ -28,8 +28,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 //
-// ResourceService carries resource-level memory operations
-// (store / recall / forget) over namespaced corpora.
+// ResourceService carries path-based resource storage and retrieval.
 type ResourceServiceClient interface {
 	Store(ctx context.Context, in *StoreRequest, opts ...grpc.CallOption) (*StoreResponse, error)
 	Recall(ctx context.Context, in *RecallRequest, opts ...grpc.CallOption) (*RecallResponse, error)
@@ -78,8 +77,7 @@ func (c *resourceServiceClient) Forget(ctx context.Context, in *ForgetRequest, o
 // All implementations must embed UnimplementedResourceServiceServer
 // for forward compatibility.
 //
-// ResourceService carries resource-level memory operations
-// (store / recall / forget) over namespaced corpora.
+// ResourceService carries path-based resource storage and retrieval.
 type ResourceServiceServer interface {
 	Store(context.Context, *StoreRequest) (*StoreResponse, error)
 	Recall(context.Context, *RecallRequest) (*RecallResponse, error)

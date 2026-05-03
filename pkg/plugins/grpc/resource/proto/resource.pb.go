@@ -23,18 +23,171 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type FilterPredicate struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
+	Op            string                 `protobuf:"bytes,2,opt,name=op,proto3" json:"op,omitempty"` // eq | prefix | contains | gte | lte
+	Value         *structpb.Value        `protobuf:"bytes,3,opt,name=value,proto3" json:"value,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FilterPredicate) Reset() {
+	*x = FilterPredicate{}
+	mi := &file_pkg_plugins_grpc_resource_proto_resource_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FilterPredicate) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FilterPredicate) ProtoMessage() {}
+
+func (x *FilterPredicate) ProtoReflect() protoreflect.Message {
+	mi := &file_pkg_plugins_grpc_resource_proto_resource_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FilterPredicate.ProtoReflect.Descriptor instead.
+func (*FilterPredicate) Descriptor() ([]byte, []int) {
+	return file_pkg_plugins_grpc_resource_proto_resource_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *FilterPredicate) GetKey() string {
+	if x != nil {
+		return x.Key
+	}
+	return ""
+}
+
+func (x *FilterPredicate) GetOp() string {
+	if x != nil {
+		return x.Op
+	}
+	return ""
+}
+
+func (x *FilterPredicate) GetValue() *structpb.Value {
+	if x != nil {
+		return x.Value
+	}
+	return nil
+}
+
+type RecallQuery struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Path          string                 `protobuf:"bytes,1,opt,name=path,proto3" json:"path,omitempty"`
+	Query         string                 `protobuf:"bytes,2,opt,name=query,proto3" json:"query,omitempty"`
+	Tags          []string               `protobuf:"bytes,3,rep,name=tags,proto3" json:"tags,omitempty"`
+	Filter        []*FilterPredicate     `protobuf:"bytes,4,rep,name=filter,proto3" json:"filter,omitempty"`
+	CreatedAfter  *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=created_after,json=createdAfter,proto3" json:"created_after,omitempty"`
+	CreatedBefore *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=created_before,json=createdBefore,proto3" json:"created_before,omitempty"`
+	Limit         int32                  `protobuf:"varint,7,opt,name=limit,proto3" json:"limit,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RecallQuery) Reset() {
+	*x = RecallQuery{}
+	mi := &file_pkg_plugins_grpc_resource_proto_resource_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RecallQuery) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RecallQuery) ProtoMessage() {}
+
+func (x *RecallQuery) ProtoReflect() protoreflect.Message {
+	mi := &file_pkg_plugins_grpc_resource_proto_resource_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RecallQuery.ProtoReflect.Descriptor instead.
+func (*RecallQuery) Descriptor() ([]byte, []int) {
+	return file_pkg_plugins_grpc_resource_proto_resource_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *RecallQuery) GetPath() string {
+	if x != nil {
+		return x.Path
+	}
+	return ""
+}
+
+func (x *RecallQuery) GetQuery() string {
+	if x != nil {
+		return x.Query
+	}
+	return ""
+}
+
+func (x *RecallQuery) GetTags() []string {
+	if x != nil {
+		return x.Tags
+	}
+	return nil
+}
+
+func (x *RecallQuery) GetFilter() []*FilterPredicate {
+	if x != nil {
+		return x.Filter
+	}
+	return nil
+}
+
+func (x *RecallQuery) GetCreatedAfter() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedAfter
+	}
+	return nil
+}
+
+func (x *RecallQuery) GetCreatedBefore() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedBefore
+	}
+	return nil
+}
+
+func (x *RecallQuery) GetLimit() int32 {
+	if x != nil {
+		return x.Limit
+	}
+	return 0
+}
+
 type StoreRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Namespace     string                 `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	Path          string                 `protobuf:"bytes,1,opt,name=path,proto3" json:"path,omitempty"`
 	Content       string                 `protobuf:"bytes,2,opt,name=content,proto3" json:"content,omitempty"`
-	Metadata      *structpb.Struct       `protobuf:"bytes,3,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	Tags          []string               `protobuf:"bytes,3,rep,name=tags,proto3" json:"tags,omitempty"`
+	Metadata      *structpb.Struct       `protobuf:"bytes,4,opt,name=metadata,proto3" json:"metadata,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *StoreRequest) Reset() {
 	*x = StoreRequest{}
-	mi := &file_pkg_plugins_grpc_resource_proto_resource_proto_msgTypes[0]
+	mi := &file_pkg_plugins_grpc_resource_proto_resource_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -46,7 +199,7 @@ func (x *StoreRequest) String() string {
 func (*StoreRequest) ProtoMessage() {}
 
 func (x *StoreRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pkg_plugins_grpc_resource_proto_resource_proto_msgTypes[0]
+	mi := &file_pkg_plugins_grpc_resource_proto_resource_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -59,12 +212,12 @@ func (x *StoreRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StoreRequest.ProtoReflect.Descriptor instead.
 func (*StoreRequest) Descriptor() ([]byte, []int) {
-	return file_pkg_plugins_grpc_resource_proto_resource_proto_rawDescGZIP(), []int{0}
+	return file_pkg_plugins_grpc_resource_proto_resource_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *StoreRequest) GetNamespace() string {
+func (x *StoreRequest) GetPath() string {
 	if x != nil {
-		return x.Namespace
+		return x.Path
 	}
 	return ""
 }
@@ -74,6 +227,13 @@ func (x *StoreRequest) GetContent() string {
 		return x.Content
 	}
 	return ""
+}
+
+func (x *StoreRequest) GetTags() []string {
+	if x != nil {
+		return x.Tags
+	}
+	return nil
 }
 
 func (x *StoreRequest) GetMetadata() *structpb.Struct {
@@ -92,7 +252,7 @@ type StoreResponse struct {
 
 func (x *StoreResponse) Reset() {
 	*x = StoreResponse{}
-	mi := &file_pkg_plugins_grpc_resource_proto_resource_proto_msgTypes[1]
+	mi := &file_pkg_plugins_grpc_resource_proto_resource_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -104,7 +264,7 @@ func (x *StoreResponse) String() string {
 func (*StoreResponse) ProtoMessage() {}
 
 func (x *StoreResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_pkg_plugins_grpc_resource_proto_resource_proto_msgTypes[1]
+	mi := &file_pkg_plugins_grpc_resource_proto_resource_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -117,7 +277,7 @@ func (x *StoreResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StoreResponse.ProtoReflect.Descriptor instead.
 func (*StoreResponse) Descriptor() ([]byte, []int) {
-	return file_pkg_plugins_grpc_resource_proto_resource_proto_rawDescGZIP(), []int{1}
+	return file_pkg_plugins_grpc_resource_proto_resource_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *StoreResponse) GetResource() *Resource {
@@ -129,17 +289,14 @@ func (x *StoreResponse) GetResource() *Resource {
 
 type RecallRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Namespace     string                 `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
-	Query         string                 `protobuf:"bytes,2,opt,name=query,proto3" json:"query,omitempty"`
-	Limit         int32                  `protobuf:"varint,3,opt,name=limit,proto3" json:"limit,omitempty"`
-	Filter        *structpb.Struct       `protobuf:"bytes,4,opt,name=filter,proto3" json:"filter,omitempty"`
+	Query         *RecallQuery           `protobuf:"bytes,1,opt,name=query,proto3" json:"query,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *RecallRequest) Reset() {
 	*x = RecallRequest{}
-	mi := &file_pkg_plugins_grpc_resource_proto_resource_proto_msgTypes[2]
+	mi := &file_pkg_plugins_grpc_resource_proto_resource_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -151,7 +308,7 @@ func (x *RecallRequest) String() string {
 func (*RecallRequest) ProtoMessage() {}
 
 func (x *RecallRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pkg_plugins_grpc_resource_proto_resource_proto_msgTypes[2]
+	mi := &file_pkg_plugins_grpc_resource_proto_resource_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -164,33 +321,12 @@ func (x *RecallRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RecallRequest.ProtoReflect.Descriptor instead.
 func (*RecallRequest) Descriptor() ([]byte, []int) {
-	return file_pkg_plugins_grpc_resource_proto_resource_proto_rawDescGZIP(), []int{2}
+	return file_pkg_plugins_grpc_resource_proto_resource_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *RecallRequest) GetNamespace() string {
-	if x != nil {
-		return x.Namespace
-	}
-	return ""
-}
-
-func (x *RecallRequest) GetQuery() string {
+func (x *RecallRequest) GetQuery() *RecallQuery {
 	if x != nil {
 		return x.Query
-	}
-	return ""
-}
-
-func (x *RecallRequest) GetLimit() int32 {
-	if x != nil {
-		return x.Limit
-	}
-	return 0
-}
-
-func (x *RecallRequest) GetFilter() *structpb.Struct {
-	if x != nil {
-		return x.Filter
 	}
 	return nil
 }
@@ -204,7 +340,7 @@ type RecallResponse struct {
 
 func (x *RecallResponse) Reset() {
 	*x = RecallResponse{}
-	mi := &file_pkg_plugins_grpc_resource_proto_resource_proto_msgTypes[3]
+	mi := &file_pkg_plugins_grpc_resource_proto_resource_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -216,7 +352,7 @@ func (x *RecallResponse) String() string {
 func (*RecallResponse) ProtoMessage() {}
 
 func (x *RecallResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_pkg_plugins_grpc_resource_proto_resource_proto_msgTypes[3]
+	mi := &file_pkg_plugins_grpc_resource_proto_resource_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -229,7 +365,7 @@ func (x *RecallResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RecallResponse.ProtoReflect.Descriptor instead.
 func (*RecallResponse) Descriptor() ([]byte, []int) {
-	return file_pkg_plugins_grpc_resource_proto_resource_proto_rawDescGZIP(), []int{3}
+	return file_pkg_plugins_grpc_resource_proto_resource_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *RecallResponse) GetResults() []*Resource {
@@ -241,7 +377,7 @@ func (x *RecallResponse) GetResults() []*Resource {
 
 type ForgetRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Namespace     string                 `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	Path          string                 `protobuf:"bytes,1,opt,name=path,proto3" json:"path,omitempty"`
 	Id            string                 `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -249,7 +385,7 @@ type ForgetRequest struct {
 
 func (x *ForgetRequest) Reset() {
 	*x = ForgetRequest{}
-	mi := &file_pkg_plugins_grpc_resource_proto_resource_proto_msgTypes[4]
+	mi := &file_pkg_plugins_grpc_resource_proto_resource_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -261,7 +397,7 @@ func (x *ForgetRequest) String() string {
 func (*ForgetRequest) ProtoMessage() {}
 
 func (x *ForgetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pkg_plugins_grpc_resource_proto_resource_proto_msgTypes[4]
+	mi := &file_pkg_plugins_grpc_resource_proto_resource_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -274,12 +410,12 @@ func (x *ForgetRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ForgetRequest.ProtoReflect.Descriptor instead.
 func (*ForgetRequest) Descriptor() ([]byte, []int) {
-	return file_pkg_plugins_grpc_resource_proto_resource_proto_rawDescGZIP(), []int{4}
+	return file_pkg_plugins_grpc_resource_proto_resource_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *ForgetRequest) GetNamespace() string {
+func (x *ForgetRequest) GetPath() string {
 	if x != nil {
-		return x.Namespace
+		return x.Path
 	}
 	return ""
 }
@@ -299,7 +435,7 @@ type ForgetResponse struct {
 
 func (x *ForgetResponse) Reset() {
 	*x = ForgetResponse{}
-	mi := &file_pkg_plugins_grpc_resource_proto_resource_proto_msgTypes[5]
+	mi := &file_pkg_plugins_grpc_resource_proto_resource_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -311,7 +447,7 @@ func (x *ForgetResponse) String() string {
 func (*ForgetResponse) ProtoMessage() {}
 
 func (x *ForgetResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_pkg_plugins_grpc_resource_proto_resource_proto_msgTypes[5]
+	mi := &file_pkg_plugins_grpc_resource_proto_resource_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -324,24 +460,25 @@ func (x *ForgetResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ForgetResponse.ProtoReflect.Descriptor instead.
 func (*ForgetResponse) Descriptor() ([]byte, []int) {
-	return file_pkg_plugins_grpc_resource_proto_resource_proto_rawDescGZIP(), []int{5}
+	return file_pkg_plugins_grpc_resource_proto_resource_proto_rawDescGZIP(), []int{7}
 }
 
 type Resource struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Namespace     string                 `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	Path          string                 `protobuf:"bytes,2,opt,name=path,proto3" json:"path,omitempty"`
 	Content       string                 `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`
-	Metadata      *structpb.Struct       `protobuf:"bytes,4,opt,name=metadata,proto3" json:"metadata,omitempty"`
-	Score         float64                `protobuf:"fixed64,5,opt,name=score,proto3" json:"score,omitempty"`
-	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	Tags          []string               `protobuf:"bytes,4,rep,name=tags,proto3" json:"tags,omitempty"`
+	Metadata      *structpb.Struct       `protobuf:"bytes,5,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	Score         float64                `protobuf:"fixed64,6,opt,name=score,proto3" json:"score,omitempty"`
+	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Resource) Reset() {
 	*x = Resource{}
-	mi := &file_pkg_plugins_grpc_resource_proto_resource_proto_msgTypes[6]
+	mi := &file_pkg_plugins_grpc_resource_proto_resource_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -353,7 +490,7 @@ func (x *Resource) String() string {
 func (*Resource) ProtoMessage() {}
 
 func (x *Resource) ProtoReflect() protoreflect.Message {
-	mi := &file_pkg_plugins_grpc_resource_proto_resource_proto_msgTypes[6]
+	mi := &file_pkg_plugins_grpc_resource_proto_resource_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -366,7 +503,7 @@ func (x *Resource) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Resource.ProtoReflect.Descriptor instead.
 func (*Resource) Descriptor() ([]byte, []int) {
-	return file_pkg_plugins_grpc_resource_proto_resource_proto_rawDescGZIP(), []int{6}
+	return file_pkg_plugins_grpc_resource_proto_resource_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *Resource) GetId() string {
@@ -376,9 +513,9 @@ func (x *Resource) GetId() string {
 	return ""
 }
 
-func (x *Resource) GetNamespace() string {
+func (x *Resource) GetPath() string {
 	if x != nil {
-		return x.Namespace
+		return x.Path
 	}
 	return ""
 }
@@ -388,6 +525,13 @@ func (x *Resource) GetContent() string {
 		return x.Content
 	}
 	return ""
+}
+
+func (x *Resource) GetTags() []string {
+	if x != nil {
+		return x.Tags
+	}
+	return nil
 }
 
 func (x *Resource) GetMetadata() *structpb.Struct {
@@ -415,32 +559,43 @@ var File_pkg_plugins_grpc_resource_proto_resource_proto protoreflect.FileDescrip
 
 const file_pkg_plugins_grpc_resource_proto_resource_proto_rawDesc = "" +
 	"\n" +
-	".pkg/plugins/grpc/resource/proto/resource.proto\x12\bresource\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"{\n" +
-	"\fStoreRequest\x12\x1c\n" +
-	"\tnamespace\x18\x01 \x01(\tR\tnamespace\x12\x18\n" +
-	"\acontent\x18\x02 \x01(\tR\acontent\x123\n" +
-	"\bmetadata\x18\x03 \x01(\v2\x17.google.protobuf.StructR\bmetadata\"?\n" +
+	".pkg/plugins/grpc/resource/proto/resource.proto\x12\bresource\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"a\n" +
+	"\x0fFilterPredicate\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x0e\n" +
+	"\x02op\x18\x02 \x01(\tR\x02op\x12,\n" +
+	"\x05value\x18\x03 \x01(\v2\x16.google.protobuf.ValueR\x05value\"\x98\x02\n" +
+	"\vRecallQuery\x12\x12\n" +
+	"\x04path\x18\x01 \x01(\tR\x04path\x12\x14\n" +
+	"\x05query\x18\x02 \x01(\tR\x05query\x12\x12\n" +
+	"\x04tags\x18\x03 \x03(\tR\x04tags\x121\n" +
+	"\x06filter\x18\x04 \x03(\v2\x19.resource.FilterPredicateR\x06filter\x12?\n" +
+	"\rcreated_after\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\fcreatedAfter\x12A\n" +
+	"\x0ecreated_before\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\rcreatedBefore\x12\x14\n" +
+	"\x05limit\x18\a \x01(\x05R\x05limit\"\x85\x01\n" +
+	"\fStoreRequest\x12\x12\n" +
+	"\x04path\x18\x01 \x01(\tR\x04path\x12\x18\n" +
+	"\acontent\x18\x02 \x01(\tR\acontent\x12\x12\n" +
+	"\x04tags\x18\x03 \x03(\tR\x04tags\x123\n" +
+	"\bmetadata\x18\x04 \x01(\v2\x17.google.protobuf.StructR\bmetadata\"?\n" +
 	"\rStoreResponse\x12.\n" +
-	"\bresource\x18\x01 \x01(\v2\x12.resource.ResourceR\bresource\"\x8a\x01\n" +
-	"\rRecallRequest\x12\x1c\n" +
-	"\tnamespace\x18\x01 \x01(\tR\tnamespace\x12\x14\n" +
-	"\x05query\x18\x02 \x01(\tR\x05query\x12\x14\n" +
-	"\x05limit\x18\x03 \x01(\x05R\x05limit\x12/\n" +
-	"\x06filter\x18\x04 \x01(\v2\x17.google.protobuf.StructR\x06filter\">\n" +
+	"\bresource\x18\x01 \x01(\v2\x12.resource.ResourceR\bresource\"<\n" +
+	"\rRecallRequest\x12+\n" +
+	"\x05query\x18\x01 \x01(\v2\x15.resource.RecallQueryR\x05query\">\n" +
 	"\x0eRecallResponse\x12,\n" +
-	"\aresults\x18\x01 \x03(\v2\x12.resource.ResourceR\aresults\"=\n" +
-	"\rForgetRequest\x12\x1c\n" +
-	"\tnamespace\x18\x01 \x01(\tR\tnamespace\x12\x0e\n" +
+	"\aresults\x18\x01 \x03(\v2\x12.resource.ResourceR\aresults\"3\n" +
+	"\rForgetRequest\x12\x12\n" +
+	"\x04path\x18\x01 \x01(\tR\x04path\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\tR\x02id\"\x10\n" +
-	"\x0eForgetResponse\"\xd8\x01\n" +
+	"\x0eForgetResponse\"\xe2\x01\n" +
 	"\bResource\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1c\n" +
-	"\tnamespace\x18\x02 \x01(\tR\tnamespace\x12\x18\n" +
-	"\acontent\x18\x03 \x01(\tR\acontent\x123\n" +
-	"\bmetadata\x18\x04 \x01(\v2\x17.google.protobuf.StructR\bmetadata\x12\x14\n" +
-	"\x05score\x18\x05 \x01(\x01R\x05score\x129\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
+	"\x04path\x18\x02 \x01(\tR\x04path\x12\x18\n" +
+	"\acontent\x18\x03 \x01(\tR\acontent\x12\x12\n" +
+	"\x04tags\x18\x04 \x03(\tR\x04tags\x123\n" +
+	"\bmetadata\x18\x05 \x01(\v2\x17.google.protobuf.StructR\bmetadata\x12\x14\n" +
+	"\x05score\x18\x06 \x01(\x01R\x05score\x129\n" +
 	"\n" +
-	"created_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt2\xc5\x01\n" +
+	"created_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt2\xc5\x01\n" +
 	"\x0fResourceService\x128\n" +
 	"\x05Store\x12\x16.resource.StoreRequest\x1a\x17.resource.StoreResponse\x12;\n" +
 	"\x06Recall\x12\x17.resource.RecallRequest\x1a\x18.resource.RecallResponse\x12;\n" +
@@ -458,36 +613,43 @@ func file_pkg_plugins_grpc_resource_proto_resource_proto_rawDescGZIP() []byte {
 	return file_pkg_plugins_grpc_resource_proto_resource_proto_rawDescData
 }
 
-var file_pkg_plugins_grpc_resource_proto_resource_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
+var file_pkg_plugins_grpc_resource_proto_resource_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_pkg_plugins_grpc_resource_proto_resource_proto_goTypes = []any{
-	(*StoreRequest)(nil),          // 0: resource.StoreRequest
-	(*StoreResponse)(nil),         // 1: resource.StoreResponse
-	(*RecallRequest)(nil),         // 2: resource.RecallRequest
-	(*RecallResponse)(nil),        // 3: resource.RecallResponse
-	(*ForgetRequest)(nil),         // 4: resource.ForgetRequest
-	(*ForgetResponse)(nil),        // 5: resource.ForgetResponse
-	(*Resource)(nil),              // 6: resource.Resource
-	(*structpb.Struct)(nil),       // 7: google.protobuf.Struct
-	(*timestamppb.Timestamp)(nil), // 8: google.protobuf.Timestamp
+	(*FilterPredicate)(nil),       // 0: resource.FilterPredicate
+	(*RecallQuery)(nil),           // 1: resource.RecallQuery
+	(*StoreRequest)(nil),          // 2: resource.StoreRequest
+	(*StoreResponse)(nil),         // 3: resource.StoreResponse
+	(*RecallRequest)(nil),         // 4: resource.RecallRequest
+	(*RecallResponse)(nil),        // 5: resource.RecallResponse
+	(*ForgetRequest)(nil),         // 6: resource.ForgetRequest
+	(*ForgetResponse)(nil),        // 7: resource.ForgetResponse
+	(*Resource)(nil),              // 8: resource.Resource
+	(*structpb.Value)(nil),        // 9: google.protobuf.Value
+	(*timestamppb.Timestamp)(nil), // 10: google.protobuf.Timestamp
+	(*structpb.Struct)(nil),       // 11: google.protobuf.Struct
 }
 var file_pkg_plugins_grpc_resource_proto_resource_proto_depIdxs = []int32{
-	7, // 0: resource.StoreRequest.metadata:type_name -> google.protobuf.Struct
-	6, // 1: resource.StoreResponse.resource:type_name -> resource.Resource
-	7, // 2: resource.RecallRequest.filter:type_name -> google.protobuf.Struct
-	6, // 3: resource.RecallResponse.results:type_name -> resource.Resource
-	7, // 4: resource.Resource.metadata:type_name -> google.protobuf.Struct
-	8, // 5: resource.Resource.created_at:type_name -> google.protobuf.Timestamp
-	0, // 6: resource.ResourceService.Store:input_type -> resource.StoreRequest
-	2, // 7: resource.ResourceService.Recall:input_type -> resource.RecallRequest
-	4, // 8: resource.ResourceService.Forget:input_type -> resource.ForgetRequest
-	1, // 9: resource.ResourceService.Store:output_type -> resource.StoreResponse
-	3, // 10: resource.ResourceService.Recall:output_type -> resource.RecallResponse
-	5, // 11: resource.ResourceService.Forget:output_type -> resource.ForgetResponse
-	9, // [9:12] is the sub-list for method output_type
-	6, // [6:9] is the sub-list for method input_type
-	6, // [6:6] is the sub-list for extension type_name
-	6, // [6:6] is the sub-list for extension extendee
-	0, // [0:6] is the sub-list for field type_name
+	9,  // 0: resource.FilterPredicate.value:type_name -> google.protobuf.Value
+	0,  // 1: resource.RecallQuery.filter:type_name -> resource.FilterPredicate
+	10, // 2: resource.RecallQuery.created_after:type_name -> google.protobuf.Timestamp
+	10, // 3: resource.RecallQuery.created_before:type_name -> google.protobuf.Timestamp
+	11, // 4: resource.StoreRequest.metadata:type_name -> google.protobuf.Struct
+	8,  // 5: resource.StoreResponse.resource:type_name -> resource.Resource
+	1,  // 6: resource.RecallRequest.query:type_name -> resource.RecallQuery
+	8,  // 7: resource.RecallResponse.results:type_name -> resource.Resource
+	11, // 8: resource.Resource.metadata:type_name -> google.protobuf.Struct
+	10, // 9: resource.Resource.created_at:type_name -> google.protobuf.Timestamp
+	2,  // 10: resource.ResourceService.Store:input_type -> resource.StoreRequest
+	4,  // 11: resource.ResourceService.Recall:input_type -> resource.RecallRequest
+	6,  // 12: resource.ResourceService.Forget:input_type -> resource.ForgetRequest
+	3,  // 13: resource.ResourceService.Store:output_type -> resource.StoreResponse
+	5,  // 14: resource.ResourceService.Recall:output_type -> resource.RecallResponse
+	7,  // 15: resource.ResourceService.Forget:output_type -> resource.ForgetResponse
+	13, // [13:16] is the sub-list for method output_type
+	10, // [10:13] is the sub-list for method input_type
+	10, // [10:10] is the sub-list for extension type_name
+	10, // [10:10] is the sub-list for extension extendee
+	0,  // [0:10] is the sub-list for field type_name
 }
 
 func init() { file_pkg_plugins_grpc_resource_proto_resource_proto_init() }
@@ -501,7 +663,7 @@ func file_pkg_plugins_grpc_resource_proto_resource_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_pkg_plugins_grpc_resource_proto_resource_proto_rawDesc), len(file_pkg_plugins_grpc_resource_proto_resource_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   7,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

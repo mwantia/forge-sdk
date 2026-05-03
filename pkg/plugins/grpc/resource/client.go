@@ -7,6 +7,7 @@ import (
 	proto "github.com/mwantia/forge-sdk/pkg/plugins/grpc/resource/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/structpb"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 // Client implements plugins.ResourcePlugin over gRPC.
@@ -19,15 +20,16 @@ func NewClient(conn *grpc.ClientConn) *Client {
 	return &Client{client: proto.NewResourceServiceClient(conn)}
 }
 
-func (c *Client) Store(ctx context.Context, namespace, content string, metadata map[string]any) (*plugins.Resource, error) {
+func (c *Client) Store(ctx context.Context, path, content string, tags []string, metadata map[string]any) (*plugins.Resource, error) {
 	meta, err := structpb.NewStruct(metadata)
 	if err != nil {
 		return nil, err
 	}
 	resp, err := c.client.Store(ctx, &proto.StoreRequest{
-		Namespace: namespace,
-		Content:   content,
-		Metadata:  meta,
+		Path:     path,
+		Content:  content,
+		Tags:     tags,
+		Metadata: meta,
 	})
 	if err != nil {
 		return nil, err
@@ -35,17 +37,29 @@ func (c *Client) Store(ctx context.Context, namespace, content string, metadata 
 	return resourceFromProto(resp.Resource), nil
 }
 
-func (c *Client) Recall(ctx context.Context, namespace, query string, limit int, filter map[string]any) ([]*plugins.Resource, error) {
-	filterStruct, err := structpb.NewStruct(filter)
-	if err != nil {
-		return nil, err
+func (c *Client) Recall(ctx context.Context, q plugins.RecallQuery) ([]*plugins.Resource, error) {
+	pq := &proto.RecallQuery{
+		Path:  q.Path,
+		Query: q.Query,
+		Tags:  q.Tags,
+		Limit: int32(q.Limit),
 	}
-	resp, err := c.client.Recall(ctx, &proto.RecallRequest{
-		Namespace: namespace,
-		Query:     query,
-		Limit:     int32(limit),
-		Filter:    filterStruct,
-	})
+	for _, f := range q.Filter {
+		val, _ := structpb.NewValue(f.Value)
+		pq.Filter = append(pq.Filter, &proto.FilterPredicate{
+			Key:   f.Key,
+			Op:    string(f.Op),
+			Value: val,
+		})
+	}
+	if !q.CreatedAfter.IsZero() {
+		pq.CreatedAfter = timestamppb.New(q.CreatedAfter)
+	}
+	if !q.CreatedBefore.IsZero() {
+		pq.CreatedBefore = timestamppb.New(q.CreatedBefore)
+	}
+
+	resp, err := c.client.Recall(ctx, &proto.RecallRequest{Query: pq})
 	if err != nil {
 		return nil, err
 	}
@@ -56,8 +70,8 @@ func (c *Client) Recall(ctx context.Context, namespace, query string, limit int,
 	return results, nil
 }
 
-func (c *Client) Forget(ctx context.Context, namespace, id string) error {
-	_, err := c.client.Forget(ctx, &proto.ForgetRequest{Namespace: namespace, Id: id})
+func (c *Client) Forget(ctx context.Context, path, id string) error {
+	_, err := c.client.Forget(ctx, &proto.ForgetRequest{Path: path, Id: id})
 	return err
 }
 
@@ -66,10 +80,11 @@ func resourceFromProto(p *proto.Resource) *plugins.Resource {
 		return nil
 	}
 	r := &plugins.Resource{
-		ID:        p.Id,
-		Namespace: p.Namespace,
-		Content:   p.Content,
-		Score:     p.Score,
+		ID:      p.Id,
+		Path:    p.Path,
+		Content: p.Content,
+		Tags:    p.Tags,
+		Score:   p.Score,
 	}
 	if p.Metadata != nil {
 		r.Metadata = p.Metadata.AsMap()
