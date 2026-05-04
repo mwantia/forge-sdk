@@ -6,25 +6,17 @@ import (
 	"github.com/mwantia/forge-sdk/pkg/plugins"
 )
 
-// SystemPromptEntry is a named system prompt segment.
-// Multiple entries are joined in order into a single system message.
-type SystemPromptEntry struct {
-	Name    string `json:"name"`
-	Content string `json:"content"`
-}
-
 // SessionMetadata holds the persistent metadata for a pipeline session.
 type SessionMetadata struct {
-	ID            string               `json:"id"`
-	Name          string               `json:"name"`
-	Title         string               `json:"title,omitempty"`
-	Description   string               `json:"description,omitempty"`
-	Parent        string               `json:"parent,omitempty"`
-	Model         string               `json:"model"`
-	SystemPrompts []SystemPromptEntry  `json:"system_prompts,omitempty"`
-	CreatedAt     time.Time            `json:"created_at"`
-	UpdatedAt     time.Time            `json:"updated_at"`
-	Usage         *plugins.TokenUsage  `json:"usage,omitempty"`
+	ID          string              `json:"id"`
+	Name        string              `json:"name"`
+	Title       string              `json:"title,omitempty"`
+	Description string              `json:"description,omitempty"`
+	Parent      string              `json:"parent,omitempty"`
+	Model       string              `json:"model"`
+	CreatedAt   time.Time           `json:"created_at"`
+	UpdatedAt   time.Time           `json:"updated_at"`
+	Usage       *plugins.TokenUsage `json:"usage,omitempty"`
 }
 
 // Message is a single stored message in a session, projected from the
@@ -51,12 +43,11 @@ type MessageToolCall struct {
 
 // CreateSessionRequest is the POST body for creating a new session.
 type CreateSessionRequest struct {
-	Name              string               `json:"name,omitempty"`
-	Model             string               `json:"model"`
-	SystemPrompts     []SystemPromptEntry  `json:"system_prompts,omitempty"`
-	Memory            string               `json:"memory,omitempty"`
-	Tools             []string             `json:"tools,omitempty"`
-	MaxToolIterations int                  `json:"max_tool_iterations,omitempty"`
+	Name              string   `json:"name,omitempty"`
+	Model             string   `json:"model"`
+	Memory            string   `json:"memory,omitempty"`
+	Tools             []string `json:"tools,omitempty"`
+	MaxToolIterations int      `json:"max_tool_iterations,omitempty"`
 }
 
 // CompactResult is the response from PATCH …/messages/compact.

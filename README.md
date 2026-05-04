@@ -11,7 +11,7 @@ The SDK defines a plugin architecture where each plugin is an external process c
 | Type | Constant | Description |
 |------|----------|-------------|
 | Provider | `PluginTypeProvider` | LLM provider (Ollama, Anthropic, etc.) |
-| Memory | `PluginTypeMemory` | Memory/vector storage (sessions, embeddings) |
+| Resource | `PluginTypeResource` | Long-term memory / vector storage (`Store`, `Recall`, `Forget`) |
 | Channel | `PluginTypeChannel` | Communication gateway (Discord, etc.) |
 | Tools | `PluginTypeTools` | Tool calling bridge |
 | Sandbox | `PluginTypeSandbox` | Isolated execution environment (Docker, SSH, etc.) |
@@ -24,7 +24,7 @@ pkg/
 │   └── grpc/        # gRPC transport layer
 │       ├── driver/
 │       ├── provider/
-│       ├── memory/
+│       ├── resource/
 │       ├── channel/
 │       ├── tools/
 │       └── sandbox/
@@ -61,7 +61,7 @@ func main() {
 }
 ```
 
-Use `UnimplementedProviderPlugin`, `UnimplementedMemoryPlugin`, etc. as embedded stubs for sub-plugins you don't support.
+Use `UnimplementedProviderPlugin`, `UnimplementedResourcePlugin`, etc. as embedded stubs for sub-plugins you don't support.
 
 ### Registering a Plugin
 
@@ -86,7 +86,7 @@ type Driver interface {
     CloseDriver(ctx context.Context) error
     ConfigDriver(ctx context.Context, config PluginConfig) error
     GetProviderPlugin(ctx context.Context) (ProviderPlugin, error)
-    GetMemoryPlugin(ctx context.Context) (MemoryPlugin, error)
+    GetResourcePlugin(ctx context.Context) (ResourcePlugin, error)
     GetChannelPlugin(ctx context.Context) (ChannelPlugin, error)
     GetToolsPlugin(ctx context.Context) (ToolsPlugin, error)
     GetSandboxPlugin(ctx context.Context) (SandboxPlugin, error)
@@ -103,15 +103,30 @@ Embed(ctx, content []string, model string) ([][]float32, error)
 ListModels(ctx) ([]*Model, error)
 ```
 
-### `MemoryPlugin`
+### `ResourcePlugin`
 
-Session-scoped vector storage:
+Path-addressed long-term memory. Resources are stored at a URL-style path
+(e.g. `/sessions/<id>`, `/global`) and retrieved by content query, tags, or
+metadata predicates:
 
 ```go
-StoreResource(ctx, sessionID, content string, metadata map[string]string) (*MemoryResource, error)
-RetrieveResource(ctx, sessionID, query string, limit int, filter map[string]string) ([]*MemoryResource, error)
-CreateSession(ctx) (*MemorySession, error)
+Store(ctx, path, content string, tags []string, metadata map[string]any) (*Resource, error)
+Recall(ctx, q RecallQuery) ([]*Resource, error)
+Forget(ctx, path, id string) error
 ```
+
+**`Resource`** fields: `ID`, `Path`, `Content`, `Tags []string`, `Score float64`, `Metadata map[string]any`, `CreatedAt`.
+
+**`RecallQuery`** fields:
+
+| Field | Description |
+|---|---|
+| `Path` | Exact path or glob (e.g. `/sessions/**`) |
+| `Query` | Content search string |
+| `Tags` | AND-filter — all listed tags must be present |
+| `Filter []FilterPredicate` | Metadata predicates: `{Key, Op, Value}` where Op is `eq`, `prefix`, `contains`, `gte`, `lte` |
+| `CreatedAfter`, `CreatedBefore` | Time bounds |
+| `Limit` | Max results |
 
 ### `ToolsPlugin`
 

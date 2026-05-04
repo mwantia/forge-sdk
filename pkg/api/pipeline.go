@@ -89,7 +89,11 @@ type DispatchOptions struct {
 	ForkFrom string // hash or prefix; auto-creates a branch off that message's parent
 }
 
-func (c *Client) SendMessage(ctx context.Context, sessionID, content string, opts DispatchOptions) (<-chan WireEvent, error) {
+// SendMessage dispatches a user message and returns the active ref name and a
+// channel of streamed pipeline events. The ref comes from the X-Forge-Ref
+// response header — useful for renaming auto-created fork-* refs via
+// RenameBranch after the stream completes.
+func (c *Client) SendMessage(ctx context.Context, sessionID, content string, opts DispatchOptions) (ref string, ch <-chan WireEvent, err error) {
 	body := map[string]any{
 		"session_id": sessionID,
 		"content":    content,
@@ -109,14 +113,15 @@ func (c *Client) SendMessage(ctx context.Context, sessionID, content string, opt
 	if len(q) > 0 {
 		path += "?" + joinQuery(q)
 	}
-	resp, err := c.postRaw(path, body)
-	if err != nil {
-		return nil, err
+	resp, rerr := c.postRaw(path, body)
+	if rerr != nil {
+		return "", nil, rerr
 	}
 
-	ch := make(chan WireEvent, 32)
+	ref = resp.Header.Get("X-Forge-Ref")
+	events := make(chan WireEvent, 32)
 	go func() {
-		defer close(ch)
+		defer close(events)
 		defer resp.Body.Close()
 
 		scanner := bufio.NewScanner(resp.Body)
@@ -134,14 +139,14 @@ func (c *Client) SendMessage(ctx context.Context, sessionID, content string, opt
 			if err := json.Unmarshal([]byte(line), &ev); err != nil {
 				continue
 			}
-			ch <- ev
+			events <- ev
 			if ev.Type == "done" || ev.Type == "error" {
 				return
 			}
 		}
 	}()
 
-	return ch, nil
+	return ref, events, nil
 }
 
 // PreviewUsage is a heuristic size summary for a single fragment. EstTokens
@@ -193,6 +198,65 @@ func (c *Client) PreviewPipeline(ctx context.Context, sessionID, content string)
 
 func joinQuery(parts []string) string {
 	return strings.Join(parts, "&")
+}
+
+// SystemSnapshot is the current system message for a session (root of HEAD chain).
+type SystemSnapshot struct {
+	Hash    string `json:"hash"`
+	Content string `json:"content"`
+	Message string `json:"message,omitempty"`
+}
+
+// SystemRegenResult is the response from system edit or regen operations.
+// Branch is non-empty when the operation forked the existing chain; empty when
+// it wrote the system to an empty HEAD (fresh session).
+type SystemRegenResult struct {
+	Hash   string `json:"hash"`
+	Branch string `json:"branch,omitempty"`
+}
+
+// GetSystemSnapshot returns the system message for a session (root of HEAD chain).
+// If no messages exist yet, Hash and Content will be empty.
+func (c *Client) GetSystemSnapshot(ctx context.Context, sessionID string) (*SystemSnapshot, error) {
+	var snap SystemSnapshot
+	if err := c.get(sessionsPath+"/"+sessionID+"/system", &snap); err != nil {
+		return nil, err
+	}
+	return &snap, nil
+}
+
+// EditSystemSnapshot replaces the system message with template-rendered content.
+// Returns the new hash and the fork branch name (empty on a fresh session).
+func (c *Client) EditSystemSnapshot(ctx context.Context, sessionID, content string) (string, string, error) {
+	body := map[string]any{"content": content}
+	var out SystemRegenResult
+	if err := c.patch(sessionsPath+"/"+sessionID+"/system", body, &out); err != nil {
+		return "", "", err
+	}
+	return out.Hash, out.Branch, nil
+}
+
+// RegenSystemSnapshot re-assembles the system prompt from current plugin state
+// and stores it as a new root MessageObj. system is an optional session-layer
+// template rendered and appended to the assembled prompt. toolsVerbosity and
+// plugins are optional overrides (empty = use session defaults).
+// Returns the new hash and the fork branch name (empty on a fresh session).
+func (c *Client) RegenSystemSnapshot(ctx context.Context, sessionID, system, toolsVerbosity string, plugins []string) (string, string, error) {
+	body := map[string]any{}
+	if system != "" {
+		body["system"] = system
+	}
+	if toolsVerbosity != "" {
+		body["tools_verbosity"] = toolsVerbosity
+	}
+	if len(plugins) > 0 {
+		body["plugins"] = plugins
+	}
+	var out SystemRegenResult
+	if err := c.post(sessionsPath+"/"+sessionID+"/system/regen", body, &out); err != nil {
+		return "", "", err
+	}
+	return out.Hash, out.Branch, nil
 }
 
 // CompactMessages removes intermediate tool-call messages from the session.
