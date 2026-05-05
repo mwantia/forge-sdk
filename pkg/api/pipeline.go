@@ -9,7 +9,6 @@ import (
 )
 
 const (
-	pipelinePath = "/v1/pipeline"
 	sessionsPath = "/v1/sessions"
 )
 
@@ -99,7 +98,7 @@ func (c *Client) SendMessage(ctx context.Context, sessionID, content string, opt
 		"content":    content,
 		"no_store":   opts.NoStore,
 	}
-	path := pipelinePath + "/dispatch"
+	path := sessionsPath + "/dispatch"
 	q := []string{}
 	if opts.Raw {
 		q = append(q, "raw=true")
@@ -190,7 +189,7 @@ func (c *Client) PreviewPipeline(ctx context.Context, sessionID, content string)
 		"content":    content,
 	}
 	var resp PreviewResponse
-	if err := c.post(pipelinePath+"/preview", body, &resp); err != nil {
+	if err := c.post(sessionsPath+"/preview", body, &resp); err != nil {
 		return nil, err
 	}
 	return &resp, nil
