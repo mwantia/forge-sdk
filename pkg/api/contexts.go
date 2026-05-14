@@ -7,7 +7,7 @@ import (
 	"fmt"
 )
 
-const contextsPath = "/v1/contexts"
+const contextsPath = "/v1/pipeline/contexts"
 
 // PromptContextMessage is one resolved entry returned by GET
 // /v1/contexts/:hash/materialized.

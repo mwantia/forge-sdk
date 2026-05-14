@@ -10,20 +10,28 @@ import (
 
 const (
 	sessionsPath = "/v1/sessions"
+	pipelinePath = "/v1/pipeline"
 )
 
-// ListSessions returns sessions, optionally filtered by parent session ID.
-func (c *Client) ListSessions(ctx context.Context, parent string, offset, limit int) ([]*SessionMetadata, error) {
+// ListSessions returns sessions optionally filtered by parent session ID.
+// When archived is true, only archived sessions are returned; otherwise only active sessions.
+func (c *Client) ListSessions(ctx context.Context, parent string, archived bool, offset, limit int) ([]*SessionMetadata, error) {
 	path := fmt.Sprintf("%s?offset=%d&limit=%d", sessionsPath, offset, limit)
 	if parent != "" {
 		path += "&parent=" + parent
 	}
+
+	if archived {
+		path += "&archived=true"
+	}
+
 	var resp struct {
 		Sessions []*SessionMetadata `json:"sessions"`
 	}
 	if err := c.get(path, &resp); err != nil {
 		return nil, err
 	}
+
 	return resp.Sessions, nil
 }
 
@@ -45,14 +53,61 @@ func (c *Client) GetSession(ctx context.Context, id string) (*SessionMetadata, e
 	return &meta, nil
 }
 
-// DeleteSession deletes a session and all its messages.
+// UpdateSessionRequest carries the fields to patch on a session. Only non-nil
+// fields are applied; omitting a field leaves it unchanged.
+type UpdateSessionRequest struct {
+	Name        *string `json:"name,omitempty"`
+	Title       *string `json:"title,omitempty"`
+	Description *string `json:"description,omitempty"`
+	Model       *string `json:"model,omitempty"`
+}
+
+// UpdateSession patches mutable metadata on a session and returns the updated record.
+func (c *Client) UpdateSession(ctx context.Context, id string, req UpdateSessionRequest) (*SessionMetadata, error) {
+	var meta SessionMetadata
+	if err := c.patch(sessionsPath+"/"+id, req, &meta); err != nil {
+		return nil, err
+	}
+	return &meta, nil
+}
+
+// DeleteSession permanently deletes an archived session and all its data.
+// The session must be archived first; deleting a live session returns an error.
 func (c *Client) DeleteSession(ctx context.Context, id string) error {
 	return c.delete(sessionsPath + "/" + id)
+}
+
+// ArchiveSession archives a session, optionally renaming it first.
+// ref selects the branch to archive (empty = HEAD). name renames the session
+// before archiving (empty = keep current name).
+func (c *Client) ArchiveSession(ctx context.Context, id, ref, name string) error {
+	body := map[string]any{}
+	if ref != "" {
+		body["ref"] = ref
+	}
+	if name != "" {
+		body["name"] = name
+	}
+	return c.post(sessionsPath+"/"+id+"/archive", body, nil)
 }
 
 // ListMessages returns messages for a session in chronological order.
 func (c *Client) ListMessages(ctx context.Context, sessionID string, offset, limit int) ([]*Message, error) {
 	path := fmt.Sprintf("%s/%s/messages?offset=%d&limit=%d", sessionsPath, sessionID, offset, limit)
+	var resp struct {
+		Messages []*Message `json:"messages"`
+	}
+	if err := c.get(path, &resp); err != nil {
+		return nil, err
+	}
+	return resp.Messages, nil
+}
+
+func (c *Client) ListMessagesForRef(ctx context.Context, sessionID, branch string, limit int) ([]*Message, error) {
+	path := fmt.Sprintf("%s/%s/messages?offset=0&limit=%d", sessionsPath, sessionID, limit)
+	if branch != "" && branch != "HEAD" {
+		path += "&branch=" + branch
+	}
 	var resp struct {
 		Messages []*Message `json:"messages"`
 	}
@@ -71,34 +126,26 @@ func (c *Client) GetMessage(ctx context.Context, sessionID, msgID string) (*Mess
 	return &msg, nil
 }
 
-// SendMessage dispatches a user message to the pipeline and returns a channel
-// of pipeline events streamed as NDJSON. The channel is closed after the
-// DoneEvent or ErrorEvent. The caller must drain or cancel the channel;
-// cancelling ctx stops the stream. When noStore is true, the generated
-// messages are not persisted to storage. When raw is true, the server's
-// output chunking and pacing policy is bypassed: deltas are forwarded as
-// token-boundary chunks with no pacing. Use this for programmatic consumers
-// that want raw throughput.
-// DispatchOptions configures branch-aware dispatching. Zero values pick
+// CommitOptions configures branch-aware message commits. Zero values pick
 // the defaults: HEAD branch, no fork, server-managed chunking.
-type DispatchOptions struct {
+type CommitOptions struct {
 	NoStore  bool
 	Raw      bool
-	Ref      string // dispatch on a non-HEAD ref
+	Ref      string // commit on a non-HEAD ref
 	ForkFrom string // hash or prefix; auto-creates a branch off that message's parent
 }
 
-// SendMessage dispatches a user message and returns the active ref name and a
+// SendMessage commits a user message and returns the active ref name and a
 // channel of streamed pipeline events. The ref comes from the X-Forge-Ref
 // response header — useful for renaming auto-created fork-* refs via
 // RenameBranch after the stream completes.
-func (c *Client) SendMessage(ctx context.Context, sessionID, content string, opts DispatchOptions) (ref string, ch <-chan WireEvent, err error) {
+func (c *Client) SendMessage(ctx context.Context, sessionID, content string, opts CommitOptions) (ref string, ch <-chan WireEvent, err error) {
 	body := map[string]any{
 		"session_id": sessionID,
 		"content":    content,
 		"no_store":   opts.NoStore,
 	}
-	path := sessionsPath + "/dispatch"
+	path := pipelinePath + "/commit"
 	q := []string{}
 	if opts.Raw {
 		q = append(q, "raw=true")
@@ -189,7 +236,7 @@ func (c *Client) PreviewPipeline(ctx context.Context, sessionID, content string)
 		"content":    content,
 	}
 	var resp PreviewResponse
-	if err := c.post(sessionsPath+"/preview", body, &resp); err != nil {
+	if err := c.post(pipelinePath+"/preview", body, &resp); err != nil {
 		return nil, err
 	}
 	return &resp, nil
