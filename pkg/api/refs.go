@@ -12,6 +12,22 @@ func (c *Client) ListBranches(ctx context.Context, sessionID string) (map[string
 	return refs, err
 }
 
+// ListBranchesWithPrefix returns refs whose names begin with prefix.
+// Pass an empty prefix to get all refs (equivalent to ListBranches).
+func (c *Client) ListBranchesWithPrefix(ctx context.Context, sessionID, prefix string) (map[string]string, error) {
+	var out struct {
+		Refs map[string]string `json:"refs"`
+	}
+	path := sessionsPath + "/" + sessionID + "/branch"
+	if prefix != "" {
+		path += "?prefix=" + prefix
+	}
+	if err := c.get(path, &out); err != nil {
+		return nil, err
+	}
+	return out.Refs, nil
+}
+
 // ListBranchesWithSymrefs returns both the name->hash map and a symrefs map
 // (e.g. {"HEAD": "main"}) that shows which refs are symbolic pointers.
 func (c *Client) ListBranchesWithSymrefs(ctx context.Context, sessionID string) (refs, symrefs map[string]string, err error) {

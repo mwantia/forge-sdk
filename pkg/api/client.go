@@ -37,6 +37,10 @@ func New(addr, token string) *Client {
 	}
 }
 
+func (c *Client) GetAddress() string {
+	return c.addr
+}
+
 func (c *Client) get(path string, out any) error {
 	req, err := http.NewRequest(http.MethodGet, c.addr+path, nil)
 	if err != nil {

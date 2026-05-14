@@ -6,6 +6,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"sort"
+	"strings"
 	"time"
 
 	"github.com/mwantia/forge-sdk/pkg/plugins"
@@ -84,14 +86,30 @@ func ParseWireEvent(w WireEvent) (any, error) {
 	}
 }
 
+type EventState string
+
+const (
+	EventStateRunning EventState = "running"
+	EventStatePaused  EventState = "paused"
+	EventStateFailed  EventState = "failed"
+)
+
+// EventBranch describes a single dispatched event allocation (one branch per fire).
+type EventBranch struct {
+	Name    string    `json:"name"`
+	Hash    string    `json:"hash"`
+	FiredAt time.Time `json:"fired_at"`
+}
+
 // EventStatus describes a configured event and its live queue state.
 type EventStatus struct {
-	ID          string      `json:"id"`
-	Description string      `json:"description,omitempty"`
-	Session     string      `json:"session"`
-	Options     *EventOpts  `json:"options,omitempty"`
+	ID          string     `json:"id"`
+	Description string     `json:"description,omitempty"`
+	Session     string     `json:"session"`
+	State       EventState `json:"state"`
+	Options     *EventOpts `json:"options,omitempty"`
 	Queue       *EventQueue `json:"queue,omitempty"`
-	LastBranch  string      `json:"last_branch,omitempty"`
+	LastBranch  string     `json:"last_branch,omitempty"`
 }
 
 // EventOpts mirrors the options block from the HCL config.
@@ -118,6 +136,30 @@ type FireResponse struct {
 	WindowExpiresAt *time.Time `json:"window_expires_at,omitempty"`
 }
 
+// ListEventBranches returns all branches created by the named event in the given
+// session, sorted newest-first. Branch names follow the convention
+// "event/<eventID>-<RFC3339>" set by the service dispatch path.
+func (c *Client) ListEventBranches(ctx context.Context, sessionID, eventID string) ([]EventBranch, error) {
+	prefix := "event/" + eventID + "-"
+	refs, err := c.ListBranchesWithPrefix(ctx, sessionID, prefix)
+	if err != nil {
+		return nil, err
+	}
+	branches := make([]EventBranch, 0, len(refs))
+	for name, hash := range refs {
+		ts := strings.TrimPrefix(name, prefix)
+		firedAt, err := time.Parse(time.RFC3339, ts)
+		if err != nil {
+			continue
+		}
+		branches = append(branches, EventBranch{Name: name, Hash: hash, FiredAt: firedAt})
+	}
+	sort.Slice(branches, func(i, j int) bool {
+		return branches[i].FiredAt.After(branches[j].FiredAt)
+	})
+	return branches, nil
+}
+
 // ListEvents returns all configured events and their live queue state.
 func (c *Client) ListEvents(_ context.Context) ([]*EventStatus, error) {
 	var out []*EventStatus
@@ -128,6 +170,26 @@ func (c *Client) ListEvents(_ context.Context) ([]*EventStatus, error) {
 func (c *Client) GetEvent(_ context.Context, id string) (*EventStatus, error) {
 	var out EventStatus
 	return &out, c.get(fmt.Sprintf("/v1/events/%s", id), &out)
+}
+
+// PauseEvent pauses the named event. Fires while paused return 503.
+func (c *Client) PauseEvent(_ context.Context, id string) (*EventStatus, error) {
+	req, err := http.NewRequest(http.MethodPost, c.addr+fmt.Sprintf("/v1/events/%s/pause", id), nil)
+	if err != nil {
+		return nil, err
+	}
+	var out EventStatus
+	return &out, c.do(req, &out)
+}
+
+// ResumeEvent resumes a paused event.
+func (c *Client) ResumeEvent(_ context.Context, id string) (*EventStatus, error) {
+	req, err := http.NewRequest(http.MethodPost, c.addr+fmt.Sprintf("/v1/events/%s/resume", id), nil)
+	if err != nil {
+		return nil, err
+	}
+	var out EventStatus
+	return &out, c.do(req, &out)
 }
 
 // FireEvent fires the named event with an optional JSON payload and branch

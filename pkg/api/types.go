@@ -8,15 +8,20 @@ import (
 
 // SessionMetadata holds the persistent metadata for a pipeline session.
 type SessionMetadata struct {
-	ID          string              `json:"id"`
-	Name        string              `json:"name"`
-	Title       string              `json:"title,omitempty"`
-	Description string              `json:"description,omitempty"`
-	Parent      string              `json:"parent,omitempty"`
-	Model       string              `json:"model"`
-	CreatedAt   time.Time           `json:"created_at"`
-	UpdatedAt   time.Time           `json:"updated_at"`
-	Usage       *plugins.TokenUsage `json:"usage,omitempty"`
+	ID                string              `json:"id"`
+	Name              string              `json:"name"`
+	Title             string              `json:"title,omitempty"`
+	Description       string              `json:"description,omitempty"`
+	Parent            string              `json:"parent,omitempty"`
+	Model             string              `json:"model"`
+	CreatedAt         time.Time           `json:"created_at"`
+	UpdatedAt         time.Time           `json:"updated_at"`
+	ArchivedAt        *time.Time          `json:"archived_at,omitempty"`
+	ArchiveResourceID string              `json:"archive_resource_id,omitempty"`
+	ArchivePath       string              `json:"archive_path,omitempty"`
+	Usage             *plugins.TokenUsage `json:"usage,omitempty"`
+	ToolsVerbosity    string              `json:"tools_verbosity,omitempty"`
+	Plugins           []string            `json:"plugins,omitempty"`
 }
 
 // Message is a single stored message in a session, projected from the
@@ -48,6 +53,8 @@ type CreateSessionRequest struct {
 	Memory            string   `json:"memory,omitempty"`
 	Tools             []string `json:"tools,omitempty"`
 	MaxToolIterations int      `json:"max_tool_iterations,omitempty"`
+	ToolsVerbosity    string   `json:"tools_verbosity,omitempty"`
+	Plugins           []string `json:"plugins,omitempty"`
 }
 
 // CompactResult is the response from PATCH …/messages/compact.

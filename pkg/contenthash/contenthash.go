@@ -29,16 +29,20 @@ func Canonical(v any) ([]byte, error) {
 	if err != nil {
 		return nil, fmt.Errorf("contenthash: marshal: %w", err)
 	}
+
 	dec := json.NewDecoder(bytes.NewReader(raw))
 	dec.UseNumber()
+
 	var decoded any
 	if err := dec.Decode(&decoded); err != nil {
 		return nil, fmt.Errorf("contenthash: decode: %w", err)
 	}
+
 	var buf bytes.Buffer
 	if err := writeValue(&buf, decoded); err != nil {
 		return nil, err
 	}
+
 	return buf.Bytes(), nil
 }
 
@@ -48,6 +52,7 @@ func Hash(v any) (string, error) {
 	if err != nil {
 		return "", err
 	}
+
 	return HashBytes(b), nil
 }
 
@@ -62,14 +67,17 @@ func writeValue(buf *bytes.Buffer, v any) error {
 	switch val := v.(type) {
 	case nil:
 		buf.WriteString("null")
+
 	case bool:
 		if val {
 			buf.WriteString("true")
 		} else {
 			buf.WriteString("false")
 		}
+
 	case string:
 		return writeString(buf, val)
+
 	case json.Number:
 		s := val.String()
 		// Integer-shaped numbers stay integer-shaped.
@@ -78,6 +86,7 @@ func writeValue(buf *bytes.Buffer, v any) error {
 			return nil
 		}
 		buf.WriteString(s)
+
 	case []any:
 		buf.WriteByte('[')
 		for i, item := range val {
@@ -89,14 +98,17 @@ func writeValue(buf *bytes.Buffer, v any) error {
 			}
 		}
 		buf.WriteByte(']')
+
 	case map[string]any:
 		keys := make([]string, 0, len(val))
 		for k, kv := range val {
 			if kv == nil {
 				continue
 			}
+
 			keys = append(keys, k)
 		}
+
 		sort.Strings(keys)
 		buf.WriteByte('{')
 		for i, k := range keys {
@@ -112,9 +124,11 @@ func writeValue(buf *bytes.Buffer, v any) error {
 			}
 		}
 		buf.WriteByte('}')
+
 	default:
 		return fmt.Errorf("contenthash: unsupported type %T", v)
 	}
+
 	return nil
 }
 
@@ -123,6 +137,7 @@ func writeString(buf *bytes.Buffer, s string) error {
 	if err != nil {
 		return err
 	}
+
 	buf.Write(enc)
 	return nil
 }
