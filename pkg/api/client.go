@@ -99,6 +99,19 @@ func (c *Client) postRaw(path string, in any) (*http.Response, error) {
 	return resp, nil
 }
 
+func (c *Client) put(path string, in, out any) error {
+	body, err := json.Marshal(in)
+	if err != nil {
+		return err
+	}
+	req, err := http.NewRequest(http.MethodPut, c.addr+path, bytes.NewReader(body))
+	if err != nil {
+		return err
+	}
+	req.Header.Set("Content-Type", "application/json")
+	return c.do(req, out)
+}
+
 func (c *Client) delete(path string) error {
 	req, err := http.NewRequest(http.MethodDelete, c.addr+path, nil)
 	if err != nil {
